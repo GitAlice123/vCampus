@@ -1,66 +1,90 @@
-package src.main.handler;
+package view;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import src.logIn.logInUI;
+import view.logInUI;
+import dao.UserDao;
+import vo.User;
 
 import javax.swing.*;
 
 public class logInHandler extends KeyAdapter implements ActionListener{
- private logInUI loginView;
- private boolean radioButtonSelected = false;
- public logInHandler(logInUI loginView){
+    private logInUI loginView;
+    private boolean radioButtonSelected = false;
+    public logInHandler(logInUI loginView){
 
-     this.loginView=loginView;
- }
+        this.loginView=loginView;
+    }
     public void actionPerformed(ActionEvent e){
         if (e.getSource() instanceof JRadioButton) {
-            JRadioButton jRadioButton = (JRadioButton) e.getSource();
-            String text = jRadioButton.getText();
-            if ("学生".equals(text) || "管理员".equals(text)) {
-                radioButtonSelected = true;
-            }
-            else {
-                radioButtonSelected = false;
-            }
+            radioButtonSelected = true;
         } else if (e.getSource() instanceof JButton) {
-            if (!radioButtonSelected) {
+            JButton jButton = (JButton) e.getSource();
+            String text2 = jButton.getText();
+            // 执行按钮操作
+            if ("注册".equals(text2)) {
+                loginView.dispose();
+                new RegisterUI();
+            }
+            else if (!radioButtonSelected) {
                 // 当单选按钮未被选择时，不执行后续的操作
                 JOptionPane.showMessageDialog(loginView, "请先选择单选按钮");
                 return;
             }
-
-            // 执行按钮操作
-            JButton jButton = (JButton) e.getSource();
-            String text2 = jButton.getText();
             if ("登录".equals(text2)) {
                 extracted();
-            } else if ("注册".equals(text2)) {
-
             }
         }
-}
+
+    }
 
     private void extracted() {
-        String user=loginView.getUserNameTxt().getText();
-        if(user.length()!=9){
+        String userId=loginView.getUserNameTxt().getText();
+        String password=loginView.getPwdField().getText();
+        if(userId.length()!=9){
             JOptionPane.showMessageDialog(loginView,"请输入9位用户名！");
             loginView.getUserNameTxt().setText("");
             loginView.getPwdField().setText("");
+            return;
         }
-        char[] chars=loginView.getPwdField().getPassword();
-        String pwd=new String(chars);
-        System.out.println(user+":"+pwd);
+
+        else if(password.length()==0)
+        {
+            JOptionPane.showMessageDialog(loginView,"请输入密码！");
+        }
+
+
+
         //查询数据库，给flag值
         boolean flag=false;
-        if(flag){
 
+        UserDao userdao = new UserDao();
+        User user = userdao.findUserByuId(userId);
+
+        String role = "";
+        if(loginView.studentRadioButton.isSelected())
+            role = "ST";
+        else if(loginView.teacherRadioButton.isSelected())
+            role = "TC";
+        else if(loginView.adminRadioButton.isSelected())
+            role = "AD";
+
+        if(user != null && user.getuPwd().equals(password) && user.getuRole().equals(role)){
+            flag = true;
+        }//判断登录信息是否正确
+
+
+        if(flag){
+            JOptionPane.showMessageDialog(loginView,"登录成功！");
         }
         else {
-         //JOptionPane.showMessageDialog(loginView,"用户名或密码错误！");
+            JOptionPane.showMessageDialog(loginView,"用户名或密码或用户类型错误！");
         }
+
+        System.out.println(userId+":"+password+":"+role);
     }
 
     @Override
