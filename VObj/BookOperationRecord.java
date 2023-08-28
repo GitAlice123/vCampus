@@ -1,13 +1,13 @@
 package view.VObj;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class BookOperationRecord {
 
     String oprId;
     String sId;
     String ISBN;
-    LocalDate oprTime;
+    Date oprTime;
     OprType oprtype;
     String oprMark;
 
@@ -35,11 +35,11 @@ public class BookOperationRecord {
         this.ISBN = ISBN;
     }
 
-    public LocalDate getOprTime() {
+    public Date getOprTime() {
         return oprTime;
     }
 
-    public void setOprTime(LocalDate oprTime) {
+    public void setOprTime(Date oprTime) {
         this.oprTime = oprTime;
     }
 
