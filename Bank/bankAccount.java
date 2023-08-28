@@ -5,8 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import dao.UserDao;
-import vo.User;
+
 import java.io.*;
 import java.util.*;
 

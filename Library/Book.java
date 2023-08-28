@@ -1,4 +1,4 @@
-package view.VObj;
+package view.Library;
 
 public class Book {
     String bookId;

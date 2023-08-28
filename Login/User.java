@@ -1,4 +1,4 @@
-package view.VObj;
+package view.Login;
 
 public class User {
     private String uId;

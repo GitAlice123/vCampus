@@ -1,4 +1,4 @@
-package view.UI;
+package view.Login;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,7 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import view.DAO.UserDao;
-import view.VObj.User;
+
 
 import javax.swing.*;
 
