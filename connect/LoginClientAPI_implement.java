@@ -1,4 +1,4 @@
-package connect;
+package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-import connect.LoginMessage;
+import view.connect.LoginMessage;
 
 public class LoginClientAPI_implement implements LoginClientAPI {
     private Socket socket;

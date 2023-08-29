@@ -1,10 +1,11 @@
-package connect;
+package view.connect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import view.logInUI;
-import dao.UserDao;
-import vo.User;
+import view.connect.*;
+import view.DAO.UserDao;
+import view.Login.User;
 
 import java.io.*;
 
@@ -14,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import connect.BoolRespMessage;
+import view.connect.BoolRespMessage;
 
 
 

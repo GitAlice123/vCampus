@@ -1,14 +1,17 @@
 package view;
 
+import view.logInUI;
+import view.RegisterUI;
+
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import connect.LoginClientAPI;
-import connect.LoginClientAPI_implement;
-import connect.LoginMessage;
+import view.connect.LoginClientAPI;
+import view.connect.LoginClientAPI_implement;
+import view.connect.LoginMessage;
 
 import javax.swing.*;
 

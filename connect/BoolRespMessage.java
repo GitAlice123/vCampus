@@ -1,4 +1,4 @@
-package connect;
+package view.connect;
 
 public class BoolRespMessage {
     private boolean flag;

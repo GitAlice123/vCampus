@@ -1,7 +1,7 @@
 /*  这里创建了loginmessage类，头部说明了消息的类型
 * */
 
-package connect;
+package view.connect;
 
 public class LoginMessage {
     private String userId;
