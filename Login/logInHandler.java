@@ -1,12 +1,14 @@
-package view.Login;
+package view;
 
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import view.DAO.UserDao;
-
+import connect.LoginClientAPI;
+import connect.LoginClientAPI_implement;
+import connect.LoginMessage;
 
 import javax.swing.*;
 
@@ -34,13 +36,17 @@ public class logInHandler extends KeyAdapter implements ActionListener{
                 return;
             }
             if ("登录".equals(text2)) {
-                extracted();
+                try {
+                    extracted();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
 
     }
 
-    private void extracted() {
+    private void extracted() throws IOException {
         String userId=loginView.getUserNameTxt().getText();
         String password=loginView.getPwdField().getText();
         if(userId.length()!=9){
@@ -56,12 +62,10 @@ public class logInHandler extends KeyAdapter implements ActionListener{
         }
 
 
-
+        /*以下更改为使用后端接口访问服务器*/
         //查询数据库，给flag值
         boolean flag=false;
 
-        UserDao userdao = new UserDao();
-        User user = userdao.findUserByuId(userId);
 
         String role = "";
         if(loginView.studentRadioButton.isSelected())
@@ -71,11 +75,18 @@ public class logInHandler extends KeyAdapter implements ActionListener{
         else if(loginView.adminRadioButton.isSelected())
             role = "AD";
 
-        if(user != null && user.getuPwd().equals(password) && user.getuRole().equals(role)){
-            flag = true;
-        }//判断登录信息是否正确
 
+        // 创建 LoginClientAPI 的实例，可以是接口的任何实现类
+        LoginClientAPI loginClientAPI = new LoginClientAPI_implement("localhost", 8888);
+        LoginMessage login_message = new LoginMessage("login",userId,password,role);
 
+        // 调用接口方法
+        boolean resultByte = loginClientAPI.loginByUserId(login_message);
+
+        // 处理结果
+        flag = (resultByte == true); // 如果接收到的字节为 1，结果为 true；否则结果为 false
+
+/*与后端连接部分修改结束*/
         if(flag){
             JOptionPane.showMessageDialog(loginView,"登录成功！");
         }
@@ -90,7 +101,11 @@ public class logInHandler extends KeyAdapter implements ActionListener{
     public void keyPressed(KeyEvent e) {
         e.getKeyCode();
         if(KeyEvent.VK_ENTER==e.getKeyCode()){
-            extracted();
+            try {
+                extracted();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
