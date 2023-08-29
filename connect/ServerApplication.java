@@ -11,6 +11,7 @@ import java.io.*;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,30 +40,28 @@ public class ServerApplication {
             InputStream inputStream = clientSocket.getInputStream();
             System.out.println("Get inputstream");
 
-            byte[] bytes = new byte[1024];
-            int len;
-            StringBuilder sb = new StringBuilder();
-            //只有当客户端关闭它的输出流的时候，服务端才能取得结尾的-1
-            while ((len = inputStream.read(bytes)) != -1) {
-                // 注意指定编码格式，发送方和接收方一定要统一，建议使用UTF-8
-                sb.append(new String(bytes, 0, len, "UTF-8"));
-            }
+            byte[] lengthBytes = new byte[4];
+            inputStream.read(lengthBytes);  // 读取消息长度
+            int messageLength = ByteBuffer.wrap(lengthBytes).getInt();
+            byte[] jsonDataBytes = new byte[messageLength];
+            inputStream.read(jsonDataBytes);  // 读取消息内容
+            String receivedJsonData = new String(jsonDataBytes, StandardCharsets.UTF_8);
 
-            String jsonData = sb.toString();
+            String jsonData = receivedJsonData.toString();
             System.out.println("Success");
             System.out.println(jsonData);
 
-// 创建 ObjectMapper 对象
+//          创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             jsonData = jsonData.replaceAll("^\\[|\\]$", "");
 
-// 将 JSON 数据还原为对象
+//          将 JSON 数据还原为对象
             LoginMessage loginMessage = objectMapper.readValue(jsonData, LoginMessage.class);
             System.out.println("Into object");
 
 
 
-//            inputStream.close();
+//          inputStream.close();
             switch (loginMessage.getMessageType()) {
                 case "login":
                     // 以下内容先写在这，后续封装成类调用，要不然代码太长
@@ -80,14 +79,17 @@ public class ServerApplication {
                         try {
                             // 将 LoginMessage 对象转换为 JSON 字符串
                             String outputData = objectMapper.writeValueAsString(respMessage);
-                            System.out.println(outputData);
 
-                            System.out.println("server socket is closed?:" + clientSocket.isClosed());
-                            // 获取输出流
                             OutputStream outputStream = clientSocket.getOutputStream();
 
-                            outputStream.write(outputData.getBytes(StandardCharsets.UTF_8));
-                            clientSocket.shutdownOutput();
+                            byte[] responseServer = outputData.getBytes(StandardCharsets.UTF_8);
+                            int responseLength = responseServer.length;
+                            System.out.println(responseLength);
+                            byte[] lengthBytesResponse = ByteBuffer.allocate(4).putInt(messageLength).array();
+                            outputStream.write(responseLength);  // 写入消息长度
+                            outputStream.write(responseServer);  // 写入消息内容
+                            outputStream.flush();
+
 
 
                         } catch (Exception e) {

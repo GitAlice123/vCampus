@@ -1,8 +1,5 @@
 package view;
 
-import view.logInUI;
-import view.RegisterUI;
-
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import view.connect.LoginClientAPI;
-import view.connect.LoginClientAPI_implement;
+import view.connect.LoginClientAPIImpl;
 import view.connect.LoginMessage;
 
 import javax.swing.*;
@@ -80,7 +77,7 @@ public class logInHandler extends KeyAdapter implements ActionListener{
 
 
         // 创建 LoginClientAPI 的实例，可以是接口的任何实现类
-        LoginClientAPI loginClientAPI = new LoginClientAPI_implement("localhost", 8888);
+        LoginClientAPI loginClientAPI = new LoginClientAPIImpl("localhost", 8888);
         LoginMessage login_message = new LoginMessage("login",userId,password,role);
 
         // 调用接口方法

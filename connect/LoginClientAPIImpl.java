@@ -5,16 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.ByteBuffer;
 
-import view.connect.LoginMessage;
-
-public class LoginClientAPI_implement implements LoginClientAPI {
+public class LoginClientAPIImpl implements LoginClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
 
    //构造函数
-    public LoginClientAPI_implement(String serverAddress, int serverPort) {
+    public LoginClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
             socket = new Socket(serverAddress, serverPort);
@@ -39,8 +38,14 @@ public class LoginClientAPI_implement implements LoginClientAPI {
             System.out.println(jsonData);
 
 
-            outputStream.write(jsonData.getBytes(StandardCharsets.UTF_8));
-            socket.shutdownOutput();
+//            outputStream.write(jsonData.getBytes(StandardCharsets.UTF_8));
+//            socket.shutdownOutput();
+            byte[] jsonDataBytes = jsonData.getBytes(StandardCharsets.UTF_8);
+            int messageLength = jsonDataBytes.length;
+            byte[] lengthBytes = ByteBuffer.allocate(4).putInt(messageLength).array();
+            outputStream.write(lengthBytes);  // 写入消息长度
+            outputStream.write(jsonDataBytes);  // 写入消息内容
+            outputStream.flush();
 
 
 
@@ -49,28 +54,23 @@ public class LoginClientAPI_implement implements LoginClientAPI {
         }
 
 
+        byte[] lengthBytes = new byte[4];
+        inputStream.read(lengthBytes);  // 读取消息长度
+        int messageLength = ByteBuffer.wrap(lengthBytes).getInt();
+        byte[] jsonDataBytes = new byte[messageLength];
+        inputStream.read(jsonDataBytes);  // 读取消息内容
+        String receivedJsonData = new String(jsonDataBytes, StandardCharsets.UTF_8);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder jsonDataBuilder = new StringBuilder();
-        String line;
+//        System.out.println(receivedJsonData);
+        String mess = receivedJsonData.toString();
 
-
-        byte[] bytes = new byte[1024];
-        int len;
-        StringBuilder sb = new StringBuilder();
-        while ((len = inputStream.read(bytes)) != -1) {
-            //注意指定编码格式，发送方和接收方一定要统一，建议使用UTF-8
-            sb.append(new String(bytes, 0, len,"UTF-8"));
-        }
-        String mess = sb.toString();
-
-// 创建 ObjectMapper 对象
+//      创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
 
-// 将 JSON 数据转换为对象
+//      将 JSON 数据转换为对象
         BoolRespMessage boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
 
-// 处理结果
+//      处理结果
         boolean result = boolRespMessage.getFlag();
         return result;
     }
