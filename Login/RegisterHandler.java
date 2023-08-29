@@ -59,7 +59,7 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
         else if(!(password.equals(ensurepsd))){
             JOptionPane.showMessageDialog(registerView,"两次密码输入不一致！");
         }
-
+        /* TODO:改成用后端访问数据库 */
         else {
             UserDao userdao = new UserDao();
             if(userdao.findUserByuId(userId)!=null){
