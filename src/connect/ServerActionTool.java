@@ -32,7 +32,7 @@ public class ServerActionTool {
         boolean flag = false;
         if (user != null && user.getuPwd().equals(loginMessage.getPassword())
                 && user.getuRole().equals(loginMessage.getRole())) {
-            flag = true;
+            flag = true;}
             //下面将response信息返回客户端
             BoolRespMessage respMessage = new BoolRespMessage(flag);
             try {
@@ -44,7 +44,6 @@ public class ServerActionTool {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
     }
     public void Action101(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
