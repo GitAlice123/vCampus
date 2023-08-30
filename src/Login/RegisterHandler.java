@@ -1,7 +1,5 @@
 package view.Login;
 
-import view.DAO.UserDao;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,9 +77,6 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
                 return;
             }else{
                   String role = null;
-//                User user = new User();
-//                user.setuId(userId);
-//                user.setuPwd(password);
                 if(registerView.studentRadioButton.isSelected())
                     role = "ST";
                 else if(registerView.teacherRadioButton.isSelected())
