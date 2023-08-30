@@ -38,12 +38,16 @@ public class ServerApplication {
                     case 100: {
                         // 100为LoginMessage
                         // 根据消息的类型决定服务器要采取的动作
-                        serverActionTool.Action100(jsonData, clientSocket, rwTool);
+                        serverActionTool.Action100(jsonData, clientSocket);
                         break;
                     }
                     case 101: {
                         // 101为RegisterReqMessage
-                        // 处理注册请求
+                        serverActionTool.Action101(jsonData, clientSocket);
+                        break;
+                    }
+                    case 102: {
+                        serverActionTool.Action102(jsonData,clientSocket);
                         break;
                     }
                     default: {
@@ -56,10 +60,6 @@ public class ServerApplication {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } finally {
-                if (clientSocket != null) {
-                    clientSocket.close();
-                }
             }
         }
     }

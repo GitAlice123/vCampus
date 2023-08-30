@@ -1,6 +1,7 @@
 package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 
 import java.io.*;
@@ -25,8 +26,6 @@ public class LoginClientAPIImpl implements LoginClientAPI {
 
     @Override
     public boolean loginByUserId(LoginMessage loginMessage) throws IOException {
-
-
         //以下发送用户id和密码给服务器
         try {
             // 创建 ObjectMapper 对象
@@ -36,7 +35,7 @@ public class LoginClientAPIImpl implements LoginClientAPI {
             String jsonData = objectMapper.writeValueAsString(loginMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData);
+            rwTool.ClientSendOutStream(outputStream,jsonData,100);
 
         } catch (Exception e) {
             e.printStackTrace();

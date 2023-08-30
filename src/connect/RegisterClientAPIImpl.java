@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 public class RegisterClientAPIImpl implements RegisterClientAPI {
     private Socket socket;
@@ -30,7 +28,12 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
     public boolean checkExistByUserId(RegisterReqMessage registerReqMessage) throws IOException {
         //以下发送用户id给服务器
         try {
-            String jsonData = registerReqMessage.getUserId();
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(registerReqMessage);
+            System.out.println(jsonData);
             rwTool.ClientSendOutStream(outputStream,jsonData,101);
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,19 +44,50 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             String receivedJsonData = rwTool.ClientReadStream(inputStream);
             String mess = receivedJsonData.toString();
 
-//      创建 ObjectMapper 对象
+            //  创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
 
-//      将 JSON 数据转换为对象
+            //  将 JSON 数据转换为对象
             BoolRespMessage boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
 
-//      处理结果
+            //  处理结果
             result = boolRespMessage.getFlag();
 
         } catch (Exception e) {
             e.printStackTrace();
         };
         return result;
+    }
+    @Override
+    public Boolean createNewUser(LoginMessage loginMessage) throws IOException {
+        //以下发送用户信息给服务器
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(loginMessage);
+            System.out.println(jsonData+" Successfully send request!");
+
+            rwTool.ClientSendOutStream(outputStream,jsonData,102);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+        //创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //将 JSON 数据转换为对象
+        BoolRespMessage boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+
+        return boolRespMessage.getFlag();
     }
 
 }

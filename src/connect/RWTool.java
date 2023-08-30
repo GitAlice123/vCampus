@@ -47,7 +47,7 @@ public class RWTool {
         System.out.println(responseLength);
         byte[] lengthBytesResponse = ByteBuffer.allocate(4).putInt(responseLength).array();
         try {
-            outputStream.write(responseLength);  // 写入消息长度
+            outputStream.write(lengthBytesResponse);  // 写入消息长度
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -56,6 +56,7 @@ public class RWTool {
     }
     public String ClientReadStream(InputStream inputStream) throws IOException {
         byte[] lengthBytes = new byte[4];
+        System.out.println("Client inputStream status: "+inputStream.available());
         try {
             inputStream.read(lengthBytes);  // 读取消息长度
         } catch (IOException e) {
@@ -67,11 +68,9 @@ public class RWTool {
         String receivedJsonData = new String(jsonDataBytes, StandardCharsets.UTF_8);
         return receivedJsonData;
     }
-
-    public void ClientSendOutStream(OutputStream outputStream, String jsonData) throws IOException {
+    public void ClientSendOutStream(OutputStream outputStream, String jsonData,int index) throws IOException {
             byte[] jsonDataBytes = jsonData.getBytes(StandardCharsets.UTF_8);
             int messageLength = jsonDataBytes.length;
-            int index = 100;
             byte[] lengthBytes = ByteBuffer.allocate(4).putInt(messageLength).array();
             byte[] indexInfo = ByteBuffer.allocate(4).putInt(index).array();
             outputStream.write(lengthBytes,0,4);  // 写入消息长度
