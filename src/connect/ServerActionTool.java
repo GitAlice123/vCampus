@@ -3,6 +3,7 @@ package view.connect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import view.DAO.UserDao;
 
+import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 
 import java.io.OutputStream;
