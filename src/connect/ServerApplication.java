@@ -46,6 +46,10 @@ public class ServerApplication {
                         serverActionTool.Action101(jsonData, clientSocket);
                         break;
                     }
+                    case 102: {
+                        serverActionTool.Action102(jsonData,clientSocket);
+                        break;
+                    }
                     default: {
                         // 处理其他消息类型
                         break;
@@ -56,10 +60,6 @@ public class ServerApplication {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            } finally {
-                if (clientSocket != null) {
-                    clientSocket.close();
-                }
             }
         }
     }

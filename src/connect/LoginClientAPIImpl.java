@@ -26,8 +26,6 @@ public class LoginClientAPIImpl implements LoginClientAPI {
 
     @Override
     public boolean loginByUserId(LoginMessage loginMessage) throws IOException {
-
-
         //以下发送用户id和密码给服务器
         try {
             // 创建 ObjectMapper 对象
