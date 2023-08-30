@@ -1,4 +1,4 @@
-package enty;
+package view.CourseSelection;
 
 public class CourseClass {
         private String classID;        // 课程班编号
