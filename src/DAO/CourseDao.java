@@ -1,12 +1,14 @@
 package view.DAO;
 
+import view.CourseSelection.Course;
+
 import java.sql.*;
 
 public class CourseDao {
-    public view.Login.User findUserByuId(String uId) {
+    public Course findUserByuId(String uId) {
 
         String sqlString = "select * from tblCoures where uId = '" + uId + "'";
-        view.Login.User user = new view.Login.User();
+        Course course = new Course();
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -19,16 +21,11 @@ public class CourseDao {
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if(!res.next()){
-                return null;
-            }
+            if(!res.next()){return null;}
             res.beforeFirst();
-
             res.next();
 
-            user.setuId(res.getString(1));
-            user.setuPwd(res.getString(2));
-            user.setuRole(res.getString(3));
+
 
             con.close();//关闭数据库连接
 

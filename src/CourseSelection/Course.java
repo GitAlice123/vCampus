@@ -24,6 +24,8 @@ public class Course {
         setGrades(grades); // 使用setter方法来确保值的范围
     }
 
+    public Course(){}//空构造
+
     // getters 和 setters
     public String getCourseNum() {
         return CourseNum;
