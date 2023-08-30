@@ -1,11 +1,11 @@
 package view.Library;
 
 public class Book {
-    String bookId;
+    String bookName;
     String bookISBN;
     String author;
     String bookType;
-    Double bookPrise;
+    Double bookPrice;
     String publisher;
     String summary;
     int totalNum;
@@ -13,12 +13,12 @@ public class Book {
     String bookPos;
     int borrowNum;
 
-    public String getBookId() {
-        return bookId;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getBookISBN() {
@@ -45,12 +45,12 @@ public class Book {
         this.bookType = bookType;
     }
 
-    public Double getBookPrise() {
-        return bookPrise;
+    public Double getBookPrice() {
+        return bookPrice;
     }
 
-    public void setBookPrise(Double bookPrise) {
-        this.bookPrise = bookPrise;
+    public void setBookPrice(Double bookPrice) {
+        this.bookPrice = bookPrice;
     }
 
     public String getPublisher() {
