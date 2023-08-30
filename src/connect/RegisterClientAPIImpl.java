@@ -44,13 +44,13 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             String receivedJsonData = rwTool.ClientReadStream(inputStream);
             String mess = receivedJsonData.toString();
 
-//      创建 ObjectMapper 对象
+            //  创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
 
-//      将 JSON 数据转换为对象
+            //  将 JSON 数据转换为对象
             BoolRespMessage boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
 
-//      处理结果
+            //  处理结果
             result = boolRespMessage.getFlag();
 
         } catch (Exception e) {

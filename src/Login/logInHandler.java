@@ -7,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import view.connect.*;
-import view.message.LoginMessage;
+import view.message.*;
 
 import javax.swing.*;
 
