@@ -68,10 +68,9 @@ public class RWTool {
         return receivedJsonData;
     }
 
-    public void ClientSendOutStream(OutputStream outputStream, String jsonData) throws IOException {
+    public void ClientSendOutStream(OutputStream outputStream, String jsonData,int index) throws IOException {
             byte[] jsonDataBytes = jsonData.getBytes(StandardCharsets.UTF_8);
             int messageLength = jsonDataBytes.length;
-            int index = 100;
             byte[] lengthBytes = ByteBuffer.allocate(4).putInt(messageLength).array();
             byte[] indexInfo = ByteBuffer.allocate(4).putInt(index).array();
             outputStream.write(lengthBytes,0,4);  // 写入消息长度

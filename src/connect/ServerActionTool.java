@@ -1,10 +1,9 @@
 package view.connect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import view.DAO.UserDao;
+import view.DAO.*;
 
-import view.message.BoolRespMessage;
-import view.message.LoginMessage;
+import view.message.*;
 
 import java.io.OutputStream;
 import java.net.Socket;
@@ -14,8 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ServerActionTool {
     public ServerActionTool() {
     }
-
-    public void Action100(String jsonData, Socket clientSocket, RWTool rwTool) {
+    private RWTool rwTool = new RWTool();
+    public void Action100(String jsonData, Socket clientSocket) {
         //        创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -44,6 +43,35 @@ public class ServerActionTool {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public void Action101(String jsonData, Socket clientSocket){
+        //        创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+//          将 JSON 数据还原为对象
+        RegisterReqMessage registerReqMessage = null;
+        try {
+            registerReqMessage = objectMapper.readValue(jsonData, RegisterReqMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object");
+        UserDao userdao = new UserDao();
+        view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
+        boolean flag = false;
+        // flag = true表示user已经在表单里了
+        if (user != null) {
+            flag = true;
+        }
+        //下面将response信息返回客户端
+        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        try {
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
