@@ -1,4 +1,4 @@
-package view;
+package view.Login;
 
 import java.awt.*;
 import javax.swing.*;

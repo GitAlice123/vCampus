@@ -6,11 +6,11 @@ import java.util.Date;
  * 银行账单类
  */
 public class bankBill {
-    private String description; // 商品说明
+    private String description; // 商品说明 医院/商店/银行充值
     private String nums; // 订单号
     private String cardId; // 对应卡账号，6位数字
     private Date time; // 交易时间
-    private boolean type; // 交易类型
+    private boolean type; // 交易类型 true:消费，false:充值
     private double amount; // 交易金额
 
     /**

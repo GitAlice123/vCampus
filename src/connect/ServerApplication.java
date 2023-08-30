@@ -2,7 +2,7 @@ package view.connect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import view.logInUI;
+import view.Login.logInUI;
 import view.connect.*;
 import view.DAO.UserDao;
 import view.Login.User;
