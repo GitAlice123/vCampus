@@ -1,19 +1,21 @@
 /*  这里创建了loginmessage类，头部说明了消息的类型
 * */
 
-package view.message;
+package view.connect;
 
 public class LoginMessage {
     private String userId;
     private String password;
     private String role;
+    private   String messageType;
 
     public LoginMessage()
     {}
-    public LoginMessage(String userId, String password,String role) {
+    public LoginMessage(String messageType,String userId, String password,String role) {
         this.userId = userId;
         this.password = password;
         this.role=role;
+        this.messageType = messageType;
     }
 
     public String getUserId(){
@@ -22,6 +24,10 @@ public class LoginMessage {
 
     public String getPassword(){
         return password;
+    }
+
+    public String getMessageType(){
+        return messageType;
     }
 
     public String getRole(){
