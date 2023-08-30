@@ -1,36 +1,32 @@
-package view;
+package view.Login;
 
-import javax.swing.*;
 import java.awt.*;
-
-public class logInUI extends JFrame{
-    JLabel titleLabel=new JLabel("用户登录",JLabel.CENTER);//位于边界布局的北边
+import javax.swing.*;
+public class RegisterUI extends JFrame {
+    JLabel titleLabel=new JLabel("用户注册",JLabel.CENTER);//位于边界布局的北边
     SpringLayout springLayout=new SpringLayout();
     JPanel centerPanel=new JPanel(springLayout);//其余组件在边界布局中间的JPanel中
     JLabel userNameLabel=new JLabel("用户名");//用户名标签
     JTextField userNameTxt=new JTextField();//用户名输入框
-
-
     JLabel pwdLabel=new JLabel("密码");//密码标签
     JPasswordField pwdField=new JPasswordField();//密码输入框
-    //JLabel studentLabel=new JLabel("学生");
+    JLabel ensurepwdLabel=new JLabel("再次确认密码");//再次确认密码标签
+    JPasswordField ensurepwdField=new JPasswordField();//再次确认密码输入框
     JRadioButton studentRadioButton=new JRadioButton("学生");//学生登录单选按钮
-    //JLabel adminLabel=new JLabel("管理员");
     JRadioButton adminRadioButton=new JRadioButton("管理员");//管理员登录单选按钮
     JRadioButton teacherRadioButton=new JRadioButton("老师");//老师登录单选按钮
-    JButton logInBtn=new JButton("登录");//登录按钮
     JButton registerBtn=new JButton("注册");//注册按钮
+    JButton backBtn=new JButton("返回");//返回按钮
     ButtonGroup group=new ButtonGroup();//创建按钮组
-    //    SystemTray systemTray;//定义系统托盘
-//    TrayIcon trayIcon;//定义托盘
 
-    logInHandler loginHandler;
-    public logInUI(){
+    RegisterHandler registerHandler;
+    public RegisterUI(){
         super("虚拟校园系统");
         //JFrame jFrame=new JFrame();
-        loginHandler=new logInHandler(this);
+        registerHandler=new RegisterHandler(this);
 
         Container contentPane=getContentPane();//获取控制面板
+
 
         titleLabel.setFont(new Font("华文行楷",Font.PLAIN,40));//设置标题大小、字体
         titleLabel.setPreferredSize(new Dimension(0,80));//设置标题宽（0为自动填充）高（80像素）
@@ -39,11 +35,14 @@ public class logInUI extends JFrame{
         userNameTxt.setPreferredSize(new Dimension(200,30));//设置输入框大小
         pwdLabel.setFont(centerFont);
         pwdField.setPreferredSize(new Dimension(200,30));//设置输入框大小
+        ensurepwdLabel.setFont(centerFont);
+        ensurepwdField.setPreferredSize(new Dimension(200,30));
         studentRadioButton.setFont(centerFont);
         adminRadioButton.setFont(centerFont);
-        logInBtn.setFont(centerFont);
         registerBtn.setFont(centerFont);
+        backBtn.setFont(centerFont);
         teacherRadioButton.setFont(centerFont);
+
 
         //把组件加入控制面板
         centerPanel.add(userNameLabel);
@@ -51,22 +50,23 @@ public class logInUI extends JFrame{
 
         centerPanel.add(pwdLabel);
         centerPanel.add(pwdField);
-        studentRadioButton.addActionListener(loginHandler);
+        centerPanel.add(ensurepwdLabel);
+        centerPanel.add(ensurepwdField);
+        studentRadioButton.addActionListener(registerHandler);
         centerPanel.add(studentRadioButton);
-        adminRadioButton.addActionListener(loginHandler);
+        adminRadioButton.addActionListener(registerHandler);
         centerPanel.add(adminRadioButton);
-        teacherRadioButton.addActionListener(loginHandler);
+        registerBtn.addActionListener(registerHandler);
+        backBtn.addActionListener(registerHandler);
+        teacherRadioButton.addActionListener(registerHandler);
         centerPanel.add(teacherRadioButton);
-        logInBtn.addActionListener(loginHandler);
         group.add(adminRadioButton);
         group.add(studentRadioButton);
         group.add(teacherRadioButton);
         //增加按键事件
-        logInBtn.addKeyListener(loginHandler);
-        centerPanel.add(logInBtn);
-        registerBtn.addActionListener(loginHandler);
+        registerBtn.addKeyListener(registerHandler);
         centerPanel.add(registerBtn);
-
+        centerPanel.add(backBtn);
         //弹簧布局
         //布局userNameLabel，水平居中，北边与边界布局中间一块顶部距离20
         Spring childWidth=Spring.sum(Spring.sum(Spring.width(userNameLabel),Spring.width(userNameTxt)),Spring.constant(20));
@@ -83,44 +83,35 @@ public class logInUI extends JFrame{
         //pwdTxt西边与pwdLabel东边距离20，pwdTxt北边与pwdLabel北边平齐
         springLayout.putConstraint(SpringLayout.WEST,pwdField,20,SpringLayout.EAST,pwdLabel);
         springLayout.putConstraint(SpringLayout.NORTH,pwdField,0,SpringLayout.NORTH,pwdLabel);
+        //ensurepwdLabel东边与pwdLabel平齐，ensurepwdLabel北边与pwdLabel南边相距20
+        springLayout.putConstraint(SpringLayout.EAST,ensurepwdLabel,0,SpringLayout.EAST,pwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,ensurepwdLabel,20,SpringLayout.SOUTH,pwdLabel);
+        //ensurepwdTxt西边雨ensurepwdLabel东边距离20，ensurepwdTxt与ensurepwdLabel北边平齐
+        springLayout.putConstraint(SpringLayout.WEST,ensurepwdField,20,SpringLayout.EAST,ensurepwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,ensurepwdField,0,SpringLayout.NORTH,ensurepwdLabel);
         //布局studentRadioButton和adminRadioButton
         Spring childWidth2=Spring.sum(Spring.sum(Spring.width(studentRadioButton),Spring.width(adminRadioButton)),
                 Spring.constant(30));
         int offsetX2=childWidth2.getValue()/2;
         springLayout.putConstraint(SpringLayout.WEST,studentRadioButton,-offsetX2-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,studentRadioButton,40,SpringLayout.SOUTH,pwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,studentRadioButton,70,SpringLayout.SOUTH,pwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,adminRadioButton,offsetX2-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,adminRadioButton,40,SpringLayout.SOUTH,pwdLabel);
-        //布局logInBtn和registerBtn
-        Spring childWidth3=Spring.sum(Spring.sum(Spring.width(logInBtn),Spring.width(registerBtn)),
+        springLayout.putConstraint(SpringLayout.NORTH,adminRadioButton,70,SpringLayout.SOUTH,pwdLabel);
+        //布局registerBtn
+        Spring childWidth3=Spring.sum(Spring.sum(Spring.width(backBtn),Spring.width(registerBtn)),
                 Spring.constant(30));
         int offsetX3=childWidth3.getValue()/2;
-        springLayout.putConstraint(SpringLayout.NORTH,logInBtn,70,SpringLayout.NORTH,studentRadioButton);
-        springLayout.putConstraint(SpringLayout.WEST,logInBtn,-offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,registerBtn,70,SpringLayout.NORTH,adminRadioButton);
-        springLayout.putConstraint(SpringLayout.WEST,registerBtn,offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,registerBtn,40,SpringLayout.NORTH,studentRadioButton);
+        springLayout.putConstraint(SpringLayout.WEST,registerBtn,-offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,backBtn,40,SpringLayout.NORTH,adminRadioButton);
+        springLayout.putConstraint(SpringLayout.WEST,backBtn,offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
         springLayout.putConstraint(SpringLayout.WEST,teacherRadioButton,-15,SpringLayout.HORIZONTAL_CENTER,centerPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,teacherRadioButton,40,SpringLayout.SOUTH,pwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,teacherRadioButton,70,SpringLayout.SOUTH,pwdLabel);
+
 
 
         contentPane.add(titleLabel,BorderLayout.NORTH);//把标题放在边界布局北边一块
         contentPane.add(centerPanel,BorderLayout.CENTER);//把centerPanel放在边界布局中间一块
-
-//        if(SystemTray.isSupported()){//判断是否支持系统托盘
-//            systemTray=SystemTray.getSystemTray();//初始化系统托盘
-//
-//        }
-
-//设置登录按钮为默认按钮
-        getRootPane().setDefaultButton(logInBtn);
-
-//        String resource=getClass().getResource("/Images/登录.png").toString();
-//        Image image=new Image(resource);
-//        URL resource=logInUI.class.getClassLoader().getResource("/Images/登录.png");
-//        Image image=new ImageIcon(resource).getImage();
-//        jFrame.setIconImage(image);
-
-        //registerBtn.addActionListener(loginHandler);
 
         setSize(600,400);
         setLocationRelativeTo(null);
@@ -132,14 +123,12 @@ public class logInUI extends JFrame{
     public JTextField getUserNameTxt() {
         return userNameTxt;
     }
-
-
     public JPasswordField getPwdField() {
         return pwdField;
     }
+    public JPasswordField getEnsurepwdField(){return ensurepwdField;}
 
     public static void main(String[] args){
-
-        new logInUI();
+        new RegisterUI();
     }
 }

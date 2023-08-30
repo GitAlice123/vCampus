@@ -1,4 +1,4 @@
-package view;
+package view.Login;
 
 import java.io.IOException;
 import java.awt.event.ActionEvent;

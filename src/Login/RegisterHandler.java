@@ -1,8 +1,6 @@
-package view;
+package view.Login;
 
 import view.DAO.UserDao;
-import view.RegisterUI;
-import view.Login.User;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
