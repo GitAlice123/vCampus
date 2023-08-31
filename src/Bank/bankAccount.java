@@ -18,6 +18,7 @@ public class bankAccount {
     private String cardId;  // 校园卡账户，六位数字
     private String name;  // 姓名
     private String id;  // 一卡通号，9位
+    private String PaymentPwd;//密码，6为数字
     private double balance;  // 余额
     private boolean isLoss;  // 是否挂失，true表示正常，false表示挂失
 
@@ -30,10 +31,11 @@ public class bankAccount {
      * @param balance  余额
      * @param isLoss   是否挂失
      */
-    public bankAccount(String cardId, String name, String id, double balance, boolean isLoss) {
+    public bankAccount(String cardId, String name, String id, String paymentPwd,double balance, boolean isLoss) {
         this.cardId = cardId;
         this.name = name;
         this.id = id;
+        this.PaymentPwd=paymentPwd;
         this.balance = balance;
         this.isLoss = isLoss;
     }
@@ -93,6 +95,24 @@ public class bankAccount {
     }
 
     /**
+     * 获取校园卡账户
+     *
+     * @return 校园卡账户
+     */
+    public String getPaymentPwd() {
+        return PaymentPwd;
+    }
+
+    /**
+     * 设置校园卡账户
+     *
+     * @param paymentPwd 校园卡账户
+     */
+    public void setPaymentPwd(String paymentPwd) {
+        this.PaymentPwd = paymentPwd;
+    }
+
+    /**
      * 获取余额
      *
      * @return 余额
@@ -139,6 +159,7 @@ public class bankAccount {
                 "cardId='" + cardId + '\'' +
                 ", name='" + name + '\'' +
                 ", id='" + id + '\'' +
+                ", PaymentPwd='" + PaymentPwd + '\'' +
                 ", balance=" + balance +
                 ", isLoss=" + isLoss +
                 '}';
