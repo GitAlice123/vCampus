@@ -14,7 +14,6 @@ public class RWTool {
     public RWTool(){
     }
 
-    // 读取输入流，返回json格式的数据
     public Pair<String, Integer> ServerReadStream(InputStream inputStream) throws IOException {
         String jsonData;
         int messageNumber;
@@ -77,5 +76,34 @@ public class RWTool {
             outputStream.write(indexInfo,0,4);// 写入消息编码
             outputStream.write(jsonDataBytes);  // 写入消息内容
             outputStream.flush();
+    }
+    public int ServerReadSimpleReq(InputStream inputStream) throws IOException {
+        String jsonData;
+        int messageNumber;
+        byte[] lengthBytes = new byte[4];
+        byte[] indexBytes = new byte[4];
+        try {
+            inputStream.read(lengthBytes);  // 读取消息长度和编号
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        int messageLength = ByteBuffer.wrap(lengthBytes, 0, 4).getInt();
+        try {
+            inputStream.read(indexBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        messageNumber = ByteBuffer.wrap(indexBytes, 0, 4).getInt();
+
+        byte[] jsonDataBytes = new byte[messageLength];
+        inputStream.read(jsonDataBytes);  // 读取消息内容
+
+        jsonData = new String(jsonDataBytes, StandardCharsets.UTF_8);
+
+        System.out.println("Server success read request");
+        System.out.println("message number: " + messageNumber);
+        System.out.println(jsonData);
+
+        return messageNumber;
     }
 }
