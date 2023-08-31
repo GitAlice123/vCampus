@@ -14,6 +14,9 @@ public class LibraryAdminUI extends JFrame {
     DefaultTableModel model = new DefaultTableModel();
 
     JTable table = new JTable();
+
+
+
     String[][] data = {//书籍列表，表格数据均传入该数组
             {"1","1","1","1","1","1","1","1"},
             {"1","1","1","1","1","1","1","1"},
@@ -94,7 +97,9 @@ public class LibraryAdminUI extends JFrame {
 
     JButton backBtn=new JButton("退出");
     public LibraryAdminUI(){
+
         super("图书馆系统");
+
 
         String[] columnNames ={"书名","索书号","作者","类型","出版社","位置","修改","删除"};//索书号是一本书一个
 
@@ -233,6 +238,27 @@ public class LibraryAdminUI extends JFrame {
 
 
     public static void main(String[] args){
+        try {
+            // 设置外观为Windows外观
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        try
+//        {
+//            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//        }
+//        catch(Exception e)
+//        {
+//            //TODO exception
+//
+//        }
 
         new LibraryAdminUI();
     }
