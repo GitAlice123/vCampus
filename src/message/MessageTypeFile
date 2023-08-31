@@ -1,3 +1,4 @@
 LoginMessage:100
 RegisterReqMessage:101
 RegisterMessage不设置了，和loginMessage内容一样，只是编号为102
+ReqBookListMessage使用NoDataReqMessage,编号为200
