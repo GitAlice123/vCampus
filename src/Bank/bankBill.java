@@ -100,7 +100,7 @@ public class bankBill {
     /**
      * 设置对应一卡通号
      *
-     * @param cardId 对应一卡通号
+     * @param _userId 对应一卡通号
      */
     public void setUserIdId(String _userId) {
         this.userId = _userId;
@@ -172,4 +172,5 @@ public class bankBill {
                 ", amount=" + amount +
                 '}';
     }
+
 }

@@ -6,10 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import view.Global.SummaryUI;
 
+import view.DAO.bankAccountDao;
+import view.Global.GlobalData;
+import view.Bank.bankAccount;
+
 import java.net.URL;
 import java.util.Calendar;
 
+
 public class BankTeacherStudentUI extends JFrame {
+
+    //找出当前用户的银行账户
+    bankAccount thisAccount=bankAccountDao.findBankAccountById(GlobalData.getUID());
     //导航栏
     JButton rechargeBtn=new JButton("充值");
     JButton billBtn=new JButton("账单");
@@ -20,14 +28,16 @@ public class BankTeacherStudentUI extends JFrame {
     //充值
     JLabel rechargeLabel=new JLabel("卡片充值",JLabel.CENTER);
     JLabel balanceLabel=new JLabel("校园卡余额");
-    JLabel balance=new JLabel("￥0.00");
+    JLabel balance=new JLabel("￥"+Double.toString(thisAccount.getBalance()));
     JLabel amountLabel=new JLabel("充值金额");
     JTextField amountField=new JTextField();
+    JLabel rechargepwdLabel=new JLabel("密码");
+    JTextField rechargepwdField=new JTextField();
     JButton confirmrechargeBtn=new JButton("确认充值");
     //修改密码
     JLabel changepwdLabel=new JLabel("修改密码");
     JLabel idLabel=new JLabel("学工号");
-    JLabel id=new JLabel("XXXXXXXXX");
+    JLabel id=new JLabel(thisAccount.getId());
     JLabel oldpwdLabel=new JLabel("原密码");
     JLabel newpwdLabel=new JLabel("新密码");
     JLabel ensurepwdLabel=new JLabel("确认新密码");
@@ -47,18 +57,20 @@ public class BankTeacherStudentUI extends JFrame {
     JLabel idLabel2=new JLabel("学工号");
     JLabel balanceLabel2=new JLabel("账户余额");
     JLabel statusLabel=new JLabel("挂失状态");
-    JLabel account=new JLabel("XXXXXX");
-    JLabel name=new JLabel("XXX");
-    JLabel id2=new JLabel("XXXXXXXXX");
-    JLabel balance2=new JLabel("￥0.00");
-    JLabel status=new JLabel("正常");
+    JLabel account=new JLabel(thisAccount.getCardId());
+    JLabel name=new JLabel(thisAccount.getName());
+    JLabel id2=new JLabel(thisAccount.getId());
+    JLabel balance2=new JLabel("￥"+thisAccount.getBalance());
+    JLabel status=new JLabel(thisAccount.isLoss()?"正常":"已挂失");
+
+
     //挂失/解挂
     JLabel reportlossLabel=new JLabel("卡片挂失");
     JLabel cardstatusLabel=new JLabel("卡片状态");
-    JLabel cardstatus=new JLabel("正常");
+    JLabel cardstatus=new JLabel(thisAccount.isLoss()?"正常":"已挂失");
     JLabel cardpwdLabel=new JLabel("卡片密码");
     JTextField cardpwdField=new JTextField();
-    JButton confirmfreezeBtn=new JButton("确认挂失");
+    JButton confirmfreezeBtn=new JButton(thisAccount.isLoss()?"确认挂失":"确认解挂");
 
 
 
@@ -147,6 +159,8 @@ public class BankTeacherStudentUI extends JFrame {
         amountLabel.setFont(centerFont);
         amountField.setPreferredSize(new Dimension(200,30));//设置输入框大小
         confirmrechargeBtn.setFont(buttonFont);
+        rechargepwdField.setPreferredSize(new Dimension(200,30));
+        rechargepwdLabel.setFont(centerFont);
 
         recharge.add(rechargeLabel);
         recharge.add(balanceLabel);
@@ -154,6 +168,8 @@ public class BankTeacherStudentUI extends JFrame {
         recharge.add(amountLabel);
         recharge.add(amountField);
         recharge.add(confirmrechargeBtn);
+        recharge.add(rechargepwdLabel);
+        recharge.add(rechargepwdField);
 
         springLayout.putConstraint(SpringLayout.NORTH,rechargeLabel,0,SpringLayout.NORTH,cardPanel);
         int x=(int)(1.3*(Spring.width(cardPanel).getValue()-Spring.width(rechargeLabel).getValue()));
@@ -163,11 +179,15 @@ public class BankTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.WEST,balance,40,SpringLayout.EAST,balanceLabel);
         springLayout.putConstraint(SpringLayout.NORTH,balance,0,SpringLayout.NORTH,balanceLabel);
         springLayout.putConstraint(SpringLayout.WEST,amountLabel,0,SpringLayout.WEST,balanceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,amountLabel,40,SpringLayout.SOUTH,balanceLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,amountLabel,20,SpringLayout.SOUTH,balanceLabel);
         springLayout.putConstraint(SpringLayout.WEST,amountField,0,SpringLayout.WEST,balance);
         springLayout.putConstraint(SpringLayout.NORTH,amountField,0,SpringLayout.NORTH,amountLabel);
+        springLayout.putConstraint(SpringLayout.WEST,rechargepwdLabel,0,SpringLayout.WEST,balanceLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,rechargepwdLabel,20,SpringLayout.SOUTH,amountLabel);
+        springLayout.putConstraint(SpringLayout.WEST,rechargepwdField,0,SpringLayout.WEST,balance);
+        springLayout.putConstraint(SpringLayout.NORTH,rechargepwdField,0,SpringLayout.NORTH,rechargepwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,confirmrechargeBtn,235,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmrechargeBtn,40,SpringLayout.SOUTH,amountLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,confirmrechargeBtn,40,SpringLayout.SOUTH,rechargepwdLabel);
 
         //修改密码
         changepwdLabel.setFont(titleFont);
@@ -241,7 +261,8 @@ public class BankTeacherStudentUI extends JFrame {
 
         JComboBox<String>year=new JComboBox<String>();
         JComboBox<String>month=new JComboBox<String>();
-        month.addItem("");
+
+        year.addItem("");
         year.addItem("2023");
         year.addItem("2022");
         year.addItem("2021");
@@ -389,6 +410,15 @@ public class BankTeacherStudentUI extends JFrame {
 
     public static void main(String[] args)
     {
+//        try
+//        {
+//            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//        }
+//        catch(Exception e)
+//        {
+//            //TODO exception
+//        }
+
         new BankTeacherStudentUI();
     }
 }
