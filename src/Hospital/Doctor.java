@@ -77,4 +77,16 @@ public class Doctor {
                 ", Doctor_id='" + Doctor_id + '\'' +
                 '}';
     }
+
+    public Doctor(String depart_ID, String doctor_name, boolean doctor_level, String doctor_phone, String doctor_addr, boolean doctor_sex, String doctor_id) {
+        Depart_ID = depart_ID;
+        Doctor_name = doctor_name;
+        Doctor_level = doctor_level;
+        Doctor_phone = doctor_phone;
+        Doctor_addr = doctor_addr;
+        Doctor_sex = doctor_sex;
+        Doctor_id = doctor_id;
+    }
+
+    public Doctor() {}
 }
