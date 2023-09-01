@@ -1,13 +1,18 @@
-package src.LibraryUI;
+package view.Library;
 
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 public class LibraryUI extends JFrame {
     SpringLayout springLayout=new SpringLayout();
@@ -83,6 +88,21 @@ public class LibraryUI extends JFrame {
 
     public LibraryUI(){
         super("图书馆系统");
+        JLabel imageLabel = new JLabel();
+        try {
+            // 加载图片
+            int newWidth = 120;  // 新的宽度
+            int newHeight = 120; // 新的高度
+
+            Image pkqIm = ImageIO.read(new File("Images/pkq8.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
+
+            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(scaledImage));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String[] columnNames ={"书名","索书号","作者","类型","出版社","位置","借阅"};//索书号是一本书一个
         String[] columnNamesChosen ={"书名","索书号","借阅时间","过期时间","还书","续借"};
         model.setDataVector(data, columnNames);
@@ -90,8 +110,11 @@ public class LibraryUI extends JFrame {
 
         table.getColumnModel().getColumn(6).setCellRenderer(new BorrowBookTableCellRendererButton());
         table.getColumnModel().getColumn(6).setCellEditor(new BorrowBookTableCellEditorButton());
-
-
+        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        table.setRowHeight(30);
+        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
         modelChosen.setDataVector(dataChosen, columnNamesChosen);
         tableChosen.setModel(modelChosen);
 
@@ -99,11 +122,15 @@ public class LibraryUI extends JFrame {
         tableChosen.getColumnModel().getColumn(4).setCellEditor(new ReturnBookTableCellEditorButton());
         tableChosen.getColumnModel().getColumn(5).setCellRenderer(new RenewBookTableCellRendererButton());
         tableChosen.getColumnModel().getColumn(5).setCellEditor(new RenewBookTableCellEditorButton());
-
+        tableChosen.setRowHeight(30);
+        JTableHeader tab_headerChosen = tableChosen.getTableHeader();					//获取表头
+        tab_headerChosen.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_headerChosen.setPreferredSize(new Dimension(tab_headerChosen.getWidth(), 30));	//修改表头的高度
+        tableChosen.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(550, 250)); // 设置滚动面板的大小
+        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
         JScrollPane scrollPaneChosen = new JScrollPane(tableChosen);
-        scrollPaneChosen.setPreferredSize(new Dimension(550, 250)); // 设置滚动面板的大小
+        scrollPaneChosen.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
         //loginHandler=new logInHandler(this);
 
         Container contentPane=getContentPane();//获取控制面板
@@ -119,12 +146,21 @@ public class LibraryUI extends JFrame {
         BookPanel.add(FindBookBtn);
         BookPanel.add(NumOfBook);
         BookPanel.add(NumOfBookOut);
-        backBtn.setPreferredSize(new Dimension(100, 30));
-        BookBtn.setPreferredSize(new Dimension(150, 30));
-        ChosenBtn.setPreferredSize(new Dimension(150, 30));
-        FindBookTex.setPreferredSize(new Dimension(150, 20));
-        FindBookBtn.setPreferredSize(new Dimension(80, 20));
-
+        BookPanel.add(imageLabel);
+        backBtn.setPreferredSize(new Dimension(100, 40));
+        BookBtn.setPreferredSize(new Dimension(250, 40));
+        ChosenBtn.setPreferredSize(new Dimension(250, 40));
+        FindBookTex.setPreferredSize(new Dimension(150, 40));
+        FindBookBtn.setPreferredSize(new Dimension(150, 40));
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        table.setFont(centerFont);
+        tableChosen.setFont(centerFont);
+        backBtn.setFont(centerFont);
+        BookBtn.setFont(centerFont);
+        ChosenBtn.setFont(centerFont);
+        FindBookTex.setFont(centerFont);
+        FindBookBtn.setFont(centerFont);
+        NumOfBook.setFont(centerFont);
         TopPanel.add(BookBtn);
         TopPanel.add(ChosenBtn);
 
@@ -151,33 +187,62 @@ public class LibraryUI extends JFrame {
             }
         });
 
-        springLayout.putConstraint(SpringLayout.WEST, FindBookTex, 20, SpringLayout.WEST, BookPanel);
-        springLayout.putConstraint(SpringLayout.NORTH, FindBookTex, 10, SpringLayout.NORTH, BookPanel);
-        springLayout.putConstraint(SpringLayout.EAST, NumOfBook, -100, SpringLayout.EAST, BookPanel);
-        springLayout.putConstraint(SpringLayout.NORTH, NumOfBook, 10, SpringLayout.NORTH, BookPanel);
-        springLayout.putConstraint(SpringLayout.EAST, NumOfBookOut, -50, SpringLayout.EAST, BookPanel);
-        springLayout.putConstraint(SpringLayout.NORTH, NumOfBookOut, 10, SpringLayout.NORTH, BookPanel);
+        springLayout.putConstraint(SpringLayout.WEST, FindBookTex, 130, SpringLayout.WEST, BookPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, FindBookTex, 30, SpringLayout.NORTH, BookPanel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfBook, -200, SpringLayout.EAST, BookPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBook, 40, SpringLayout.NORTH, BookPanel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfBookOut, -120, SpringLayout.EAST, BookPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBookOut, 40, SpringLayout.NORTH, BookPanel);
         springLayout.putConstraint(SpringLayout.WEST, FindBookBtn, 10, SpringLayout.EAST, FindBookTex);
         springLayout.putConstraint(SpringLayout.NORTH, FindBookBtn, 0, SpringLayout.NORTH, FindBookTex);
-        springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 10, SpringLayout.SOUTH, FindBookTex);
-        springLayout.putConstraint(SpringLayout.WEST, scrollPane, 25, SpringLayout.WEST, panel1);
-        springLayout.putConstraint(SpringLayout.NORTH, scrollPaneChosen, 20, SpringLayout.NORTH, panel1);
-        springLayout.putConstraint(SpringLayout.WEST, scrollPaneChosen, 25, SpringLayout.WEST, panel1);
+        springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 50, SpringLayout.SOUTH, FindBookTex);
+        springLayout.putConstraint(SpringLayout.WEST, scrollPane, 100, SpringLayout.WEST, panel1);
+        springLayout.putConstraint(SpringLayout.NORTH, scrollPaneChosen, 100, SpringLayout.NORTH, panel1);
+        springLayout.putConstraint(SpringLayout.WEST, scrollPaneChosen, 100, SpringLayout.WEST, panel1);
 
 
 
 
-        setSize(600,400);
+        setSize(1200,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setVisible((true));
     }
 
+    private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
+            // 设置单元格背景颜色
+            if (row % 2 == 0) {
+                Color customColor = new Color(255, 255, 224);
+                cellComponent.setBackground(customColor);
+            } else {
+                Color customColor2 = new Color(255, 250, 205);
+                cellComponent.setBackground(customColor2);
+            }
+
+            return cellComponent;
+        }
+    }
 
     public static void main(String[] args){
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
 
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new LibraryUI();
     }
 }
@@ -189,6 +254,8 @@ class BorrowBookTableCellRendererButton implements TableCellRenderer {//查看�
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                    int row, int column) {
         JButton button = new JButton("借阅");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        button.setFont(centerFont);
         return button;
     }
 
@@ -202,6 +269,8 @@ class BorrowBookTableCellEditorButton extends DefaultCellEditor{//查看班级�
         //设置点击一次就激活，否则默认好像是点击2次激活。
         this.setClickCountToStart(1);
         btn = new JButton("借阅");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        btn.setFont(centerFont);
         btn.addActionListener(new ActionListener() {
 
             @Override
@@ -241,6 +310,8 @@ class ReturnBookTableCellRendererButton implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                    int row, int column) {
         JButton button = new JButton("还书");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        button.setFont(centerFont);
         return button;
     }
 
@@ -254,6 +325,8 @@ class ReturnBookTableCellEditorButton extends DefaultCellEditor{
         //设置点击一次就激活，否则默认好像是点击2次激活。
         this.setClickCountToStart(1);
         btn = new JButton("还书");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        btn.setFont(centerFont);
         btn.addActionListener(new ActionListener() {
 
             @Override
@@ -293,6 +366,8 @@ class RenewBookTableCellRendererButton implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                    int row, int column) {
         JButton button = new JButton("续借");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        button.setFont(centerFont);
         return button;
     }
 
@@ -306,6 +381,8 @@ class RenewBookTableCellEditorButton extends DefaultCellEditor{
         //设置点击一次就激活，否则默认好像是点击2次激活。
         this.setClickCountToStart(1);
         btn = new JButton("续借");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        btn.setFont(centerFont);
         btn.addActionListener(new ActionListener() {
 
             @Override
