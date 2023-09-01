@@ -37,4 +37,14 @@ public class Department {
                 ", Department_dir='" + Department_dir + '\'' +
                 '}';
     }
+
+    public Department() {
+        this(null, null, null);
+    }
+
+    public Department(String department_name , String department_ID, String department_dir) {
+        Department_name = department_name;
+        Department_ID = department_ID;
+        Department_dir = department_dir;
+    }
 }
