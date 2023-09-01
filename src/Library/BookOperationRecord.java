@@ -8,7 +8,7 @@ public class BookOperationRecord {
     String sId;
     String ISBN;
     Date oprTime;
-    OprType oprtype;
+    String oprtype;
     String oprMark;
 
     public String getOprId() {
@@ -43,24 +43,13 @@ public class BookOperationRecord {
         this.oprTime = oprTime;
     }
 
-    public OprType getOprtype() {
+    public String getOprtype() {
         return oprtype;
     }
 
-    public void setOprtype(OprType oprtype) {
-        this.oprtype = oprtype;
-    }
 
     public void setOprtype(String oprtype) {
-        switch (oprtype) {
-            case "BOR":
-                this.oprtype = OprType.BOR;
-            case "RET":
-                this.oprtype = OprType.RET;
-            case "REN":
-                this.oprtype = OprType.REN;
-        }
-
+         this.oprtype = oprtype;
     }
 
     public String getOprMark() {
