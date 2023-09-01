@@ -68,4 +68,22 @@ public class DoctorDao {
 
         return true;
     }
+
+    public boolean deleteDoc(String id){
+        try {
+            Class.forName("com.hxtt.sql.access.AccessDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            int ret = sta.executeUpdate("delete from tblDoctor where Doctor_id = '" + id + "'");
+            con.close();//关闭数据库连接
+            if(ret==0){return false;}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 }
