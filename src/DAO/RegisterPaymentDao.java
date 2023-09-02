@@ -1,6 +1,5 @@
 package view.DAO;
 
-import view.CourseSelection.CourseClass;
 import view.Hospital.Payment;
 import view.Hospital.Register;
 
@@ -42,8 +41,7 @@ public class RegisterPaymentDao {
         return true;
     }
 
-
-    public Register[] findRegisterByUesrID(String ID) {
+    public Register[] findRegisterByUserID(String ID) {
         Register[] regs = new Register[1];
 
         try {
@@ -85,7 +83,7 @@ public class RegisterPaymentDao {
         return regs;
     }
 
-    public Payment[] findPaymentByUesrID(String ID) {
+    public Payment[] findPaymentByUserID(String ID) {
         Payment[] pays = new Payment[1];
 
         try {
