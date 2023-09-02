@@ -1,6 +1,6 @@
 package view.Hospital;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Register {
     String Patient_ID;//和总的id对应
