@@ -100,4 +100,21 @@ public class Book {
     public void setBorrowNum(int borrowNum) {
         this.borrowNum = borrowNum;
     }
+
+    public Book() {
+    }
+
+    public Book(String bookName, String bookISBN, String author, String bookType, Double bookPrice, String publisher, String summary, int totalNum, int freeNum, String bookPos, int borrowNum) {
+        this.bookName = bookName;
+        this.bookISBN = bookISBN;
+        this.author = author;
+        this.bookType = bookType;
+        this.bookPrice = bookPrice;
+        this.publisher = publisher;
+        this.summary = summary;
+        this.totalNum = totalNum;
+        this.freeNum = freeNum;
+        this.bookPos = bookPos;
+        this.borrowNum = borrowNum;
+    }
 }
