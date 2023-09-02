@@ -15,6 +15,153 @@ import java.io.File;
 import java.io.IOException;
 
 public class CurriculumAdminUI extends JFrame {
+    class AdminDeleteClassesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("删除");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class AdminDeleteClassesTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public AdminDeleteClassesTableCellEditorButton() {
+            super(new JTextField());
+            this.setClickCountToStart(1);
+            btn = new JButton("删除");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    //此处要加删除该行课程班
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
+    class AdminChangeClassesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("修改");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class AdminChangeClassesTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public AdminChangeClassesTableCellEditorButton() {
+            super(new JTextField());
+            this.setClickCountToStart(1);
+            btn = new JButton("修改");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    AdminAddOrChangeClassesUI adminAddOrChangeClassesUI=new AdminAddOrChangeClassesUI();
+                    adminAddOrChangeClassesUI.setVisible(true);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
+    class AdminShowClassesStuTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("展开");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class AdminShowClassesStuTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public AdminShowClassesStuTableCellEditorButton() {
+            super(new JTextField());
+            this.setClickCountToStart(1);
+            btn = new JButton("展开");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    AdminShowClassesStuUI adminShowClassesStuUI=new AdminShowClassesStuUI();
+                    adminShowClassesStuUI.setVisible(true);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
+
     SpringLayout springLayout=new SpringLayout();
     JPanel TopPanel=new JPanel(springLayout);
     JPanel BottomPanel=new JPanel();//底部放置按钮的面板
@@ -64,7 +211,7 @@ public class CurriculumAdminUI extends JFrame {
         String[] columnNames ={"班级编号","课程名称","上课地点","最大人数","上课时间","任课教师","修改","删除","本班学生"};
         //loginHandler=new logInHandler(this);
         model.setDataVector(data, columnNames);
-        table.setModel(model);
+        table.setModel(model);//table是展示课程班的表格
         table.setRowHeight(30);
         JTableHeader tab_header = table.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
@@ -168,6 +315,7 @@ public class CurriculumAdminUI extends JFrame {
     }
 }
 class AdminAddOrChangeClassesUI extends JFrame{
+
     SpringLayout springLayout=new SpringLayout();
     JLabel ClassIdLabel=new JLabel("课程班编号");
     JLabel CourseNameLabel=new JLabel("课程名称");
@@ -340,6 +488,54 @@ class AdminAddOrChangeClassesUI extends JFrame{
     }
 }
 class AdminShowClassesStuUI extends JFrame{
+    class AdminDeleteStuTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("删除");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class AdminDeleteStuTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public AdminDeleteStuTableCellEditorButton() {
+            super(new JTextField());
+            this.setClickCountToStart(1);
+            btn = new JButton("删除");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    //此处要从该课程班中删除该行学生
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
     private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -384,7 +580,7 @@ class AdminShowClassesStuUI extends JFrame{
     JPanel ClassStudentsPanel1 = new JPanel();//中间卡片布局的面板
     JPanel ClassStudentsPanel = new JPanel(springLayout);//老师查看班级学生的面板
     DefaultTableModel model = new DefaultTableModel();
-    JTable table = new JTable();
+    JTable tableOfStudents = new JTable();//tableOfStudents是展示本班学生的表格
     JLabel ClassLabel = new JLabel("本班学生");
 
     JButton backBtn = new JButton("退出");
@@ -394,17 +590,17 @@ class AdminShowClassesStuUI extends JFrame{
         String[] columnNames = {"课程班编号", "学号", "一卡通号", "姓名","删除学生"};
 
         model.setDataVector(data, columnNames);
-        table.setModel(model);
+        tableOfStudents.setModel(model);
 
-        table.setRowHeight(30);
-        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tableOfStudents.setRowHeight(30);
+        JTableHeader tab_header = tableOfStudents.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
-        table.getColumnModel().getColumn(4).setCellRenderer(new AdminDeleteStuTableCellRendererButton());
-        table.getColumnModel().getColumn(4).setCellEditor(new AdminDeleteStuTableCellEditorButton());
-        JScrollPane scrollPane = new JScrollPane(table);
+        tableOfStudents.getColumnModel().getColumn(4).setCellRenderer(new AdminDeleteStuTableCellRendererButton());
+        tableOfStudents.getColumnModel().getColumn(4).setCellEditor(new AdminDeleteStuTableCellEditorButton());
+        JScrollPane scrollPane = new JScrollPane(tableOfStudents);
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
-        table.setDefaultRenderer(Object.class, new AdminShowClassesStuUI.TableBackgroundColorRenderer());
+        tableOfStudents.setDefaultRenderer(Object.class, new AdminShowClassesStuUI.TableBackgroundColorRenderer());
         Container contentPane = getContentPane();//获取控制面板
 
         contentPane.setLayout(new BorderLayout());
@@ -417,7 +613,7 @@ class AdminShowClassesStuUI extends JFrame{
         ClassStudentsPanel1.add(ClassStudentsPanel, "ClassPanel");
         Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
 
-        table.setFont(centerFont);
+        tableOfStudents.setFont(centerFont);
         ClassLabel.setFont(new Font("楷体",Font.PLAIN,40));
         backBtn.setPreferredSize(new Dimension(100, 40));
         backBtn.setFont(centerFont);
@@ -444,198 +640,4 @@ class AdminShowClassesStuUI extends JFrame{
         setVisible((true));
     }
 
-}
-class AdminDeleteClassesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("删除");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class AdminDeleteClassesTableCellEditorButton extends DefaultCellEditor {
-    private JButton btn;
-    private int clickedRow;
-
-    public AdminDeleteClassesTableCellEditorButton() {
-        super(new JTextField());
-        this.setClickCountToStart(1);
-        btn = new JButton("删除");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                //此处要加删除该行课程班
-            }
-        });
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-}
-class AdminChangeClassesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("修改");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class AdminChangeClassesTableCellEditorButton extends DefaultCellEditor {
-    private JButton btn;
-    private int clickedRow;
-
-    public AdminChangeClassesTableCellEditorButton() {
-        super(new JTextField());
-        this.setClickCountToStart(1);
-        btn = new JButton("修改");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                AdminAddOrChangeClassesUI adminAddOrChangeClassesUI=new AdminAddOrChangeClassesUI();
-                adminAddOrChangeClassesUI.setVisible(true);
-            }
-        });
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-}
-class AdminShowClassesStuTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("展开");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class AdminShowClassesStuTableCellEditorButton extends DefaultCellEditor {
-    private JButton btn;
-    private int clickedRow;
-
-    public AdminShowClassesStuTableCellEditorButton() {
-        super(new JTextField());
-        this.setClickCountToStart(1);
-        btn = new JButton("展开");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                AdminShowClassesStuUI adminShowClassesStuUI=new AdminShowClassesStuUI();
-                adminShowClassesStuUI.setVisible(true);
-            }
-        });
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-}
-class AdminDeleteStuTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("删除");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class AdminDeleteStuTableCellEditorButton extends DefaultCellEditor {
-    private JButton btn;
-    private int clickedRow;
-
-    public AdminDeleteStuTableCellEditorButton() {
-        super(new JTextField());
-        this.setClickCountToStart(1);
-        btn = new JButton("删除");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                //此处要从该课程班中删除该行学生
-            }
-        });
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
 }

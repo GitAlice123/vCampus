@@ -12,13 +12,62 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CurriculumTeacherUI extends JFrame {
+    class TeacherTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("查看");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class TeacherTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public TeacherTableCellEditorButton() {
+            super(new JTextField());
+            this.setClickCountToStart(1);
+            btn = new JButton("查看");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    TeacherClassStudentsUI teacherClassStudentsUI = new TeacherClassStudentsUI();
+                    teacherClassStudentsUI.setVisible(true);
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
     SpringLayout springLayout=new SpringLayout();
     JPanel TopPanel=new JPanel();
     JPanel BottomPanel=new JPanel();//底部放置按钮的面板
     JPanel panel1=new JPanel(springLayout);
 
     DefaultTableModel model = new DefaultTableModel();
-    JTable table = new JTable();
+    JTable tableOfClasses = new JTable();//显示课程班的表格
     JLabel title=new JLabel("教学班");
     String[][] data = {
             {"1","1","1","1","1","1"},
@@ -47,20 +96,20 @@ public class CurriculumTeacherUI extends JFrame {
         String[] columnNames ={"课程班编号","课程名称","上课地点","当前班级人数","上课时间","本班学生"};
 
         model.setDataVector(data, columnNames);
-        table.setModel(model);
-        table.setRowHeight(30);
-        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tableOfClasses.setModel(model);
+        tableOfClasses.setRowHeight(30);
+        JTableHeader tab_header = tableOfClasses.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
-        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
-        table.getColumnModel().getColumn(5).setCellRenderer(new TeacherTableCellRendererButton());
-        table.getColumnModel().getColumn(5).setCellEditor(new TeacherTableCellEditorButton());
+        tableOfClasses.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        tableOfClasses.getColumnModel().getColumn(5).setCellRenderer(new TeacherTableCellRendererButton());
+        tableOfClasses.getColumnModel().getColumn(5).setCellEditor(new TeacherTableCellEditorButton());
         //table.setEnabled(false);
 
         // 设置特定单元格不可编辑
         //tableModel.setCellEditable(1, 2, false);
         //loginHandler=new logInHandler(this);
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(tableOfClasses);
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
         Container contentPane=getContentPane();//获取控制面板
 
@@ -72,7 +121,7 @@ public class CurriculumTeacherUI extends JFrame {
         title.setFont(new Font("楷体",Font.PLAIN,40));
         panel1.add(scrollPane);
 
-        table.setFont(new Font("楷体",Font.PLAIN,25));
+        tableOfClasses.setFont(new Font("楷体",Font.PLAIN,25));
         backBtn.setPreferredSize(new Dimension(100,40));
         backBtn.setFont(new Font("楷体",Font.PLAIN,25));
         TopPanel.add(title);
@@ -163,7 +212,7 @@ class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
     JPanel ClassStudentsPanel1 = new JPanel();//中间卡片布局的面板
     JPanel ClassStudentsPanel = new JPanel(springLayout);//老师查看班级学生的面板
     DefaultTableModel model = new DefaultTableModel();
-    JTable table = new JTable();
+    JTable tableOfStudents = new JTable();//显示本班学生的表格
     JLabel ClassLabel = new JLabel("本班学生");
 
     JButton backBtn = new JButton("退出");
@@ -174,16 +223,16 @@ class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         String[] columnNames = {"课程班编号", "学号", "一卡通号", "姓名"};
 
         model.setDataVector(data, columnNames);
-        table.setModel(model);
-        table.setRowHeight(30);
-        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tableOfStudents.setModel(model);
+        tableOfStudents.setRowHeight(30);
+        JTableHeader tab_header = tableOfStudents.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
-        table.setFont(new Font("楷体",Font.PLAIN,25));
-        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
-        JScrollPane scrollPane = new JScrollPane(table);
+        tableOfStudents.setFont(new Font("楷体",Font.PLAIN,25));
+        tableOfStudents.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        JScrollPane scrollPane = new JScrollPane(tableOfStudents);
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
-        table.setEnabled(false);
+        tableOfStudents.setEnabled(false);
         Container contentPane = getContentPane();//获取控制面板
 
         contentPane.setLayout(new BorderLayout());
@@ -241,52 +290,4 @@ class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         }
     }
 }
-class TeacherTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
 
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("查看");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class TeacherTableCellEditorButton extends DefaultCellEditor {
-    private JButton btn;
-    private int clickedRow;
-
-    public TeacherTableCellEditorButton() {
-        super(new JTextField());
-        this.setClickCountToStart(1);
-        btn = new JButton("查看");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                TeacherClassStudentsUI teacherClassStudentsUI = new TeacherClassStudentsUI();
-                teacherClassStudentsUI.setVisible(true);
-            }
-        });
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-}
