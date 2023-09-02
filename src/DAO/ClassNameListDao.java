@@ -3,7 +3,7 @@ package view.DAO;
 import java.sql.*;
 
 public class ClassNameListDao {
-    public static String[] findStudentIdByClassId(String ClassId){
+    public String[] findStudentIdByClassId(String ClassId){
         String[] namelist= new String[1];
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
