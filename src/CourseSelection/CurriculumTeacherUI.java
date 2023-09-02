@@ -55,7 +55,10 @@ public class CurriculumTeacherUI extends JFrame {
         table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         table.getColumnModel().getColumn(5).setCellRenderer(new TeacherTableCellRendererButton());
         table.getColumnModel().getColumn(5).setCellEditor(new TeacherTableCellEditorButton());
+        //table.setEnabled(false);
 
+        // 设置特定单元格不可编辑
+        //tableModel.setCellEditable(1, 2, false);
         //loginHandler=new logInHandler(this);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
@@ -180,7 +183,7 @@ class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
-
+        table.setEnabled(false);
         Container contentPane = getContentPane();//获取控制面板
 
         contentPane.setLayout(new BorderLayout());
