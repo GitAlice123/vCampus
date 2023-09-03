@@ -1,6 +1,7 @@
 package view.Bank;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,14 +11,17 @@ import view.DAO.bankAccountDao;
 import view.Global.GlobalData;
 import view.Bank.bankAccount;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class BankTeacherStudentUI extends JFrame {
 
     //找出当前用户的银行账户
-    bankAccount thisAccount=bankAccountDao.findBankAccountById(GlobalData.getUID());
+    bankAccount thisAccount=new bankAccount();
+
     //导航栏
     JButton rechargeBtn=new JButton("充值");
     JButton billBtn=new JButton("账单");
@@ -25,15 +29,19 @@ public class BankTeacherStudentUI extends JFrame {
     JButton cardimageBtn=new JButton("卡片信息");
     JButton freezeBtn=new JButton("挂失/解挂");
     JButton backBtn=new JButton("退出");
+
+
     //充值
     JLabel rechargeLabel=new JLabel("卡片充值",JLabel.CENTER);
     JLabel balanceLabel=new JLabel("校园卡余额");
     JLabel balance=new JLabel("￥"+Double.toString(thisAccount.getBalance()));
     JLabel amountLabel=new JLabel("充值金额");
-    JTextField amountField=new JTextField();
+    JTextField amountField=new JTextField();//用户输入的充值金额
     JLabel rechargepwdLabel=new JLabel("密码");
-    JTextField rechargepwdField=new JTextField();
-    JButton confirmrechargeBtn=new JButton("确认充值");
+    JTextField rechargepwdField=new JTextField();//用户输入的密码
+    JButton confirmrechargeBtn=new JButton("确认充值");//用户点击确认充值按钮
+
+
     //修改密码
     JLabel changepwdLabel=new JLabel("修改密码");
     JLabel idLabel=new JLabel("学工号");
@@ -50,6 +58,37 @@ public class BankTeacherStudentUI extends JFrame {
     JTextField searchField=new JTextField();
     JLabel yearLabel=new JLabel("年");
     JLabel monthLabel=new JLabel("月");
+    JComboBox<String> year=new JComboBox<String>();
+    JComboBox<String> month=new JComboBox<String>();
+
+    String[] header={"商品说明","订单号","付款账户","交易时间","账单分类","金额"};
+    String[][] data={
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+            {null,null,null,null,null,null},
+    };
+    DefaultTableModel tableModel = new DefaultTableModel(data, header);
+    //JTable billtable=new JTable(data,header);
+    JTable billtable = new JTable(tableModel);
+    JScrollPane billpane=new JScrollPane(billtable);
+
     //卡片信息
     JLabel cardimageLabel=new JLabel("卡片信息");
     JLabel accontLabel=new JLabel("校园卡账户");
@@ -70,7 +109,8 @@ public class BankTeacherStudentUI extends JFrame {
     JLabel cardstatus=new JLabel(thisAccount.isLoss()?"正常":"已挂失");
     JLabel cardpwdLabel=new JLabel("卡片密码");
     JTextField cardpwdField=new JTextField();
-    JButton confirmfreezeBtn=new JButton(thisAccount.isLoss()?"确认挂失":"确认解挂");
+    //JButton confirmfreezeBtn=new JButton(thisAccount.isLoss()?"确认挂失":"确认解挂");
+    JButton confirmfreezeBtn=new JButton("确认挂失");
 
 
 
@@ -90,6 +130,8 @@ public class BankTeacherStudentUI extends JFrame {
     public BankTeacherStudentUI()
     {
         super("银行");
+
+        getAccount();
 
         Font buttonFont=new Font("楷体",Font.PLAIN,20);//设置按钮的文字大小、字体
         Font titleFont=new Font("楷体",Font.PLAIN,40);
@@ -114,43 +156,7 @@ public class BankTeacherStudentUI extends JFrame {
         campuscard.add(freezeBtn);
         backPanel.add(backBtn);
 
-        rechargeBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel,"充值");
-            }
-        });
-        billBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel,"账单");
-            }
-        });
-        changepwdBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel,"密码修改");
-            }
-        });
-        cardimageBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel,"卡片状态");
-            }
-        });
-        freezeBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel,"挂失/解挂");
-            }
-        });
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new SummaryUI();
-            }
-        });
+
 
         //充值
         rechargeLabel.setFont(titleFont);
@@ -232,35 +238,10 @@ public class BankTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH,confirmchangepwdBtn,20,SpringLayout.SOUTH,ensurepwdLabel);
 
         //账单
-        String[] header={"商品说明","订单号","付款账户","交易时间","账单分类","金额"};
-        String[][] data={
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-                {null,null,null,null,null,null},
-        };
-        JTable billtable=new JTable(data,header);
-        JScrollPane billpane=new JScrollPane(billtable);
+
         billpane.setPreferredSize(new Dimension(400,200));
 
-        JComboBox<String>year=new JComboBox<String>();
-        JComboBox<String>month=new JComboBox<String>();
+
 
         year.addItem("");
         year.addItem("2023");
@@ -401,10 +382,224 @@ public class BankTeacherStudentUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
+
+
+        rechargeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardPanel,"充值");
+                refreshPage();
+            }
+        });
+        billBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardPanel,"账单");
+                //显示账单信息
+                IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+                // 直接调用billForSometime函数，时间范围设很大，query为空串""即可
+                ShowTableData(iBankClientAPI.billForSometime(thisAccount.getId(), new Date("1/1/2000"),new Date("1/1/2050"),""));
+                refreshPage();
+            }
+        });
+        changepwdBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardPanel,"密码修改");
+                refreshPage();
+            }
+        });
+        cardimageBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshPage();
+                cardLayout.show(cardPanel,"卡片状态");
+
+            }
+        });
+        freezeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshPage();
+                cardLayout.show(cardPanel,"挂失/解挂");
+            }
+        });
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryUI();
+            }
+        });
+        //用户点击确认充值按钮
+        confirmrechargeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                confirmRecharge();
+                refreshPage();
+            }
+        });
+
+        //用户点击确认修改密码按钮
+        confirmchangepwdBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                confirmchange();
+                refreshPage();
+            }
+        });
+
+        //用户选好时间的月份之后
+        month.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                billSearch();
+            }
+        });
+
+        //用户点击查询按钮之后
+        searchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                billSearch();
+                // 这里不用刷新页面，因为billSearch()函数里用showTable函数直接刷新了表格内容
+                //refreshPage();
+            }
+        });
+
+
+        //用户确认改变挂失状态
+        confirmfreezeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                confirmfreeze();
+                System.out.println("*******************");
+                refreshPage();
+            }
+        });
+
+
+
+    }
+    /**
+     * 用户点击确认充值之后的操作
+     * */
+    private void confirmRecharge(){
+        String inputAmount = amountField.getText();
+        double dInputAmount=Double.parseDouble(inputAmount);
+        String inputPwd=rechargepwdField.getText();
+        IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+        iBankClientAPI.recharge(thisAccount.getId(), dInputAmount,inputPwd);
+
+    }
+
+    /**
+     * 用户点击确认修改密码按钮之后的操作
+     * */
+    private void confirmchange(){
+        String oldPwd=oldpwdField.getText();
+        String newPwd=newpwdField.getText();
+        String newNewPwd=ensurepwdField.getText();
+        IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+        iBankClientAPI.changePwd(thisAccount.getId(), oldPwd,newPwd,newNewPwd);
     }
 
 
+    /**
+     * 用户通过时间和关键字查询账单,待完善
+     * */
+    private void billSearch(){
+        String selectedMonth = (String) month.getSelectedItem();
+        String selectedYear = (String) year.getSelectedItem();
+        String query=searchField.getText();
+        String[][] bills=null;
+        if(!selectedMonth.equals("")&&(!selectedYear.equals(""))){//如果选择了年月
+            System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
+            IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+            iBankClientAPI.billForSometime(thisAccount.getId(), new Date("1/"+selectedMonth+"/"+selectedYear), new Date("31/"+selectedMonth+"/"+selectedYear),query);
+            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间
+        }
+        if(selectedMonth.equals("")||selectedYear.equals("")){//如果年月没有选择，把时间范围设大
+            System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
+            IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+            bills=iBankClientAPI.billForSometime(thisAccount.getId(), new Date("1/1/2000"),new Date("1/1/2050"),query);
+        }
+        ShowTableData(bills);
+    }
 
+    /**
+     * 用户确认改变挂失状态
+     * */
+    private void confirmfreeze(){
+        String Pwd=cardpwdField.getText();
+        // TODO
+        System.out.println("改变挂失输入的密码为："+Pwd);
+        IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+        iBankClientAPI.changeLoss(thisAccount.getId(), Pwd);
+    }
+
+    /**
+     * 显示账单表格信息
+     * */
+    private void ShowTableData(String[][] bills) {
+        //若查询结果为空
+        if(bills==null){
+            System.out.println("查询结果为空");
+            return;
+        }
+
+        // 清空表格原有的数据
+        tableModel.setRowCount(0);
+
+        // 将新数据添加到表格模型
+        for (String[] row : bills) {
+            tableModel.addRow(row);
+        }
+        // 通知表格模型数据发生变化，刷新表格显示
+        tableModel.fireTableDataChanged();
+    }
+
+    /**
+     * 从后端获取account
+     * */
+    public void getAccount(){
+        IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+        thisAccount=iBankClientAPI.findBankAccountById(GlobalData.getUID());
+    }
+
+
+    public void refreshPage(){
+        getAccount();
+        // 刷新余额显示
+        balance.setText("￥" + Double.toString(thisAccount.getBalance()));
+        account.setText(thisAccount.getCardId());
+        name.setText(thisAccount.getName());
+        id.setText(thisAccount.getId());
+        id2.setText(thisAccount.getId());
+        balance2.setText("￥"+thisAccount.getBalance());
+        status.setText(thisAccount.isLoss()?"正常":"已挂失");
+        System.out.println("--------------");
+        System.out.println(Boolean.toString(thisAccount.isLoss()));
+
+
+        // 清空输入框内容
+        amountField.setText("");
+        rechargepwdField.setText("");
+        oldpwdField.setText("");
+        newpwdField.setText("");
+        ensurepwdField.setText("");
+        searchField.setText("");
+        cardpwdField.setText("");
+
+        // 更新余额、状态、卡状态的显示
+        balance2.setText("￥" + thisAccount.getBalance());
+        status.setText(thisAccount.isLoss() ? "正常":"已挂失");
+        cardstatus.setText(thisAccount.isLoss() ? "正常":"已挂失");
+
+        // 更新确认挂失按钮的文本和可用状态
+        confirmfreezeBtn.setText(thisAccount.isLoss() ?  "确认挂失":"确认解挂");
+
+    }
 
 
 

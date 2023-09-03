@@ -2,3 +2,10 @@ LoginMessage:100
 RegisterReqMessage:101
 RegisterMessage不设置了，和loginMessage内容一样，只是编号为102
 ReqBookListMessage使用NoDataReqMessage,编号为200
+
+Bank：
+挂失:1000
+充值：1001
+消费：1002
+修改密码：1003
+查询筛选账单：1004

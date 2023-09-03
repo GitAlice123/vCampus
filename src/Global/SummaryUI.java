@@ -26,9 +26,9 @@ public class SummaryUI extends JFrame
 
         Container contentPane=getContentPane();//获取控制面板
 
-        URL resource =this.getClass().getClassLoader().getResource("SEU.png");
-        Image image=new ImageIcon(resource).getImage();
-        setIconImage(image);
+//        URL resource =this.getClass().getClassLoader().getResource("../../SEU.png");
+//        Image image=new ImageIcon(resource).getImage();
+//        setIconImage(image);
 
         Font buttonFont=new Font("楷体",Font.PLAIN,20);//设置按钮的文字大小、字体
         studentstatusmanagementBtn.setFont(buttonFont);

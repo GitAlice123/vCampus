@@ -22,6 +22,10 @@ public class bankAccount {
     private double balance=0.00;  // 余额
     private boolean isLoss=true;  // 是否挂失，true表示正常，false表示挂失
 
+    public bankAccount(){
+
+    }
+
     /**
      * 构造函数
      *
