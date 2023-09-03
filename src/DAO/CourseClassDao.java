@@ -150,6 +150,7 @@ public class CourseClassDao {
         }
         return classes;
     }
+    //TODO 测试上面的功能
 
     public CourseClass findClassByClassId(String classId) {
         CourseClass classes = null;
@@ -188,4 +189,5 @@ public class CourseClassDao {
         }
         return classes;
     }
+    //TODO 测试上面的功能
 }
