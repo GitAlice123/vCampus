@@ -1,5 +1,6 @@
 package view.Library;
 
+import view.Global.GlobalData;
 import view.connect.*;
 import view.message.*;
 
@@ -15,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class LibraryUI extends JFrame {
@@ -106,12 +109,26 @@ public class LibraryUI extends JFrame {
                     }
                     clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
                     System.out.println("点击的行索引：" + clickedRow);
-                    // TODO:此处要添加还书操作，将该行对应的书从该学生已借的书的数据库和表格中删除
+                    /* 下面重新显示用户借书表格 */
+                    LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost",8888);
+                    String uID = "213213000";
+                    // TODO：全局用户ID还未设置
+                    RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
+                    BookHold[] AllHoldBooks= new BookHold[0];
+                    try {
+                        AllHoldBooks = libraryClientAPI_4.getBorrowedBooks(registerReqMessage);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    try {
+                        ShowBorrowedTableData(AllHoldBooks);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
-
-
         }
 
         @Override
@@ -186,6 +203,7 @@ public class LibraryUI extends JFrame {
                     System.out.println("点击的行索引：" + clickedRow);
 
                     // TODO:此处要添加续借操作，将该行对应的书在该学生的已借书的表格和数据库中将过期时间后延
+
                 }
             });
 
@@ -227,11 +245,11 @@ public class LibraryUI extends JFrame {
     JLabel imageLabel;
     JButton FindBookBtn;
 
-    public LibraryUI() {
+    public LibraryUI() throws IOException {
         initComponents();
     }
 
-    private void initComponents() {
+    private void initComponents() throws IOException {
         this.springLayout = new SpringLayout();
         this.model = new DefaultTableModel();
         this.modelChosen = new DefaultTableModel();
@@ -265,72 +283,35 @@ public class LibraryUI extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[][] data = {//书籍列表，表格数据均传入该数组
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1", "1"}
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost",8888);
+        String a = "yes";
+        UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
-        };
-        String[][] dataChosen = {//已借阅书籍列表
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"},
-                {"1", "1", "1", "1", "1", "1"}
-        };
-        // TODO:刚打开表格应显示所有馆藏书籍
-        // TODO:刚打开借阅信息表格应显示所有借阅书籍信息
-        String[] columnNames = {"书名", "索书号", "作者", "类型", "出版社", "位置", "借阅"};//索书号是一本书一个
-        String[] columnNamesChosen = {"书名", "索书号", "借阅时间", "过期时间", "还书", "续借"};
-        model.setDataVector(data, columnNames);
-        table.setModel(model);
+        Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        ShowTableData(AllBooks);
 
-        table.getColumnModel().getColumn(6).setCellRenderer(new BorrowBookTableCellRendererButton());
-        table.getColumnModel().getColumn(6).setCellEditor(new BorrowBookTableCellEditorButton());
-        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost",8888);
+        String uID = "213213000";
+        RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
+
+        BookHold[] AllHoldBooks=libraryClientAPI_3.getBorrowedBooks(registerReqMessage);
+
+        ShowBorrowedTableData(AllHoldBooks);
+
+
         table.setRowHeight(30);
         JTableHeader tab_header = table.getTableHeader();                    //获取表头
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));    //修改表头的高度
-        modelChosen.setDataVector(dataChosen, columnNamesChosen);
-        tableChosen.setModel(modelChosen);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
-        tableChosen.getColumnModel().getColumn(4).setCellRenderer(new ReturnBookTableCellRendererButton());
-        tableChosen.getColumnModel().getColumn(4).setCellEditor(new ReturnBookTableCellEditorButton());
-        tableChosen.getColumnModel().getColumn(5).setCellRenderer(new RenewBookTableCellRendererButton());
-        tableChosen.getColumnModel().getColumn(5).setCellEditor(new RenewBookTableCellEditorButton());
         tableChosen.setRowHeight(30);
         JTableHeader tab_headerChosen = tableChosen.getTableHeader();                    //获取表头
         tab_headerChosen.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_headerChosen.setPreferredSize(new Dimension(tab_headerChosen.getWidth(), 30));    //修改表头的高度
         tableChosen.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
+
         JScrollPane scrollPaneChosen = new JScrollPane(tableChosen);
         scrollPaneChosen.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
@@ -419,11 +400,75 @@ public class LibraryUI extends JFrame {
                 }
             }
         });
+    }
+
+    private void ShowBorrowedTableData(BookHold[] bookArray) throws IOException {
+        // 把得到的书籍列表放入表格
+        String[][] data;
+        String[] columnNamesChosen;
+        if(bookArray==null){
+            int columnCount = 6;
+            columnNamesChosen = new String[]{"书名", "索书号", "借阅时间", "过期时间", "还书", "续借"};
+            data = new String[][]{null,null,null,null,null,null,null,null,null,null,null,
+            null,null,null,null};
+            modelChosen.setDataVector(data, columnNamesChosen);
+            tableChosen.setModel(modelChosen);
+        }
+        else {
+            int rowCount = bookArray.length;
+            int columnCount = 6;
+
+            columnNamesChosen = new String[]{"书名", "索书号", "借阅时间", "过期时间", "还书", "续借"};
+            // 创建二维字符串数组用于存储表格数据
+            data = new String[rowCount][columnCount];
+
+            // 将书籍信息转换为对象数组并存储在data数组中
+            for (int i = 0; i < rowCount; i++) {
+                BookHold book = bookArray[i];
+                Date dayBorrow = book.getBorrowTime();
+                Date dayOutdate = book.getOutdateTime();
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+
+                data[i] = new String[]{
+                        GetBookNameByISBN(book.getBookISBN()),
+                        book.getBookISBN(),
+                        ft.format(dayBorrow),
+                        ft.format(dayOutdate),
+                };
+            }
+            modelChosen.setDataVector(data, columnNamesChosen);
+            tableChosen.setModel(modelChosen);
+
+            ReturnBookTableCellEditorButton editor;
+            ReturnBookTableCellRendererButton renderer;
+
+            renderer = new ReturnBookTableCellRendererButton();
+            editor = new ReturnBookTableCellEditorButton();
+
+            RenewBookTableCellEditorButton renewEditor;
+            RenewBookTableCellRendererButton renewRenderer;
+
+            renewRenderer = new RenewBookTableCellRendererButton();
+            renewEditor = new RenewBookTableCellEditorButton();
+
+            tableChosen.getColumnModel().getColumn(4).setCellRenderer(renderer);
+            tableChosen.getColumnModel().getColumn(4).setCellEditor(editor);
+
+            tableChosen.getColumnModel().getColumn(5).setCellRenderer(renewRenderer);
+            tableChosen.getColumnModel().getColumn(5).setCellEditor(renewEditor);
+
+        }
+
+
+
+
 
     }
 
     private void ShowTableData(Book[] bookArray) {
         // 把得到的书籍列表放入表格
+        if(bookArray.length==0)
+            return;
         int rowCount = bookArray.length;
         int columnCount = 7;
 
@@ -461,11 +506,11 @@ public class LibraryUI extends JFrame {
         System.out.println("Search Pressed");
         String searchText = FindBookTex.getText(); // 获取文本框内容作为搜索文本
 
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost", 8888);
         SearchBookNameMessage searchBookNameMessage = new SearchBookNameMessage(searchText);
         Book[] bookArray;
         try {
-            bookArray = libraryClientAPI.getBooksBySearchBookName(searchBookNameMessage);
+            bookArray = libraryClientAPI_3.getBooksBySearchBookName(searchBookNameMessage);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -478,20 +523,49 @@ public class LibraryUI extends JFrame {
         int clickedRow;
         clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
         System.out.println("点击的行索引：" + clickedRow);
-        // ISBN号在第1列
+
+
+        // 点击显示在馆数量
         Object data = table.getValueAt(clickedRow, 1);
         String ISBNchosen = (String) data;
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
         BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBNchosen);
         Book bookGet = libraryClientAPI.getBookByISBN(bookISBNMessage);
         NumOfBook.setText("在馆数量：" + Integer.toString(bookGet.freeNum)); // 使用 Integer.toString
+
+        Date currentDate = new Date();
+        // 实施借书操作
+        // TODO:全局用户ID还未设置，现在是假的
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost", 8888);
+        UniqueMessage uniqueMessage = new UniqueMessage("yes");
+        String nextOPRid = libraryClientAPI_4.getNextOPRId(uniqueMessage);
+
+
         LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
-        BookISBNMessage bookISBNMessage_1 = new BookISBNMessage(ISBNchosen);
-        Boolean flag = libraryClientAPI_1.BorrowBook(bookISBNMessage_1);
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+                ISBNchosen,currentDate,"BOR",null);
+        Boolean flag = libraryClientAPI_1.BorrowBook(bookOperationRecord);
         if (flag) {
             System.out.println("Borrow Successfully");
         }
-        // TODO:这里可以运行但是无法写入数据库
+
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl("localhost",8888);
+        String uID = "213213000";
+        // TODO：全局用户ID还未设置
+        RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
+
+        BookHold[] AllHoldBooks= new BookHold[0];
+        try {
+            AllHoldBooks = libraryClientAPI_5.getBorrowedBooks(registerReqMessage);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        try {
+            ShowBorrowedTableData(AllHoldBooks);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
     }
 
@@ -504,20 +578,57 @@ public class LibraryUI extends JFrame {
         JButton clickedButton = (JButton) e.getSource();
         int clickedRow;
         clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-        System.out.println("点击的行索引：" + clickedRow);
-        // ISBN号在第1列
-        Object data = table.getValueAt(clickedRow, 1);
-        String ISBNchosen = (String) data;
 
-        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
-        BookISBNMessage bookISBNMessage_1 = new BookISBNMessage(ISBNchosen);
-        Boolean flag = libraryClientAPI_1.ReturnBook(bookISBNMessage_1);
+        // ISBN号在第1列
+        Object data = tableChosen.getValueAt(clickedRow, 1);
+        String ISBNchosen = (String) data;
+        System.out.println("Going to return "+ISBNchosen);
+
+        Date currentDate = new Date();
+        // 实施借书操作
+        // TODO:全局用户ID还未设置，现在是假的
+
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost", 8888);
+        UniqueMessage uniqueMessage = new UniqueMessage("yes");
+        String nextOPRid = libraryClientAPI_3.getNextOPRId(uniqueMessage);
+
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+                ISBNchosen,currentDate,"RET",null);
+        Boolean flag = libraryClientAPI_2.ReturnBook(bookOperationRecord);
+
         if (flag) {
             System.out.println("Return Successfully");
         }
+
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost",8888);
+        String uID = "213213000";
+        // TODO：全局用户ID还未设置
+        RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
+
+        BookHold[] AllHoldBooks= new BookHold[0];
+        try {
+            AllHoldBooks = libraryClientAPI_4.getBorrowedBooks(registerReqMessage);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        try {
+            ShowBorrowedTableData(AllHoldBooks);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-    public static void main(String[] args) {
+    private String GetBookNameByISBN(String ISBN)
+            throws IOException{
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+        BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBN);
+
+        Book book = libraryClientAPI.getBookByISBN(bookISBNMessage);
+        return book.getBookName();
+    }
+    public static void main(String[] args) throws IOException {
         try {
             // 设置外观为Windows外观
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

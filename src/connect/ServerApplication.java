@@ -86,6 +86,10 @@ public class ServerApplication {
                         serverActionTool.Action208(jsonData,clientSocket);
                         break;
                     }
+                    case 209:{
+                        serverActionTool.Action209(jsonData,clientSocket);
+                        break;
+                    }
                     default: {
                         // 处理其他消息类型
                         break;

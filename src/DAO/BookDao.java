@@ -1,6 +1,6 @@
 package view.DAO;
 
-import view.Library.Book;
+import view.Library.*;
 //import vo.Grade;
 
 import java.sql.*;
@@ -59,6 +59,12 @@ public class BookDao {
      * @param bookname 书名
      * @return 查询到的书本对象，因为可能存在书名相同（作者不同）的情况，因此返回一个Book类的数组
      */
+    /**
+     * 根据书名查询书
+     *
+     * @param bookname 书名
+     * @return 查询到的书本对象，因为可能存在书名相同（作者不同）的情况，因此返回一个Book类的数组
+     */
     public Book[] findBookByBookName(String bookname){
         String sqlString = "select * from tblBook where bookname = '" + bookname + "'";
         Book[] allBooks = new Book[10];
@@ -74,13 +80,15 @@ public class BookDao {
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            res.last();
-            int count = res.getRow();
+            int count =0;
+            while (res.next()){
+                count++;
+            }//统计一共查找到多少条数据
             res.beforeFirst();
 
             if(count == 0){
                 return null;
-            }
+            }//若未找到该书名的书，则返回null
 
             allBooks = new Book[count];
             int index=0;
@@ -99,6 +107,7 @@ public class BookDao {
 
         return allBooks;
     }
+
 
     /**
      * 向数据库中新增插入书本
@@ -265,7 +274,7 @@ public class BookDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\db\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -329,7 +338,7 @@ public class BookDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\db\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -343,6 +352,52 @@ public class BookDao {
 
 
         return true;
+    }
+
+    /**
+     * 根据所有书籍
+     *
+     * @return 查询到的所有书本对象，返回一个Book类的数组
+     */
+    public Book[] findAllBooks(){
+        String sqlString = "select * from tblBook";
+        Book[] allBooks = new Book[10];
+
+        try {
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            ResultSet res = sta.executeQuery(sqlString);
+
+            res.last();
+            int count = res.getRow();
+            res.beforeFirst();
+
+            if(count == 0){
+                return null;
+            }//若数据库中无书籍信息，则返回null
+
+            allBooks = new Book[count];
+            int index=0;
+            while (res.next()) {//不断的移动光标到下一个数据
+                allBooks[index] = new Book(res.getString(1),res.getString(2),res.getString(3),
+                        res.getString(4),res.getDouble(5),res.getString(6),res.getString(7),
+                        res.getInt(8),res.getInt(9),res.getString(10),res.getInt(11));
+                index++;
+            }
+
+            con.close();//关闭数据库连接
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allBooks;
     }
 
 }
