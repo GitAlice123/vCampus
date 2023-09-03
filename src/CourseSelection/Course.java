@@ -1,6 +1,7 @@
 package view.CourseSelection;
 
 public class Course {//学生视角的课程
+
     // 定义一个内部枚举类型表示课程类型
     public enum CourseType {
         Compulsory, Optional, Limitative
@@ -14,8 +15,7 @@ public class Course {//学生视角的课程
     private double Grades;        // 成绩
 
     // 构造器
-    public Course(String courseNum, String courseName, CourseType courseType,
-                  double courseTime, double credit, double grades) {
+    public Course(String courseNum, String courseName, CourseType courseType, double courseTime, double credit, double grades) {
         this.CourseNum = courseNum;
         this.CourseName = courseName;
         this.CourseType = courseType;
@@ -24,7 +24,17 @@ public class Course {//学生视角的课程
         setGrades(grades); // 使用setter方法来确保值的范围
     }
 
-    public Course(){}//空构造
+    public Course(String courseNum, String courseName, String courseType, double courseTime, double credit) {
+        CourseNum = courseNum;
+        CourseName = courseName;
+        setCourseType(courseType);
+        CourseTime = courseTime;
+        Credit = credit;
+        Grades = -1;
+    }
+
+    public Course() {
+    }//空构造
 
     // getters 和 setters
     public String getCourseNum() {
@@ -55,7 +65,7 @@ public class Course {//学生视角的课程
         this.CourseType = courseType;
     }
 
-    public void setCourseType(String courseType){
+    public void setCourseType(String courseType) {
         switch (courseType) {
             case "Compulsory":
                 this.CourseType = CourseType.Compulsory;
