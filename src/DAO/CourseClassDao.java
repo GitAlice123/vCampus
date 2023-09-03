@@ -11,6 +11,7 @@ public class CourseClassDao {
 
     public CourseClass[] findClassByTeacherId(String TeacherId){
         CourseClass[] classes= new CourseClass[1];
+        ClassNameListDao dao = new ClassNameListDao();
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
@@ -39,7 +40,7 @@ public class CourseClassDao {
                         res.getInt(6),
                         res.getInt(7),
                         res.getString(8),
-                        ClassNameListDao.findStudentIdByClassId(res.getString(1))
+                        dao.findStudentIdByClassId(res.getString(1))
                         );
                 index++;
             }

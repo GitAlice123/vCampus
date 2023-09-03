@@ -1,7 +1,19 @@
-LoginMessage:100
-RegisterReqMessage:101
-RegisterMessage不设置了，和loginMessage内容一样，只是编号为102
-ReqBookListMessage使用NoDataReqMessage,编号为200
+该文档展示不同请求的编号，有些使用相同的message类型
+记录格式：请求类型，消息类型，编号
+
+登录请求,LoginMessage,100
+注册允许请求（检查是否已经存在该用户）,RegisterReqMessage:101
+注册请求,LoginMessage,102
+
+得到馆藏书籍列表请求,NoDataReqMessage,200
+自己借阅的书籍列表请求,RegisterReqMessage,201
+用书名查找书籍并返回书籍列表请求,SearchBookNameMessage,202
+用索书号查找书籍并删除该书籍请求,BookISBNMessage,203
+传入book对象增加书籍请求,Book,204
+借阅书籍请求,BookISBNMessage,205
+还书请求,BookISBNMessage,206
+修改书籍请求,Book,207
+用索书号查找书籍并返回该书,BookISBNMessage,208
 
 Bank：
 挂失:1000
