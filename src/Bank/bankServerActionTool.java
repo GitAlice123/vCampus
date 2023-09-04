@@ -204,8 +204,6 @@ public class bankServerActionTool {
         }
     }
 
-
-
     /**
      * 通过id查找account
      * */
@@ -230,40 +228,6 @@ public class bankServerActionTool {
 
         //下面将response信息返回客户端
         bankAccount respMessage = result;
-        try {
-            // 将 respMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 管理员获取账户信息
-     * */
-    public void Action1006(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        BankIDMessage bankIDMessage = null;
-        try {
-            bankIDMessage = objectMapper.readValue(jsonData, BankIDMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 1006");
-
-
-        //执行对应操作，这里是查找所有账单
-        String[][] result;
-        String userID= bankIDMessage.getId();
-        result=funcs.findBankAccounts(userID);
-
-        //下面将response信息返回客户端
-        String[][] respMessage = result;
         try {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);

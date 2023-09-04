@@ -5,15 +5,17 @@
 注册允许请求（检查是否已经存在该用户）,RegisterReqMessage:101
 注册请求,LoginMessage,102
 
-得到馆藏书籍列表请求,NoDataReqMessage,200
+得到馆藏书籍列表请求,UniqueMessage,200
 自己借阅的书籍列表请求,RegisterReqMessage,201
 用书名查找书籍并返回书籍列表请求,SearchBookNameMessage,202
 用索书号查找书籍并删除该书籍请求,BookISBNMessage,203
 传入book对象增加书籍请求,Book,204
-借阅书籍请求,BookISBNMessage,205
+借阅书籍请求,BookOprRecordMessage,205
 还书请求,BookISBNMessage,206
 修改书籍请求,Book,207
 用索书号查找书籍并返回该书,BookISBNMessage,208
+
+得到所有书籍操作记录,UniqueMessage,209
 
 Bank：
 挂失:1000
@@ -21,5 +23,4 @@ Bank：
 消费：1002
 修改密码：1003
 查询筛选账单：1004
-用id查找account：1005
-管理员获取账户信息：1006
+

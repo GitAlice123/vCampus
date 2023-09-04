@@ -89,7 +89,7 @@ public class bankFunction {
 //     */
 //    public String[][] billSearch(String query,String ID){
 //        bankBill[] bills=bBDao.findBillsByQuery(query,ID);
-//        return convertBillsToStrings(bills);
+//        return convertSTBillsToStrings(bills);
 //    }
 
     /**
@@ -102,25 +102,16 @@ public class bankFunction {
      * @return bankBill类数组allbills，代表数据库中所有的账单
      */
     public String[][] billForSometime(String id,Date startTime, Date endTime,String query){
-        return convertBillsToStrings(bBDao.findBillsForSometime(id,startTime,endTime,query));
+        return convertSTBillsToStrings(bBDao.findBillsForSometime(id,startTime,endTime,query));
     }
 
     /**
-     * 用id查询银行账户信息。管理员用
+     * 查找并返回数据库中tblbankBill表中的所有账单信息 (管理员界面使用，现在不一定用得上)
      *
-     * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
+     * @return bankBill类数组allbills，代表数据库中所有的账单
      */
-    public String[][] findBankAccounts(String id){
-        if(id==null) {
-            return convertAccountsToStrings(bADao.findfindBankAccounts());
-        } else if (id.equals("")) {
-            return convertAccountsToStrings(bADao.findfindBankAccounts());
-        } else{
-            bankAccount[] bankA=new bankAccount[1];
-            bankA[0]=bADao.findBankAccountById(id);
-            return convertAccountsToStrings(bankA);
-        }
-
+    public String[][] findAllBills(){
+        return convertSTBillsToStrings(bBDao.findAllBills());
     }
 
     /**
@@ -128,10 +119,6 @@ public class bankFunction {
      * @return 挂失/解挂结果，true表示挂失/解挂成功，false表示挂失/解挂失败
      */
     public boolean changeLoss(String id,String pwd) throws NullPointerException{
-        if(pwd==null){
-            bADao.changeLoss(id);
-            System.out.println("管理员改变挂失状态成功");
-        }
         try{
             bankAccount thisAccount=bADao.findBankAccountById(id);
             if(!thisAccount.getPaymentPwd().equals(pwd)){
@@ -241,7 +228,7 @@ public class bankFunction {
      * @param bills bankBill 对象数组，需要进行转换的数组
      * @return 包含 bankBill 对象属性的二维字符串数组
      */
-    public String[][] convertBillsToStrings(bankBill[] bills) {
+    public String[][] convertSTBillsToStrings(bankBill[] bills) {
         if(bills!=null){
             String[][] billStrings = new String[bills.length][6];
             System.out.println(bills.length);
@@ -266,31 +253,35 @@ public class bankFunction {
     }
 
     /**
-     * 将 bankAccount 对象数组转换为二维字符串数组,只用于学生老师界面的账单展示
+     * 将 bankBill 对象数组转换为二维字符串数组,只用于管理员界面的账单展示
      *
-     * @param accounts bankAccount 对象数组，需要进行转换的数组
-     * @return 包含 bankAccount 对象属性的二维字符串数组
+     * @param bills bankBill 对象数组，需要进行转换的数组
+     * @return 包含 bankBill 对象属性的二维字符串数组
      */
-    public String[][] convertAccountsToStrings(bankAccount[] accounts) {
-        if(accounts!=null){
-            String[][] accountStrings = new String[accounts.length][6];
-            System.out.println(accounts.length);
+    public String[][] convertMaBillsToStrings(bankBill[] bills) {
+        // TODO
+        if(bills!=null){
+            String[][] billStrings = new String[bills.length][6];
+            System.out.println(bills.length);
 
-            for (int i = 0; i < accounts.length; i++) {
-                bankAccount account = accounts[i];
+            for (int i = 0; i < bills.length; i++) {
+                bankBill bill = bills[i];
+                bankAccount bankA=bADao.findBankAccountById(bill.getUserId());
 
-                accountStrings[i][0] = account.getCardId();
-                accountStrings[i][1] = account.getName();
-                accountStrings[i][2] = account.getId();
-                accountStrings[i][3] = Double.toString(account.getBalance());
-                accountStrings[i][4] = account.isLoss()?"正常":"已挂失";
-                accountStrings[i][5] = "";
+                billStrings[i][0] = bill.getCardId();
+                billStrings[i][1] = bankA.getName();
+                billStrings[i][2] = bill.getUserId();
+                billStrings[i][3] = Double.toString(bill.getAmount());
+                billStrings[i][4] = bill.isType()?"消费":"充值";
+                billStrings[i][5] ="";
             }
 
-            return accountStrings;
+            return billStrings;
         }else{
             System.out.println("无相应内容");
             return null;
         }
+
+
     }
 }

@@ -83,9 +83,44 @@ public class ServerApplication {
                         bankServerActionTool.Action1005(jsonData, clientSocket);
                         break;
                     }
-                    case 1006:{
-                        //管理员查看所有account
-                        bankServerActionTool.Action1006(jsonData, clientSocket);
+                    case 200: {
+                        serverActionTool.Action200(jsonData,clientSocket);
+                        break;
+                    }
+                    case 201: {
+                        serverActionTool.Action201(jsonData,clientSocket);
+                        break;
+                    }
+                    case 202: {
+                        serverActionTool.Action202(jsonData,clientSocket);
+                        break;
+                    }
+                    case 203: {
+                        serverActionTool.Action203(jsonData,clientSocket);
+                        break;
+                    }
+                    case 204: {
+                        serverActionTool.Action204(jsonData,clientSocket);
+                        break;
+                    }
+                    case 205: {
+                        serverActionTool.Action205(jsonData,clientSocket);
+                        break;
+                    }
+                    case 206: {
+                        serverActionTool.Action206(jsonData,clientSocket);
+                        break;
+                    }
+                    case 207: {
+                        serverActionTool.Action207(jsonData,clientSocket);
+                        break;
+                    }
+                    case 208: {
+                        serverActionTool.Action208(jsonData,clientSocket);
+                        break;
+                    }
+                    case 209:{
+                        serverActionTool.Action209(jsonData,clientSocket);
                         break;
                     }
                     default: {

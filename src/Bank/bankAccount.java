@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 import javax.swing.*;
@@ -124,12 +123,7 @@ public class bankAccount {
      * @return 余额
      */
     public double getBalance() {
-        // 使用BigDecimal将double转换为保留两位小数的double
-        BigDecimal bigDecimal = new BigDecimal(balance);
-        BigDecimal roundedNumber = bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP);
-
-        // 返回保留两位小数的double
-        return roundedNumber.doubleValue();
+        return balance;
     }
 
     /**

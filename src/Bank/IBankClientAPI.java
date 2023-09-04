@@ -67,11 +67,4 @@ public interface IBankClientAPI {
      * @return bankAccount账户
      */
     public bankAccount findBankAccountById(String id) throws NullPointerException;
-
-    /**
-     * 用一卡通号查询并返回所有的银行账户信息。管理员用
-     *
-     * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
-     */
-    String[][] findBankAccounts(String id);
 }
