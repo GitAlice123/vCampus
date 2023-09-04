@@ -244,6 +244,7 @@ public class LibraryUI extends JFrame {
     JButton backBtn;
     JLabel imageLabel;
     JButton FindBookBtn;
+    JButton ReturnToAllBookBtn;
 
     public LibraryUI() throws IOException {
         initComponents();
@@ -264,6 +265,7 @@ public class LibraryUI extends JFrame {
         this.ChosenBtn = new JButton("查看已借阅书籍");
         this.FindBookTex = new JTextField();//查找图书的输入框
         this.FindBookBtn = new JButton("查找");//查找按钮
+        this.ReturnToAllBookBtn=new JButton("显示所有书籍");//显示所有书籍按钮
         this.NumOfBook = new JLabel("在馆数量:");
         this.BookNum = null;
         this.NumOfBookOut = new JLabel(BookNum);
@@ -326,6 +328,7 @@ public class LibraryUI extends JFrame {
         panel1.add(ChosenPanel, "ChosenPanel");
         BookPanel.add(FindBookTex);
         BookPanel.add(FindBookBtn);
+        BookPanel.add(ReturnToAllBookBtn);
         BookPanel.add(NumOfBook);
         BookPanel.add(NumOfBookOut);
         BookPanel.add(imageLabel);
@@ -334,6 +337,7 @@ public class LibraryUI extends JFrame {
         ChosenBtn.setPreferredSize(new Dimension(250, 40));
         FindBookTex.setPreferredSize(new Dimension(150, 40));
         FindBookBtn.setPreferredSize(new Dimension(150, 40));
+        ReturnToAllBookBtn.setPreferredSize(new Dimension(220, 40));
         Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
         table.setFont(centerFont);
         tableChosen.setFont(centerFont);
@@ -342,6 +346,7 @@ public class LibraryUI extends JFrame {
         ChosenBtn.setFont(centerFont);
         FindBookTex.setFont(centerFont);
         FindBookBtn.setFont(centerFont);
+        ReturnToAllBookBtn.setFont(centerFont);
         NumOfBook.setFont(centerFont);
         TopPanel.add(BookBtn);
         TopPanel.add(ChosenBtn);
@@ -358,6 +363,8 @@ public class LibraryUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, NumOfBookOut, 40, SpringLayout.NORTH, BookPanel);
         springLayout.putConstraint(SpringLayout.WEST, FindBookBtn, 10, SpringLayout.EAST, FindBookTex);
         springLayout.putConstraint(SpringLayout.NORTH, FindBookBtn, 0, SpringLayout.NORTH, FindBookTex);
+        springLayout.putConstraint(SpringLayout.WEST, ReturnToAllBookBtn, 10, SpringLayout.EAST, FindBookBtn);
+        springLayout.putConstraint(SpringLayout.NORTH, ReturnToAllBookBtn, 0, SpringLayout.NORTH, FindBookTex);
         springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 50, SpringLayout.SOUTH, FindBookTex);
         springLayout.putConstraint(SpringLayout.WEST, scrollPane, 100, SpringLayout.WEST, panel1);
         springLayout.putConstraint(SpringLayout.NORTH, scrollPaneChosen, 100, SpringLayout.NORTH, panel1);
@@ -390,6 +397,16 @@ public class LibraryUI extends JFrame {
                 SearchBtnClicked();
             }
         });
+        ReturnToAllBookBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ReturnToAllBookBtnClicked(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });//TODO:加按钮响应
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -627,6 +644,16 @@ public class LibraryUI extends JFrame {
 
         Book book = libraryClientAPI.getBookByISBN(bookISBNMessage);
         return book.getBookName();
+    }
+
+    private void ReturnToAllBookBtnClicked(ActionEvent e)
+            throws IOException{
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost",8888);
+        String a = "yes";
+        UniqueMessage noDataReqMessage = new UniqueMessage(a);
+
+        Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        ShowTableData(AllBooks);
     }
     public static void main(String[] args) throws IOException {
         try {
