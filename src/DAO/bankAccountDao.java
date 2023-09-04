@@ -1,13 +1,11 @@
 package view.DAO;
 
 import view.Bank.bankAccount;
-import view.Bank.bankBill;
 
 import java.sql.*;
-import java.util.Calendar;
-import java.util.Date;
 
 public class bankAccountDao {
+
 
     // 是否挂失，true表示正常，false表示挂失
     public boolean isLoss(String id){
@@ -18,7 +16,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
@@ -57,7 +55,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
@@ -85,47 +83,6 @@ public class bankAccountDao {
         return bankaccount;
     }
 
-
-    public bankAccount[] findAllBankAccounts(){
-        String sqlString = "select * from tblBankAccount";
-        bankAccount[] allAccounts = new bankAccount[10];
-
-        try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\db\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            ResultSet res = sta.executeQuery(sqlString);
-
-            res.last();
-            int count = res.getRow(); //查找到账单信息的条数
-            res.beforeFirst();
-
-            if(count == 0){
-                return null;
-            }//若查找到0条账单数据，则返回null
-
-            allAccounts = new bankAccount[count];
-            int index=0;
-            while (res.next()) {//不断的移动光标到下一个数据
-                allAccounts[index] = new bankAccount(res.getString(1),res.getString(2),res.getString(3),
-                        res.getString(4),res.getDouble(5),res.getBoolean(6));
-                index++;
-            }
-
-            con.close();//关闭数据库连接
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return allAccounts;
-    }
-
     /*
         通过传入的一卡通号id和用户输入的支付密码Pwd，从数据库中查找相应用户并判断密码是否正确
     */
@@ -139,7 +96,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
@@ -177,7 +134,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
@@ -204,7 +161,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -234,7 +191,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
@@ -261,7 +218,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -291,7 +248,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
@@ -320,7 +277,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -351,7 +308,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
@@ -381,7 +338,7 @@ public class bankAccountDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///C:\\Users\\15222\\Desktop\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
@@ -396,5 +353,58 @@ public class bankAccountDao {
         return true;
     }
 
+    /**
+     * 查询并返回所有的银行账户信息。
+     *
+     * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
+     */
+    public bankAccount[] findfindBankAccounts() {
+        // SQL查询语句
+        String sqlString = "select * from tblBankAccount";
+
+        // 创建一个包含10个元素的 bankAccount[] 数组
+        bankAccount[] allAccounts = new bankAccount[10];
+
+        try {
+            // 加载 Access 驱动
+            Class.forName("com.hxtt.sql.access.AccessDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            // 建立数据库连接
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\database\\vCampus.mdb", "", "");
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet res = sta.executeQuery(sqlString);
+
+            // 定位到结果集的最后一行，获取记录总数
+            res.last();
+            int count = res.getRow();
+            res.beforeFirst();
+
+            // 如果记录数为0，返回 null
+            if (count == 0) {
+                return null;
+            }
+
+            // 根据记录数重新创建 bankAccount[] 数组
+            allAccounts = new bankAccount[count];
+            int index = 0;
+            while (res.next()) {
+                // 从结果集中获取账户信息并创建 bankAccount 对象
+                allAccounts[index] = new bankAccount(res.getString(1), res.getString(2), res.getString(3),
+                        res.getString(4), res.getDouble(5), res.getBoolean(6));
+                index++;
+            }
+
+            con.close(); // 关闭数据库连接
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allAccounts;
+    }
 
 }

@@ -2,6 +2,7 @@ package view.Bank;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,8 @@ import view.Bank.bankAccount;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -89,6 +92,7 @@ public class BankTeacherStudentUI extends JFrame {
     JTable billtable = new JTable(tableModel);
     JScrollPane billpane=new JScrollPane(billtable);
 
+
     //卡片信息
     JLabel cardimageLabel=new JLabel("卡片信息");
     JLabel accontLabel=new JLabel("校园卡账户");
@@ -133,9 +137,9 @@ public class BankTeacherStudentUI extends JFrame {
 
         getAccount();
 
-        Font buttonFont=new Font("楷体",Font.PLAIN,20);//设置按钮的文字大小、字体
-        Font titleFont=new Font("楷体",Font.PLAIN,40);
-        Font centerFont=new Font("楷体",Font.PLAIN,20);//设置中间组件的文字大小、字体
+        Font buttonFont=new Font("楷体",Font.PLAIN,25);//设置按钮的文字大小、字体
+        Font titleFont=new Font("楷体",Font.PLAIN,50);
+        Font centerFont=new Font("楷体",Font.PLAIN,30);//设置中间组件的文字大小、字体
 
 //        URL resource =this.getClass().getClassLoader().getResource("SEU.png");
 //        Image image=new ImageIcon(resource).getImage();
@@ -148,6 +152,13 @@ public class BankTeacherStudentUI extends JFrame {
         changepwdBtn.setFont(buttonFont);
         freezeBtn.setFont(buttonFont);
         backBtn.setFont(buttonFont);
+        rechargeBtn.setPreferredSize(new Dimension(150,40));
+        cardimageBtn.setPreferredSize(new Dimension(150,40));
+        billBtn.setPreferredSize(new Dimension(150,40));
+        changepwdBtn.setPreferredSize(new Dimension(150,40));
+        freezeBtn.setPreferredSize(new Dimension(150,40));
+        backBtn.setPreferredSize(new Dimension(100,40));
+
 
         campuscard.add(rechargeBtn);
         campuscard.add(billBtn);
@@ -164,9 +175,12 @@ public class BankTeacherStudentUI extends JFrame {
         balance.setFont(centerFont);
         amountLabel.setFont(centerFont);
         amountField.setPreferredSize(new Dimension(200,30));//设置输入框大小
+        amountField.setFont(centerFont);
         confirmrechargeBtn.setFont(buttonFont);
-        rechargepwdField.setPreferredSize(new Dimension(200,30));
         rechargepwdLabel.setFont(centerFont);
+        rechargepwdField.setPreferredSize(new Dimension(200,30));
+        rechargepwdField.setFont(centerFont);
+
 
         recharge.add(rechargeLabel);
         recharge.add(balanceLabel);
@@ -177,27 +191,29 @@ public class BankTeacherStudentUI extends JFrame {
         recharge.add(rechargepwdLabel);
         recharge.add(rechargepwdField);
 
-        springLayout.putConstraint(SpringLayout.NORTH,rechargeLabel,0,SpringLayout.NORTH,cardPanel);
-        int x=(int)(1.3*(Spring.width(cardPanel).getValue()-Spring.width(rechargeLabel).getValue()));
+        springLayout.putConstraint(SpringLayout.NORTH,rechargeLabel,40,SpringLayout.NORTH,cardPanel);
+        int x=(int)(2.45*(Spring.width(cardPanel).getValue()-Spring.width(rechargeLabel).getValue()));
         springLayout.putConstraint(SpringLayout.WEST,rechargeLabel,-x,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,balanceLabel,100,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,balanceLabel,20,SpringLayout.SOUTH,rechargeLabel);
-        springLayout.putConstraint(SpringLayout.WEST,balance,40,SpringLayout.EAST,balanceLabel);
+        springLayout.putConstraint(SpringLayout.WEST,balanceLabel,400,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,balanceLabel,80,SpringLayout.SOUTH,rechargeLabel);
+        springLayout.putConstraint(SpringLayout.WEST,balance,80,SpringLayout.EAST,balanceLabel);
         springLayout.putConstraint(SpringLayout.NORTH,balance,0,SpringLayout.NORTH,balanceLabel);
         springLayout.putConstraint(SpringLayout.WEST,amountLabel,0,SpringLayout.WEST,balanceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,amountLabel,20,SpringLayout.SOUTH,balanceLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,amountLabel,60,SpringLayout.SOUTH,balanceLabel);
         springLayout.putConstraint(SpringLayout.WEST,amountField,0,SpringLayout.WEST,balance);
         springLayout.putConstraint(SpringLayout.NORTH,amountField,0,SpringLayout.NORTH,amountLabel);
         springLayout.putConstraint(SpringLayout.WEST,rechargepwdLabel,0,SpringLayout.WEST,balanceLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,rechargepwdLabel,20,SpringLayout.SOUTH,amountLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,rechargepwdLabel,60,SpringLayout.SOUTH,amountLabel);
         springLayout.putConstraint(SpringLayout.WEST,rechargepwdField,0,SpringLayout.WEST,balance);
         springLayout.putConstraint(SpringLayout.NORTH,rechargepwdField,0,SpringLayout.NORTH,rechargepwdLabel);
-        springLayout.putConstraint(SpringLayout.WEST,confirmrechargeBtn,235,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmrechargeBtn,40,SpringLayout.SOUTH,rechargepwdLabel);
+        springLayout.putConstraint(SpringLayout.WEST,confirmrechargeBtn,525,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,confirmrechargeBtn,80,SpringLayout.SOUTH,rechargepwdLabel);
+
 
         //修改密码
         changepwdLabel.setFont(titleFont);
         idLabel.setFont(centerFont);
+        id.setFont(centerFont);
         newpwdLabel.setFont(centerFont);
         oldpwdLabel.setFont(centerFont);
         ensurepwdLabel.setFont(centerFont);
@@ -205,6 +221,10 @@ public class BankTeacherStudentUI extends JFrame {
         oldpwdField.setPreferredSize(new Dimension(200,30));
         newpwdField.setPreferredSize(new Dimension(200,30));
         ensurepwdField.setPreferredSize(new Dimension(200,30));
+        oldpwdField.setFont(centerFont);
+        newpwdField.setFont(centerFont);
+        ensurepwdField.setFont(centerFont);
+
 
         changepwd.add(changepwdLabel);
         changepwd.add(idLabel);
@@ -218,35 +238,43 @@ public class BankTeacherStudentUI extends JFrame {
         changepwd.add(confirmchangepwdBtn);
 
         springLayout.putConstraint(SpringLayout.WEST,changepwdLabel,-x,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,idLabel,100,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,idLabel,0,SpringLayout.SOUTH,changepwdLabel);
-        springLayout.putConstraint(SpringLayout.WEST,id,60,SpringLayout.EAST,idLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,changepwdLabel,40,SpringLayout.NORTH,cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST,idLabel,400,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,idLabel,60,SpringLayout.SOUTH,changepwdLabel);
+        springLayout.putConstraint(SpringLayout.WEST,id,80,SpringLayout.EAST,idLabel);
         springLayout.putConstraint(SpringLayout.NORTH,id,0,SpringLayout.NORTH,idLabel);
         springLayout.putConstraint(SpringLayout.WEST,oldpwdLabel,0,SpringLayout.WEST,idLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,oldpwdLabel,20,SpringLayout.SOUTH,idLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,oldpwdLabel,60,SpringLayout.SOUTH,idLabel);
         springLayout.putConstraint(SpringLayout.WEST,oldpwdField,0,SpringLayout.WEST,id);
         springLayout.putConstraint(SpringLayout.NORTH,oldpwdField,0,SpringLayout.NORTH,oldpwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,newpwdLabel,0,SpringLayout.WEST,idLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,newpwdLabel,20,SpringLayout.SOUTH,oldpwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,newpwdLabel,60,SpringLayout.SOUTH,oldpwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,newpwdField,0,SpringLayout.WEST,id);
         springLayout.putConstraint(SpringLayout.NORTH,newpwdField,0,SpringLayout.NORTH,newpwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,ensurepwdLabel,0,SpringLayout.WEST,idLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,ensurepwdLabel,20,SpringLayout.SOUTH,newpwdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,ensurepwdLabel,60,SpringLayout.SOUTH,newpwdLabel);
         springLayout.putConstraint(SpringLayout.WEST,ensurepwdField,0,SpringLayout.WEST,id);
         springLayout.putConstraint(SpringLayout.NORTH,ensurepwdField,0,SpringLayout.NORTH,ensurepwdLabel);
-        springLayout.putConstraint(SpringLayout.WEST,confirmchangepwdBtn,235,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmchangepwdBtn,20,SpringLayout.SOUTH,ensurepwdLabel);
+        springLayout.putConstraint(SpringLayout.WEST,confirmchangepwdBtn,525,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,confirmchangepwdBtn,80,SpringLayout.SOUTH,ensurepwdLabel);
+
 
         //账单
 
         billpane.setPreferredSize(new Dimension(400,200));
-
+        billtable.setRowHeight(30);
+        billpane.setPreferredSize(new Dimension(1000,500));
+        JTableHeader tab_header = billtable.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
 
 
         year.addItem("");
         year.addItem("2023");
         year.addItem("2022");
         year.addItem("2021");
+        year.setFont(new Font("楷体",Font.PLAIN,20));
+
 
         month.addItem("");
         month.addItem("1");
@@ -261,12 +289,18 @@ public class BankTeacherStudentUI extends JFrame {
         month.addItem("10");
         month.addItem("11");
         month.addItem("12");
+        month.setFont(new Font("楷体",Font.PLAIN,20));
 
+
+        year.setPreferredSize(new Dimension(80,40));
+        month.setPreferredSize(new Dimension(80,40));
 
         searchField.setPreferredSize(new Dimension(200,30));
+        searchField.setFont(centerFont);
         searchBtn.setFont(buttonFont);
         yearLabel.setFont(centerFont);
         monthLabel.setFont(centerFont);
+        billtable.setFont(new Font("楷体",Font.PLAIN,20));
 
         bill.add(searchBtn);
         bill.add(searchField);
@@ -276,20 +310,19 @@ public class BankTeacherStudentUI extends JFrame {
         bill.add(year);
         bill.add(month);
 
-        int x1=(Spring.width(cardPanel).getValue()-Spring.width(billpane).getValue())/4;
-        springLayout.putConstraint(SpringLayout.WEST,billpane,-x1,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,billpane,60,SpringLayout.SOUTH,cardPanel);
-        springLayout.putConstraint(SpringLayout.EAST,searchField,-10,SpringLayout.EAST,bill);
-        springLayout.putConstraint(SpringLayout.NORTH,searchField,10,SpringLayout.NORTH,bill);
-        springLayout.putConstraint(SpringLayout.EAST,searchBtn,-10,SpringLayout.WEST,searchField);
+        springLayout.putConstraint(SpringLayout.WEST,billpane,100,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,billpane,80,SpringLayout.SOUTH,cardPanel);
+        springLayout.putConstraint(SpringLayout.EAST,searchField,-40,SpringLayout.EAST,bill);
+        springLayout.putConstraint(SpringLayout.NORTH,searchField,40,SpringLayout.NORTH,bill);
+        springLayout.putConstraint(SpringLayout.EAST,searchBtn,-40,SpringLayout.WEST,searchField);
         springLayout.putConstraint(SpringLayout.NORTH,searchBtn,0,SpringLayout.NORTH,searchField);
-        springLayout.putConstraint(SpringLayout.WEST,yearLabel,30,SpringLayout.WEST,bill);
+        springLayout.putConstraint(SpringLayout.WEST,yearLabel,80,SpringLayout.WEST,bill);
         springLayout.putConstraint(SpringLayout.NORTH,yearLabel,0,SpringLayout.NORTH,searchField);
-        springLayout.putConstraint(SpringLayout.WEST,year,10,SpringLayout.EAST,yearLabel);
+        springLayout.putConstraint(SpringLayout.WEST,year,20,SpringLayout.EAST,yearLabel);
         springLayout.putConstraint(SpringLayout.NORTH,year,0,SpringLayout.NORTH,searchField);
-        springLayout.putConstraint(SpringLayout.WEST,monthLabel,10,SpringLayout.EAST,year);
+        springLayout.putConstraint(SpringLayout.WEST,monthLabel,20,SpringLayout.EAST,year);
         springLayout.putConstraint(SpringLayout.NORTH,monthLabel,0,SpringLayout.NORTH,searchField);
-        springLayout.putConstraint(SpringLayout.WEST,month,10,SpringLayout.EAST,monthLabel);
+        springLayout.putConstraint(SpringLayout.WEST,month,20,SpringLayout.EAST,monthLabel);
         springLayout.putConstraint(SpringLayout.NORTH,month,0,SpringLayout.NORTH,searchField);
         //卡片信息
         cardimageLabel.setFont(titleFont);
@@ -304,6 +337,7 @@ public class BankTeacherStudentUI extends JFrame {
         balanceLabel2.setFont(centerFont);
         balance2.setFont(centerFont);
 
+
         cardimage.add(cardimageLabel);
         cardimage.add(accontLabel);
         cardimage.add(account);
@@ -317,24 +351,25 @@ public class BankTeacherStudentUI extends JFrame {
         cardimage.add(balance2);
 
         springLayout.putConstraint(SpringLayout.WEST,cardimageLabel,-x,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,accontLabel,100,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,accontLabel,0,SpringLayout.SOUTH,cardimageLabel);
-        springLayout.putConstraint(SpringLayout.WEST,account,60,SpringLayout.EAST,accontLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,cardimageLabel,40,SpringLayout.NORTH,cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST,accontLabel,400,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,accontLabel,40,SpringLayout.SOUTH,cardimageLabel);
+        springLayout.putConstraint(SpringLayout.WEST,account,80,SpringLayout.EAST,accontLabel);
         springLayout.putConstraint(SpringLayout.NORTH,account,0,SpringLayout.NORTH,accontLabel);
         springLayout.putConstraint(SpringLayout.WEST,nameLabel,0,SpringLayout.WEST,accontLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,nameLabel,20,SpringLayout.SOUTH,accontLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,nameLabel,40,SpringLayout.SOUTH,accontLabel);
         springLayout.putConstraint(SpringLayout.WEST,name,0,SpringLayout.WEST,account);
         springLayout.putConstraint(SpringLayout.NORTH,name,0,SpringLayout.NORTH,nameLabel);
         springLayout.putConstraint(SpringLayout.WEST,idLabel2,0,SpringLayout.WEST,accontLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,idLabel2,20,SpringLayout.SOUTH,nameLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,idLabel2,40,SpringLayout.SOUTH,nameLabel);
         springLayout.putConstraint(SpringLayout.WEST,id2,0,SpringLayout.WEST,account);
         springLayout.putConstraint(SpringLayout.NORTH,id2,0,SpringLayout.NORTH,idLabel2);
         springLayout.putConstraint(SpringLayout.WEST,balanceLabel2,0,SpringLayout.WEST,accontLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,balanceLabel2,20,SpringLayout.SOUTH,idLabel2);
+        springLayout.putConstraint(SpringLayout.NORTH,balanceLabel2,40,SpringLayout.SOUTH,idLabel2);
         springLayout.putConstraint(SpringLayout.WEST,balance2,0,SpringLayout.WEST,account);
         springLayout.putConstraint(SpringLayout.NORTH,balance2,0,SpringLayout.NORTH,balanceLabel2);
         springLayout.putConstraint(SpringLayout.WEST,statusLabel,0,SpringLayout.WEST,accontLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,statusLabel,20,SpringLayout.SOUTH,balanceLabel2);
+        springLayout.putConstraint(SpringLayout.NORTH,statusLabel,40,SpringLayout.SOUTH,balanceLabel2);
         springLayout.putConstraint(SpringLayout.WEST,status,0,SpringLayout.WEST,account);
         springLayout.putConstraint(SpringLayout.NORTH,status,0,SpringLayout.NORTH,statusLabel);
 
@@ -344,7 +379,9 @@ public class BankTeacherStudentUI extends JFrame {
         cardstatus.setFont(centerFont);
         cardpwdLabel.setFont(centerFont);
         cardpwdField.setPreferredSize(new Dimension(200,30));
+        cardpwdField.setFont(centerFont);
         confirmfreezeBtn.setFont(buttonFont);
+
 
         reportloss.add(reportlossLabel);
         reportloss.add(cardstatusLabel);
@@ -354,16 +391,18 @@ public class BankTeacherStudentUI extends JFrame {
         reportloss.add(confirmfreezeBtn);
 
         springLayout.putConstraint(SpringLayout.WEST,reportlossLabel,-x,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,cardstatusLabel,100,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,cardstatusLabel,20,SpringLayout.SOUTH,reportlossLabel);
-        springLayout.putConstraint(SpringLayout.WEST,cardstatus,40,SpringLayout.EAST,cardstatusLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,reportlossLabel,40,SpringLayout.NORTH,cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST,cardstatusLabel,400,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,cardstatusLabel,80,SpringLayout.SOUTH,reportlossLabel);
+        springLayout.putConstraint(SpringLayout.WEST,cardstatus,80,SpringLayout.EAST,cardstatusLabel);
         springLayout.putConstraint(SpringLayout.NORTH,cardstatus,0,SpringLayout.NORTH,cardstatusLabel);
         springLayout.putConstraint(SpringLayout.WEST,cardpwdLabel,0,SpringLayout.WEST,cardstatusLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,cardpwdLabel,40,SpringLayout.SOUTH,cardstatusLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,cardpwdLabel,60,SpringLayout.SOUTH,cardstatusLabel);
         springLayout.putConstraint(SpringLayout.WEST,cardpwdField,0,SpringLayout.WEST,cardstatus);
         springLayout.putConstraint(SpringLayout.NORTH,cardpwdField,0,SpringLayout.NORTH,cardpwdLabel);
-        springLayout.putConstraint(SpringLayout.WEST,confirmfreezeBtn,235,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmfreezeBtn,40,SpringLayout.SOUTH,cardpwdLabel);
+        springLayout.putConstraint(SpringLayout.WEST,confirmfreezeBtn,525,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,confirmfreezeBtn,120,SpringLayout.SOUTH,cardpwdLabel);
+
 
 
         cardPanel.add(blank);
@@ -377,7 +416,7 @@ public class BankTeacherStudentUI extends JFrame {
         contentPane.add(cardPanel,BorderLayout.CENTER);
         contentPane.add(campuscard,BorderLayout.NORTH);
         contentPane.add(backPanel,BorderLayout.SOUTH);
-        setSize(600,400);
+        setSize(1200,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
@@ -407,7 +446,7 @@ public class BankTeacherStudentUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cardPanel,"密码修改");
                 refreshPage();
-            }
+            }   
         });
         cardimageBtn.addActionListener(new ActionListener() {
             @Override
@@ -516,9 +555,47 @@ public class BankTeacherStudentUI extends JFrame {
         if(!selectedMonth.equals("")&&(!selectedYear.equals(""))){//如果选择了年月
             System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
             IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
-            iBankClientAPI.billForSometime(thisAccount.getId(), new Date("1/"+selectedMonth+"/"+selectedYear), new Date("31/"+selectedMonth+"/"+selectedYear),query);
-            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间
+
+            // 构建日期字符串
+            String dateString = selectedYear + "-" + selectedMonth + "-01";
+
+            // 定义日期格式
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date firstSecondOfMonth=new Date();
+            Date lastSecondOfMonth=new Date();
+            try {
+                // 解析日期字符串为日期对象
+                Date date = dateFormat.parse(dateString);
+
+                // 获取日历实例
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+
+                // 设置为当月的第一天
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+
+                // 获取当月的第一秒
+                firstSecondOfMonth = calendar.getTime();
+                System.out.println("第一秒：" + firstSecondOfMonth);
+
+                // 设置为下个月的第一天
+                calendar.add(Calendar.MONTH, 1);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.add(Calendar.SECOND, -1);
+
+                // 获取当月的最后一秒
+                lastSecondOfMonth = calendar.getTime();
+                System.out.println("最后一秒：" + lastSecondOfMonth);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            iBankClientAPI.billForSometime(thisAccount.getId(), firstSecondOfMonth, lastSecondOfMonth,query);
+            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间,等xpl
         }
+
         if(selectedMonth.equals("")||selectedYear.equals("")){//如果年月没有选择，把时间范围设大
             System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
             IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
@@ -545,6 +622,7 @@ public class BankTeacherStudentUI extends JFrame {
         //若查询结果为空
         if(bills==null){
             System.out.println("查询结果为空");
+            tableModel.setRowCount(0);
             return;
         }
 

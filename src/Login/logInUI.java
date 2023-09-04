@@ -1,12 +1,10 @@
 package view.Login;
-import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 import java.awt.*;
 
-
 public class logInUI extends JFrame{
-    JLabel titleLabel=new JLabel("用户登录");//位于边界布局的北边
+    JLabel titleLabel=new JLabel("用户登录",JLabel.CENTER);//位于边界布局的北边
     SpringLayout springLayout=new SpringLayout();
     JPanel centerPanel=new JPanel(springLayout);//其余组件在边界布局中间的JPanel中
     JLabel userNameLabel=new JLabel("用户名");//用户名标签
@@ -27,33 +25,6 @@ public class logInUI extends JFrame{
 //    TrayIcon trayIcon;//定义托盘
 
     logInHandler loginHandler;
-    JPanel backgroundPanel = new JPanel(springLayout) {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            // 加载原始尺寸的背景图片
-            ImageIcon originalImageIcon = new ImageIcon("Images/640.jfif");
-            Image originalImage = originalImageIcon.getImage();
-
-            // 创建与面板尺寸相同的缓冲图像
-            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bufferedImage.createGraphics();
-
-            // 设置透明度
-            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
-            g2d.setComposite(alphaComposite);
-
-            // 绘制背景图片到缓冲图像
-            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
-
-            // 绘制缓冲图像到面板
-            g.drawImage(bufferedImage, 0, 0, null);
-
-            g2d.dispose();
-        }
-    };
-
     public logInUI(){
         super("虚拟校园系统");
         //JFrame jFrame=new JFrame();
@@ -62,7 +33,7 @@ public class logInUI extends JFrame{
         Container contentPane=getContentPane();//获取控制面板
 
         titleLabel.setFont(new Font("华文行楷",Font.PLAIN,40));//设置标题大小、字体
-        //titleLabel.setPreferredSize(new Dimension(0,80));//设置标题宽（0为自动填充）高（80像素）
+        titleLabel.setPreferredSize(new Dimension(0,80));//设置标题宽（0为自动填充）高（80像素）
         Font centerFont=new Font("楷体",Font.PLAIN,20);//设置中间组件的文字大小、字体
         userNameLabel.setFont(centerFont);
         userNameTxt.setPreferredSize(new Dimension(200,30));//设置输入框大小
@@ -75,39 +46,34 @@ public class logInUI extends JFrame{
         teacherRadioButton.setFont(centerFont);
 
         //把组件加入控制面板
-        backgroundPanel.add(userNameLabel);
-        backgroundPanel.add(userNameTxt);
-        backgroundPanel.add(titleLabel);
+        centerPanel.add(userNameLabel);
+        centerPanel.add(userNameTxt);
 
-        backgroundPanel.add(pwdLabel);
-        backgroundPanel.add(pwdField);
+        centerPanel.add(pwdLabel);
+        centerPanel.add(pwdField);
         studentRadioButton.addActionListener(loginHandler);
-        backgroundPanel.add(studentRadioButton);
+        centerPanel.add(studentRadioButton);
         adminRadioButton.addActionListener(loginHandler);
-        backgroundPanel.add(adminRadioButton);
+        centerPanel.add(adminRadioButton);
         teacherRadioButton.addActionListener(loginHandler);
-        backgroundPanel.add(teacherRadioButton);
+        centerPanel.add(teacherRadioButton);
         logInBtn.addActionListener(loginHandler);
         group.add(adminRadioButton);
         group.add(studentRadioButton);
         group.add(teacherRadioButton);
         //增加按键事件
         logInBtn.addKeyListener(loginHandler);
-        backgroundPanel.add(logInBtn);
+        centerPanel.add(logInBtn);
         registerBtn.addActionListener(loginHandler);
-        backgroundPanel.add(registerBtn);
-
+        centerPanel.add(registerBtn);
 
         //弹簧布局
         //布局userNameLabel，水平居中，北边与边界布局中间一块顶部距离20
         Spring childWidth=Spring.sum(Spring.sum(Spring.width(userNameLabel),Spring.width(userNameTxt)),Spring.constant(20));
         //  userNameLabel长度+userNameTxt长度+20
-
         int offsetX=childWidth.getValue()/2;
-        springLayout.putConstraint(SpringLayout.WEST,titleLabel,-50,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,titleLabel,300,SpringLayout.NORTH,backgroundPanel);
-        springLayout.putConstraint(SpringLayout.WEST,userNameLabel,-offsetX,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,userNameLabel,50,SpringLayout.NORTH,titleLabel);
+        springLayout.putConstraint(SpringLayout.WEST,userNameLabel,-offsetX,SpringLayout.HORIZONTAL_CENTER,centerPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,userNameLabel,20,SpringLayout.NORTH,centerPanel);
         //userNameTxt西边与userNameLabel东边距离20，userNameTxt北边与userNameLabel北边平齐
         springLayout.putConstraint(SpringLayout.WEST,userNameTxt,20,SpringLayout.EAST,userNameLabel);
         springLayout.putConstraint(SpringLayout.NORTH,userNameTxt,0,SpringLayout.NORTH,userNameLabel);
@@ -121,24 +87,24 @@ public class logInUI extends JFrame{
         Spring childWidth2=Spring.sum(Spring.sum(Spring.width(studentRadioButton),Spring.width(adminRadioButton)),
                 Spring.constant(30));
         int offsetX2=childWidth2.getValue()/2;
-        springLayout.putConstraint(SpringLayout.WEST,studentRadioButton,-offsetX2-20,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
+        springLayout.putConstraint(SpringLayout.WEST,studentRadioButton,-offsetX2-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,studentRadioButton,40,SpringLayout.SOUTH,pwdLabel);
-        springLayout.putConstraint(SpringLayout.WEST,adminRadioButton,offsetX2-20,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
+        springLayout.putConstraint(SpringLayout.WEST,adminRadioButton,offsetX2-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,adminRadioButton,40,SpringLayout.SOUTH,pwdLabel);
         //布局logInBtn和registerBtn
         Spring childWidth3=Spring.sum(Spring.sum(Spring.width(logInBtn),Spring.width(registerBtn)),
                 Spring.constant(30));
         int offsetX3=childWidth3.getValue()/2;
         springLayout.putConstraint(SpringLayout.NORTH,logInBtn,70,SpringLayout.NORTH,studentRadioButton);
-        springLayout.putConstraint(SpringLayout.WEST,logInBtn,-offsetX3-20,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
+        springLayout.putConstraint(SpringLayout.WEST,logInBtn,-offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,registerBtn,70,SpringLayout.NORTH,adminRadioButton);
-        springLayout.putConstraint(SpringLayout.WEST,registerBtn,offsetX3-20,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
-        springLayout.putConstraint(SpringLayout.WEST,teacherRadioButton,-15,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
+        springLayout.putConstraint(SpringLayout.WEST,registerBtn,offsetX3-20,SpringLayout.HORIZONTAL_CENTER,centerPanel);
+        springLayout.putConstraint(SpringLayout.WEST,teacherRadioButton,-15,SpringLayout.HORIZONTAL_CENTER,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,teacherRadioButton,40,SpringLayout.SOUTH,pwdLabel);
 
 
-        //contentPane.add(titleLabel,BorderLayout.NORTH);//把标题放在边界布局北边一块
-        //contentPane.add(backgroundPanel,BorderLayout.CENTER);//把backgroundPanel放在边界布局中间一块
+        contentPane.add(titleLabel,BorderLayout.NORTH);//把标题放在边界布局北边一块
+        contentPane.add(centerPanel,BorderLayout.CENTER);//把centerPanel放在边界布局中间一块
 
 //        if(SystemTray.isSupported()){//判断是否支持系统托盘
 //            systemTray=SystemTray.getSystemTray();//初始化系统托盘
@@ -156,16 +122,9 @@ public class logInUI extends JFrame{
 
         //registerBtn.addActionListener(loginHandler);
 
-        setSize(1200,800);
+        setSize(600,400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        // 创建一个面板用于承载背景图片
-
-
-        // 将背景面板设置为透明，以便显示其他组件
-        backgroundPanel.setOpaque(false);
-        setContentPane(backgroundPanel);
         setResizable(false);
         setVisible((true));
     }
@@ -180,20 +139,6 @@ public class logInUI extends JFrame{
     }
 
     public static void main(String[] args){
-        try {
-            // 设置外观为Windows外观
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(46, 139, 87)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(46, 139, 87)); // 按钮
-            UIManager.put("control", new Color(240, 255, 240)); // 背景
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         new logInUI();
     }
