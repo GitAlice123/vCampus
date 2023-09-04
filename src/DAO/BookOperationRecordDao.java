@@ -1,6 +1,7 @@
 package view.DAO;
 
-import view.Library.*;
+import view.Library.BookOperationRecord;
+import view.Shop.PurchaseRecord;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,7 @@ public class BookOperationRecordDao {
         }
 
 
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy/MM/dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss");
         String sqlString2 = "insert into tblBookOperationRecord values('"+ bookOperationRecord.getOprId() +"','" + bookOperationRecord.getuId()
                 +"','" + bookOperationRecord.getISBN() + "','" + ft.format(bookOperationRecord.getOprTime())
                 +"','" + bookOperationRecord.getOprtype() + "','" + bookOperationRecord.getOprMark() + "')";
@@ -81,7 +82,7 @@ public class BookOperationRecordDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb?serverTimezone=UTC+8", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
