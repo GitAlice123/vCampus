@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import view.Bank.bankServerActionTool;
+import view.Bank.bankServerActionTool;
 
 public class ServerApplication {
 
@@ -81,6 +82,11 @@ public class ServerApplication {
                     case 1005:{
                         //用id查找account
                         bankServerActionTool.Action1005(jsonData, clientSocket);
+                        break;
+                    }
+                    case 1006:{
+                        //管理员查看所有account
+                        bankServerActionTool.Action1006(jsonData, clientSocket);
                         break;
                     }
                     case 200: {
