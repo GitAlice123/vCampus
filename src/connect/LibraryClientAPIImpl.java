@@ -25,14 +25,14 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
     }
 
     @Override
-    public Book[] getStoredBookList(NoDataReqMessage noDataReqMessage)
+    public Book[] getStoredBookList(UniqueMessage noDataReqMessage)
             throws IOException {
         //以下发送无数据的请求消息给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // 将 LoginMessage 对象转换为 JSON 字符串
+            // 将 Message 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(noDataReqMessage);
             System.out.println(jsonData);
 
@@ -195,7 +195,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
     }
 
     @Override
-    public Boolean BorrowBook(BookISBNMessage bookISBNMessage)
+    public Boolean BorrowBook(BookOperationRecord bookOperationRecord)
             throws IOException {
         //添加图书
         try {
@@ -203,7 +203,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             ObjectMapper objectMapper = new ObjectMapper();
 
             // 将 LoginMessage 对象转换为 JSON 字符串
-            String jsonData = objectMapper.writeValueAsString(bookISBNMessage);
+            String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
             System.out.println(jsonData);
 
             rwTool.ClientSendOutStream(outputStream, jsonData, 205);
@@ -229,14 +229,14 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
     }
 
     @Override
-    public Boolean ReturnBook(BookISBNMessage bookISBNMessage) throws IOException {
+    public Boolean ReturnBook(BookOperationRecord bookOperationRecord) throws IOException {
         //还书
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
 
             // 将 LoginMessage 对象转换为 JSON 字符串
-            String jsonData = objectMapper.writeValueAsString(bookISBNMessage);
+            String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
             System.out.println(jsonData);
 
             rwTool.ClientSendOutStream(outputStream, jsonData, 206);
@@ -324,5 +324,82 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
         return bookMessage;
     }
 
+    @Override
+    public BookHold[] getBorrowedBooks(RegisterReqMessage registerReqMessage)
+            throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(registerReqMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 201);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookHoldListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookHoldListRespMessage.class);
+
+//      处理结果
+        BookHold[] result = bookListRespMessage.getBooks();
+
+        return result;
+    }
+
+    @Override
+    public String getNextOPRId(UniqueMessage uniqueMessage) throws IOException {
+        // 得到下一个操作编号
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 209);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookOPRListRespMessage bookOPRListRespMessage = objectMapper.readValue(mess, BookOPRListRespMessage.class);
+
+//      处理结果
+        BookOperationRecord[] result = bookOPRListRespMessage.getBooks();
+        if(result==null)
+        {
+            int num = 1;
+            String str = String.format("%011d", num);
+            return str;
+        }
+        BookOperationRecord lastElement = result[result.length - 1];
+        String lastOPRid = lastElement.getOprId();
+        int number = Integer.parseInt(lastOPRid);
+        int idNumber = number+1;
+        String str = String.format("%011d", idNumber);
+
+        return str;
+    }
 
 }

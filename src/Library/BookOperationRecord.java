@@ -5,11 +5,23 @@ import java.util.Date;
 public class BookOperationRecord {
 
     String oprId;
-    String sId;
+    String uId;
     String ISBN;
     Date oprTime;
     String oprtype;
     String oprMark;
+
+    public BookOperationRecord() {
+    }
+
+    public BookOperationRecord(String oprId, String uId, String ISBN, Date oprTime, String oprtype, String oprMark) {
+        this.oprId = oprId;
+        this.uId = uId;
+        this.ISBN = ISBN;
+        this.oprTime = oprTime;
+        this.oprtype = oprtype;
+        this.oprMark = oprMark;
+    }
 
     public String getOprId() {
         return oprId;
@@ -19,12 +31,12 @@ public class BookOperationRecord {
         this.oprId = oprId;
     }
 
-    public String getsId() {
-        return sId;
+    public String getuId() {
+        return uId;
     }
 
     public void setsId(String sId) {
-        this.sId = sId;
+        this.uId = uId;
     }
 
     public String getISBN() {
@@ -47,10 +59,10 @@ public class BookOperationRecord {
         return oprtype;
     }
 
-
     public void setOprtype(String oprtype) {
-         this.oprtype = oprtype;
+        this.oprtype = oprtype;
     }
+
 
     public String getOprMark() {
         return oprMark;
@@ -58,5 +70,17 @@ public class BookOperationRecord {
 
     public void setOprMark(String oprMark) {
         this.oprMark = oprMark;
+    }
+
+    @Override
+    public String toString() {
+        return "BookOperationRecord{" +
+                "oprId='" + oprId + '\'' +
+                ", uId='" + uId + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", oprTime=" + oprTime +
+                ", oprtype='" + oprtype + '\'' +
+                ", oprMark='" + oprMark + '\'' +
+                '}';
     }
 }

@@ -1,8 +1,11 @@
 package view.Library;
-
 public class Book {
-    String bookName;
     String bookISBN;
+
+    public Book() {
+    }
+
+    String bookName;
     String author;
     String bookType;
     Double bookPrice;
@@ -12,6 +15,21 @@ public class Book {
     int freeNum;
     String bookPos;
     int borrowNum;
+
+    public Book(String bookISBN, String bookName, String author, String bookType, Double bookPrice, String publisher, String summary, int totalNum, int freeNum, String bookPos, int borrowNum) {
+        this.bookISBN = bookISBN;
+        this.bookName = bookName;
+        this.author = author;
+        this.bookType = bookType;
+        this.bookPrice = bookPrice;
+        this.publisher = publisher;
+        this.summary = summary;
+        this.totalNum = totalNum;
+        this.freeNum = freeNum;
+        this.bookPos = bookPos;
+        this.borrowNum = borrowNum;
+    }
+
 
     public String getBookName() {
         return bookName;
@@ -101,20 +119,23 @@ public class Book {
         this.borrowNum = borrowNum;
     }
 
-    public Book() {
-    }
 
-    public Book(String bookName, String bookISBN, String author, String bookType, Double bookPrice, String publisher, String summary, int totalNum, int freeNum, String bookPos, int borrowNum) {
-        this.bookName = bookName;
-        this.bookISBN = bookISBN;
-        this.author = author;
-        this.bookType = bookType;
-        this.bookPrice = bookPrice;
-        this.publisher = publisher;
-        this.summary = summary;
-        this.totalNum = totalNum;
-        this.freeNum = freeNum;
-        this.bookPos = bookPos;
-        this.borrowNum = borrowNum;
-    }
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookISBN='" + bookISBN + '\'' +
+                ", bookName='" + bookName + '\'' +
+                ", author='" + author + '\'' +
+                ", bookType='" + bookType + '\'' +
+                ", bookPrice=" + bookPrice +
+                ", publisher='" + publisher + '\'' +
+                ", summary='" + summary + '\'' +
+                ", totalNum=" + totalNum +
+                ", freeNum=" + freeNum +
+                ", bookPos='" + bookPos + '\'' +
+                ", borrowNum=" + borrowNum +
+                '}';
+
+    public Book() {}
 }
+
