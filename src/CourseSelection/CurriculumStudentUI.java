@@ -11,10 +11,129 @@ import java.awt.event.ActionListener;
 
 
 public class CurriculumStudentUI extends JFrame {
+
+    class DeleteClassTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("退选");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            //button.setForeground(table.getSelectionForeground());
+
+            return button;
+        }
+
+    }
+    class DeleteClassTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
+
+        private JButton btn;
+        private int clickedRow;
+        public DeleteClassTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("退选");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    //这里要从该学生的选课列表中删除该课程
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+
+                }
+            });
+
+
+
+        }
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            //btn.setForeground(table.getSelectionForeground());
+
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
+    class ShowCoursesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("展开");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class ShowCoursesTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
+
+        private JButton btn;
+        private int clickedRow;
+        public ShowCoursesTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("展开");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    ShowClassUI showClassUI=new ShowClassUI();
+                    showClassUI.setVisible(true);
+
+                }
+            });
+
+
+
+        }
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
     SpringLayout springLayout=new SpringLayout();
     DefaultTableModel model = new DefaultTableModel();
     DefaultTableModel modelChosen = new DefaultTableModel();
-    JTable table = new JTable();
+    JTable table = new JTable();//展示课程列表的表格
     String[][] data = {
             {"1","1","1","1","1","1","1"},
             {"1","1","1","1","1","1","1"},
@@ -36,7 +155,7 @@ public class CurriculumStudentUI extends JFrame {
             {"1","1","1","1","1","1","1"}
 
     };
-    JTable tableChosen = new JTable();
+    JTable tableChosen = new JTable();//展示已选课程的表格
     String[][] dataChosen = {
             {"1","1","1","1","1"},
             {"1","1","1","1","1"},
@@ -191,9 +310,66 @@ public class CurriculumStudentUI extends JFrame {
 }
 
 class ShowClassUI extends JFrame{//显示教学班界面
+    class ChooseClassTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("选课");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+    class ChooseClassTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
+
+        private JButton btn;
+        private int clickedRow;
+        public ChooseClassTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("选课");
+            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    //这里要从该学生的选课列表中添加该课程，注意课程时间不能冲突，否则应该弹出提示框
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+
+                }
+            });
+
+
+
+        }
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
+
     SpringLayout springLayout=new SpringLayout();
     DefaultTableModel model = new DefaultTableModel();
-    JTable table = new JTable();
+    JTable tableOfSelectedCourse = new JTable();//展示选定课程课程班的表格
     JButton backBtn=new JButton("退出");//同上
 
     String[][] data = {
@@ -227,15 +403,15 @@ class ShowClassUI extends JFrame{//显示教学班界面
 
         String[] columnNames ={"课程班编号","任课教师","上课地点","上课时间","班级人数","课程容量","选课"};
         model.setDataVector(data, columnNames);
-        table.setModel(model);
-        table.setRowHeight(30);
-        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tableOfSelectedCourse.setModel(model);
+        tableOfSelectedCourse.setRowHeight(30);
+        JTableHeader tab_header = tableOfSelectedCourse.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
-        table.getColumnModel().getColumn(6).setCellRenderer(new ChooseClassTableCellRendererButton());
-        table.getColumnModel().getColumn(6).setCellEditor(new ChooseClassTableCellEditorButton());
-        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
-        JScrollPane scrollPane = new JScrollPane(table);
+        tableOfSelectedCourse.getColumnModel().getColumn(6).setCellRenderer(new ChooseClassTableCellRendererButton());
+        tableOfSelectedCourse.getColumnModel().getColumn(6).setCellEditor(new ChooseClassTableCellEditorButton());
+        tableOfSelectedCourse.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        JScrollPane scrollPane = new JScrollPane(tableOfSelectedCourse);
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
 
         Container contentPane=getContentPane();//获取控制面板
@@ -254,7 +430,7 @@ class ShowClassUI extends JFrame{//显示教学班界面
         Font centerFont=new Font("楷体",Font.PLAIN,40);//设置中间组件的文字大小、字体
         title.setFont(centerFont);
         Font centerFont2=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        table.setFont(centerFont2);
+        tableOfSelectedCourse.setFont(centerFont2);
         backBtn.setFont(centerFont2);
         backBtn.addActionListener(new ActionListener() {
 
@@ -293,179 +469,7 @@ class ShowClassUI extends JFrame{//显示教学班界面
     }
 
 }
-class ShowCoursesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
 
 
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("展开");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class ShowCoursesTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
-
-    private JButton btn;
-    private int clickedRow;
-    public ShowCoursesTableCellEditorButton() {
-        super(new JTextField());
-        //设置点击一次就激活，否则默认好像是点击2次激活。
-        this.setClickCountToStart(1);
-        btn = new JButton("展开");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("按钮事件触发----");
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-                ShowClassUI showClassUI=new ShowClassUI();
-                showClassUI.setVisible(true);
-
-            }
-        });
-
-
-
-    }
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-
-
-}
-class ChooseClassTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("选课");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        return button;
-    }
-
-}
-class ChooseClassTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
-
-    private JButton btn;
-    private int clickedRow;
-    public ChooseClassTableCellEditorButton() {
-        super(new JTextField());
-        //设置点击一次就激活，否则默认好像是点击2次激活。
-        this.setClickCountToStart(1);
-        btn = new JButton("选课");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-        btn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("按钮事件触发----");
-                //这里要从该学生的选课列表中添加该课程，注意课程时间不能冲突，否则应该弹出提示框
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-
-            }
-        });
-
-
-
-    }
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-
-
-}
-class DeleteClassTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
-
-
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                   int row, int column) {
-        JButton button = new JButton("退选");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        button.setFont(centerFont);
-        //button.setForeground(table.getSelectionForeground());
-
-        return button;
-    }
-
-}
-class DeleteClassTableCellEditorButton extends DefaultCellEditor{//查看班级界面辅助类，按钮事件触发在此类中
-
-    private JButton btn;
-    private int clickedRow;
-    public DeleteClassTableCellEditorButton() {
-        super(new JTextField());
-        //设置点击一次就激活，否则默认好像是点击2次激活。
-        this.setClickCountToStart(1);
-        btn = new JButton("退选");
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        btn.setFont(centerFont);
-
-        btn.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("按钮事件触发----");
-                //这里要从该学生的选课列表中删除该课程
-                JButton clickedButton = (JButton) e.getSource();
-
-                clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                System.out.println("点击的行索引：" + clickedRow);
-
-            }
-        });
-
-
-
-    }
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        clickedRow = row;
-        btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-        //btn.setForeground(table.getSelectionForeground());
-
-        return btn;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-        return null;
-    }
-
-
-}
 
 
