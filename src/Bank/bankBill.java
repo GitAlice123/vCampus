@@ -9,6 +9,7 @@ public class bankBill {
     private String description; // 商品说明 医院/商店/银行充值
     private String nums; // 订单号
     private String cardId; // 对应卡账号，6位数字
+    private String userId;//一卡通号
     private Date time; // 交易时间
     private boolean type; // 交易类型 true:消费，false:充值
     private double amount; // 交易金额
@@ -23,10 +24,11 @@ public class bankBill {
      * @param type        交易类型
      * @param amount      交易金额
      */
-    public bankBill(String description, String nums, String cardId, Date time, boolean type, double amount) {
+    public bankBill(String description, String nums, String cardId, String userId,Date time, boolean type, double amount) {
         this.description = description;
         this.nums = nums;
         this.cardId = cardId;
+        this.userId=userId;
         this.time = time;
         this.type = type;
         this.amount = amount;
@@ -84,6 +86,24 @@ public class bankBill {
      */
     public void setCardId(String cardId) {
         this.cardId = cardId;
+    }
+
+    /**
+     * 获取一卡通号
+     *
+     * @return 对应一卡通号
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置对应一卡通号
+     *
+     * @param _userId 对应一卡通号
+     */
+    public void setUserIdId(String _userId) {
+        this.userId = _userId;
     }
 
     /**
@@ -146,9 +166,11 @@ public class bankBill {
                 "description='" + description + '\'' +
                 ", nums='" + nums + '\'' +
                 ", cardId='" + cardId + '\'' +
+                ", userId='" + userId + '\'' +
                 ", time='" + time + '\'' +
                 ", type=" + type +
                 ", amount=" + amount +
                 '}';
     }
+
 }

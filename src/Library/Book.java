@@ -135,6 +135,7 @@ public class Book {
                 ", bookPos='" + bookPos + '\'' +
                 ", borrowNum=" + borrowNum +
                 '}';
-    }
+
+    public Book() {}
 }
 
