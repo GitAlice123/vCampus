@@ -3,14 +3,12 @@ package view.DAO;
 import view.SchoolRolls.Grade;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GradeDao {
     public Grade[] findGradesById(String uId) {
         String sqlString = "select * from tblGrade where uId = '" + uId + "'";
         Grade[] allGrades = new Grade[10];
-        //List<Grade> = new ArrayList<>();
+
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
