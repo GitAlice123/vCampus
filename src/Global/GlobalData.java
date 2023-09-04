@@ -1,10 +1,18 @@
 package view.Global;
 
+import view.Global.SummaryUI;
+import view.Login.logInUI;
+import view.Bank.BankTeacherStudentUI;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import javax.swing.*;
 /**
  * 全局数据类，用于存储用户登录信息。
  */
 public class GlobalData {
-    private static String uID;//用户一卡通号
+    private static String uID="213213000";//用户一卡通号
     private static int uType;//用户类型，1表示学生，2表示教师，3表示管理员
 
     /**
@@ -42,5 +50,20 @@ public class GlobalData {
     public static void logout() {
         uID = null;
         uType = 0;
+    }
+
+    /**
+     * 捕获double类型的输入信息
+     */
+    public void actionPerformed(JTextField f) {
+        String Text = f.getText(); // 获取文本字段中的内容
+        try {
+            double amount = Double.parseDouble(Text); // 将文本转换为 double 类型
+            System.out.println("用户输入的金额为: " + amount);
+            // 在这里可以进行进一步的处理
+        } catch (NumberFormatException ex) {
+            System.out.println("请输入有效的数值");
+            // 处理无效的输入
+        }
     }
 }

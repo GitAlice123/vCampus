@@ -14,6 +14,28 @@ public class PurchaseRecord {
     private Date purchaseTime; // 购买时间
 
     /**
+     * 构造函数
+     *
+     * @param orderId      购买订单号
+     * @param goodId       商品号
+     * @param nums         购买数量（大于等于1）
+     * @param userId       购买人的Id
+     * @param purchaseTime 购买时间（到秒）
+     * @throws IllegalArgumentException 如果购买数量小于1
+     */
+    public PurchaseRecord(String orderId, String goodId, int nums, String userId, Date purchaseTime) throws IllegalArgumentException {
+        this.order_id = orderId;
+        this.good_id = goodId;
+        if (nums >= 1) {
+            this.nums = nums;
+        } else {
+            throw new IllegalArgumentException("购买数量必须大于等于1");
+        }
+        this.uId = userId;
+        this.purchaseTime = purchaseTime;
+    }
+
+    /**
      * 获取购买订单号
      * @return 购买订单号
      */

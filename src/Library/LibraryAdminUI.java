@@ -480,16 +480,18 @@ public class LibraryAdminUI extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            // 设置单元格背景颜色
-            if (row % 2 == 0) {
-                Color customColor = new Color(255, 255, 224);
-                cellComponent.setBackground(customColor);
+            if (isSelected) {
+                setForeground(Color.BLACK);
             } else {
-                Color customColor2 = new Color(255, 250, 205);
-                cellComponent.setBackground(customColor2);
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(255, 255, 224);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(255, 250, 205);
+                    cellComponent.setBackground(customColor2);
+                }
             }
-
             return cellComponent;
         }
     }
