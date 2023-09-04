@@ -35,7 +35,7 @@ public class BookOperationRecord {
         return uId;
     }
 
-    public void setsId(String sId) {
+    public void setuId(String uId) {
         this.uId = uId;
     }
 

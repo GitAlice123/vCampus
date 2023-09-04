@@ -59,12 +59,6 @@ public class BookDao {
      * @param bookname 书名
      * @return 查询到的书本对象，因为可能存在书名相同（作者不同）的情况，因此返回一个Book类的数组
      */
-    /**
-     * 根据书名查询书
-     *
-     * @param bookname 书名
-     * @return 查询到的书本对象，因为可能存在书名相同（作者不同）的情况，因此返回一个Book类的数组
-     */
     public Book[] findBookByBookName(String bookname){
         String sqlString = "select * from tblBook where bookname = '" + bookname + "'";
         Book[] allBooks = new Book[10];
@@ -88,7 +82,7 @@ public class BookDao {
 
             if(count == 0){
                 return null;
-            }//若未找到该书名的书，则返回null
+            }//若数据库中无书籍信息，则返回null
 
             allBooks = new Book[count];
             int index=0;
