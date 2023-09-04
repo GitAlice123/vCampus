@@ -5,7 +5,7 @@ import java.util.Date;
 public class BookOperationRecord {
 
     String oprId;
-    String sId;
+    String uId;
     String ISBN;
     Date oprTime;
     String oprtype;
@@ -19,12 +19,12 @@ public class BookOperationRecord {
         this.oprId = oprId;
     }
 
-    public String getsId() {
-        return sId;
+    public String getuId() {
+        return uId;
     }
 
-    public void setsId(String sId) {
-        this.sId = sId;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getISBN() {
@@ -57,6 +57,15 @@ public class BookOperationRecord {
     }
 
     public void setOprMark(String oprMark) {
+        this.oprMark = oprMark;
+    }
+
+    public BookOperationRecord(String oprId, String uId, String ISBN, Date oprTime, String oprtype, String oprMark) {
+        this.oprId = oprId;
+        this.uId = uId;
+        this.ISBN = ISBN;
+        this.oprTime = oprTime;
+        this.oprtype = oprtype;
         this.oprMark = oprMark;
     }
 }
