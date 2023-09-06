@@ -105,7 +105,7 @@ public class logInUI extends JFrame{
 
         int offsetX=childWidth.getValue()/2;
         springLayout.putConstraint(SpringLayout.WEST,titleLabel,-50,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,titleLabel,300,SpringLayout.NORTH,backgroundPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,titleLabel,250,SpringLayout.NORTH,backgroundPanel);
         springLayout.putConstraint(SpringLayout.WEST,userNameLabel,-offsetX,SpringLayout.HORIZONTAL_CENTER,backgroundPanel);
         springLayout.putConstraint(SpringLayout.NORTH,userNameLabel,50,SpringLayout.NORTH,titleLabel);
         //userNameTxt西边与userNameLabel东边距离20，userNameTxt北边与userNameLabel北边平齐
