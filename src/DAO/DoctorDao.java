@@ -9,12 +9,12 @@ public class DoctorDao {
         Doctor doctor = new Doctor();
 
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Class.forName("com.hxtt.sql.access.AccessDriver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             ResultSet res = sta.executeQuery("select * from tblDoctor where Doctor_id = '" + id + "'");
@@ -43,13 +43,13 @@ public class DoctorDao {
 
     public boolean createDoc(Doctor doctor) {
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet test = sta.executeQuery("select * from tblDoctor where Doctor_id = '" + doctor.getDoctor_id() + "'");
             if (test.next()) {
@@ -75,12 +75,12 @@ public class DoctorDao {
 
     public boolean deleteDoc(String id) {
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Class.forName("com.hxtt.sql.access.AccessDriver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             int ret = sta.executeUpdate("delete from tblDoctor where Doctor_id = '" + id + "'");
             con.close();//关闭数据库连接

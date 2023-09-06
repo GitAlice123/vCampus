@@ -10,13 +10,13 @@ public class GradeDao {
         Grade[] allGrades = new Grade[10];
 
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
@@ -51,13 +51,13 @@ public class GradeDao {
         String sqlString = "insert into tblGrade values('" + gradeInfo.getCardID() + "','" + gradeInfo.getCourseID() + "','" + gradeInfo.getGrade() + "')";
 
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             sta.executeUpdate(sqlString);
 
@@ -79,13 +79,13 @@ public class GradeDao {
                 + " where uId = '" + grade.getCardID() + "' and courseId = '" + grade.getCourseID() + "'";
 
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString);
             if (count == 0) return false;
@@ -104,13 +104,13 @@ public class GradeDao {
         String sqlString = "select * from tblGrade where uId = '" + uId + "' and courseId = '" + courseId + "'";
 
         try {
-            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
