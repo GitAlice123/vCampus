@@ -1,5 +1,11 @@
 package view.Library;
 
+import view.connect.LibraryClientAPI;
+import view.connect.LibraryClientAPIImpl;
+import view.message.BookISBNMessage;
+import view.message.SearchBookNameMessage;
+import view.message.UniqueMessage;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -13,21 +19,24 @@ import javax.swing.table.TableCellRenderer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JTable;
 
 import javax.swing.table.JTableHeader;
 
 
 public class LibraryAdminUI extends JFrame {
-    class DeleteBookTableCellRendererButton implements TableCellRenderer {
+    private int changeBtnRow;
 
+    class DeleteBookTableCellRendererButton implements TableCellRenderer {
 
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             JButton button = new JButton("删除");
-            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
             Color customColor = new Color(255, 255, 192);
             button.setBackground(customColor);
@@ -35,16 +44,18 @@ public class LibraryAdminUI extends JFrame {
         }
 
     }
-    class DeleteBookTableCellEditorButton extends DefaultCellEditor{
+
+    class DeleteBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
         private int clickedRow;
+
         public DeleteBookTableCellEditorButton() {
             super(new JTextField());
             //设置点击一次就激活，否则默认好像是点击2次激活。
             this.setClickCountToStart(1);
             btn = new JButton("删除");
-            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
             Color customColor = new Color(255, 255, 192);
             btn.setBackground(customColor);
@@ -58,13 +69,18 @@ public class LibraryAdminUI extends JFrame {
                     clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
                     System.out.println("点击的行索引：" + clickedRow);
 
-                    //TODO:此处要添加删除操作，将该行对应的书从表格和数据库中删除
+                    try {
+                        deleteBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                 }
             });
 
 
-
         }
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             clickedRow = row;
@@ -83,12 +99,11 @@ public class LibraryAdminUI extends JFrame {
     class ChangeBookTableCellRendererButton implements TableCellRenderer {
 
 
-
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             JButton button = new JButton("修改");
-            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
             Color customColor = new Color(255, 255, 192);
             button.setBackground(customColor);
@@ -96,16 +111,18 @@ public class LibraryAdminUI extends JFrame {
         }
 
     }
-    class ChangeBookTableCellEditorButton extends DefaultCellEditor{
+
+    class ChangeBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
-        private int clickedRow;
+
         public ChangeBookTableCellEditorButton() {
             super(new JTextField());
             //设置点击一次就激活，否则默认好像是点击2次激活。
+
             this.setClickCountToStart(1);
             btn = new JButton("修改");
-            Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
             Color customColor = new Color(255, 255, 192);
             btn.setBackground(customColor);
@@ -116,20 +133,20 @@ public class LibraryAdminUI extends JFrame {
                     //System.out.println("按钮事件触发----");
                     JButton clickedButton = (JButton) e.getSource();
 
-                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                    System.out.println("点击的行索引：" + clickedRow);
+                    changeBtnRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + changeBtnRow);
 
-                    AddOrChangeBooksUI addOrChangeBooksUI=new AddOrChangeBooksUI();
-                    addOrChangeBooksUI.setVisible(true);
+                    ChangeBooksUI changeBooksUI = new ChangeBooksUI();
+                    changeBooksUI.setVisible(true);
                 }
             });
 
 
-
         }
+
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            clickedRow = row;
+            changeBtnRow = row;
             btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
 
             return btn;
@@ -142,126 +159,139 @@ public class LibraryAdminUI extends JFrame {
 
 
     }
-    SpringLayout springLayout=new SpringLayout();
-    DefaultTableModel model = new DefaultTableModel();
-    DefaultTableModel modelFind = new DefaultTableModel();
 
-    JTable table = new JTable();
+    /* 初始化内容*/
+    SpringLayout springLayout;
+    DefaultTableModel model;
+    DefaultTableModel modelFind;
 
+    JTable table;
+
+    JTable tableFindStuBorrowed;
+    //下面是表格初始化的两个String数组
     String[][] data = {//书籍列表，表格数据均传入该数组
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"},
-            {"1","1","1","1","1","1","1","1"}
-
-
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1", "1", "1"}
     };
-    JTable tableFindStuBorrowed = new JTable();
+
     String[][] dataFindStuBorrowed = {//已借阅书籍列表
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"},
-            {"1","1","1","1","1","1"}
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"},
+            {"1", "1", "1", "1", "1", "1"}
 
 
     };
-    JPanel TopPanel=new JPanel();//顶部放置按钮的面板
-    JPanel BottomPanel=new JPanel();//底部放置按钮的面板
-    JPanel panel1=new JPanel();//中间卡片布局的面板
-    JPanel BooksPanel=new JPanel(springLayout);
-    JPanel ReportPanel=new JPanel(springLayout);
+    JPanel TopPanel;
+    JPanel BottomPanel;
+    JPanel panel1;
+    JPanel BooksPanel;
+    JPanel ReportPanel;
 
-    JPanel FindStuBorrowedPanel=new JPanel(springLayout);
-    JButton BooksBtn=new JButton("查看书籍列表");
+    JPanel FindStuBorrowedPanel;
+    JButton BooksBtn;
 
-    JButton ReportBtn=new JButton("查看报告");
-    JButton FindStuBorrowedTopBtn=new JButton("学生记录查询");
-    JButton AddBooksBtn=new JButton("增加书籍");
-    public JTextField getFindBookTex() {
-        return FindBookTex;
-    }
+    JButton ReportBtn;
+    JButton FindStuBorrowedTopBtn;
+    JButton AddBooksBtn;
 
-    JTextField FindBookTex=new JTextField();//查找图书的输入框
-    JButton FindBookBtn=new JButton("查找");//查找按钮
-
-    public JTextField getFindStuBorrowedTex() {
-        return FindStuBorrowedTex;
-    }
-
-    JTextField FindStuBorrowedTex=new JTextField();//查找学生借书记录输入框
-    JButton FindStuBorrowedBtn=new JButton("查找");//查找按钮
-    JLabel NumOfBook=new JLabel("在馆数量:");
-    JLabel NumOfAllBooksLabel=new JLabel("馆藏图书数量");
-    JLabel NumOfBookInTheLibraryLabel=new JLabel("在馆图书数量");
-    JLabel NumOfBorrowedBooksLabel=new JLabel("借出图书数量");
-    JLabel NumOfReadersLabel=new JLabel("读者数量");
-
-    public void setNumOfAllBooks(String numOfAllBooks) {
-        NumOfAllBooks = numOfAllBooks;
-    }
-
+    JTextField FindBookTex;
+    JButton FindBookBtn;
+    JTextField FindStuBorrowedTex;
+    JButton FindStuBorrowedBtn;
+    JLabel NumOfAllBooksLabel;
+    JLabel NumOfBookInTheLibraryLabel;
+    JLabel NumOfBorrowedBooksLabel;
+    JLabel NumOfReadersLabel;
     String NumOfAllBooks;
-
-    public void setNumOfBookInTheLibrary(String numOfBookInTheLibrary) {
-        NumOfBookInTheLibrary = numOfBookInTheLibrary;
-    }
-
     String NumOfBookInTheLibrary;
-
-    public void setNumOfBorrowedBooks(String numOfBorrowedBooks) {
-        NumOfBorrowedBooks = numOfBorrowedBooks;
-    }
-
     String NumOfBorrowedBooks;
-
-    public void setNumOfReaders(String numOfReaders) {
-        NumOfReaders = numOfReaders;
-    }
-
     String NumOfReaders;
-    JLabel NumOfAllBooksLabelOut=new JLabel(NumOfAllBooks);//用上述SET函数导入数据，需要强制转换成String
-    JLabel NumOfBookInTheLibraryLabelOut=new JLabel(NumOfBookInTheLibrary);
-    JLabel NumOfBorrowedBooksLabelOut=new JLabel(NumOfBorrowedBooks);
-    JLabel NumOfReadersLabelOut=new JLabel(NumOfReaders);
+    JLabel NumOfAllBooksLabelOut;
+    JLabel NumOfBookInTheLibraryLabelOut;
+    JLabel NumOfBorrowedBooksLabelOut;
+    JLabel NumOfReadersLabelOut;
+    String BookNum;
+    JLabel NumOfBookOut;
+    JButton backBtn;
 
-
-
-
-    public void setBookNum(String bookNum) {
-        BookNum = bookNum;
+    public LibraryAdminUI() throws IOException {
+        initComponent();
     }
 
-    String BookNum;
-    JLabel NumOfBookOut=new JLabel(BookNum);//TODO:此处需要添加，显示所查找书籍的在馆数量，利用上述SET函数写入
+    private void initComponent() throws IOException {
 
-    JButton backBtn=new JButton("退出");
-    public LibraryAdminUI(){initComponent();}
-    private void initComponent(){
+        /* 初始化内容*/
+        springLayout = new SpringLayout();
+        model = new DefaultTableModel();
+        modelFind = new DefaultTableModel();
 
-       // super("图书馆系统");
+        table = new JTable();
 
+        tableFindStuBorrowed = new JTable();
+        /* 界面布局内容 */
+        // super("图书馆系统");
+        TopPanel = new JPanel();//顶部放置按钮的面板
+        BottomPanel = new JPanel();//底部放置按钮的面板
+        panel1 = new JPanel();//中间卡片布局的面板
+        BooksPanel = new JPanel(springLayout);
+        ReportPanel = new JPanel(springLayout);
+
+        FindStuBorrowedPanel = new JPanel(springLayout);
+        BooksBtn = new JButton("查看书籍列表");
+
+        ReportBtn = new JButton("查看报告");
+        FindStuBorrowedTopBtn = new JButton("学生记录查询");
+        AddBooksBtn = new JButton("增加书籍");
+
+        FindBookTex = new JTextField();//查找图书的输入框
+        FindBookBtn = new JButton("查找");//查找按钮
+        FindStuBorrowedTex = new JTextField();//查找学生借书记录输入框
+        FindStuBorrowedBtn = new JButton("查找");//查找按钮
+
+        NumOfAllBooksLabel = new JLabel("馆藏图书数量");
+        NumOfBookInTheLibraryLabel = new JLabel("在馆图书数量");
+        NumOfBorrowedBooksLabel = new JLabel("借出图书数量");
+        NumOfReadersLabel = new JLabel("读者数量");
+
+        int totalNum = 0;
+        int freeNum = 0;
+        int borrowedNum = 0;
+        NumOfAllBooksLabelOut = new JLabel(Integer.toString(totalNum));
+        NumOfBookInTheLibraryLabelOut = new JLabel(Integer.toString(freeNum));
+        NumOfBorrowedBooksLabelOut = new JLabel(Integer.toString(borrowedNum));
+
+
+        NumOfReadersLabelOut = new JLabel("当前还未知");
+        // TODO:这里需要补充获得所有读者数量
+        NumOfBookOut = new JLabel(BookNum);
+        backBtn = new JButton("退出");
+
+// 折叠的展示图片的，和实现无关
         JLabel imageLabel = new JLabel();
         try {
             // 加载图片
@@ -278,21 +308,21 @@ public class LibraryAdminUI extends JFrame {
             e.printStackTrace();
         }
 
-        String[] columnNames ={"书名","索书号","作者","类型","出版社","位置","修改","删除"};//索书号是一本书一个
 
-        model.setDataVector(data, columnNames);
-        table.setModel(model);
+        // 初始显示所有馆藏书籍
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
+        String a = "yes";
+        UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
+        Book[] AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        ShowTableData(AllBooks);
+        // 结束
+
+        // 以下折叠的是表格表头样式信息
         table.setRowHeight(30);
-        JTableHeader tab_header = table.getTableHeader();					//获取表头
-        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
-        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
-
-
-        table.getColumnModel().getColumn(6).setCellRenderer(new ChangeBookTableCellRendererButton());
-        table.getColumnModel().getColumn(6).setCellEditor(new ChangeBookTableCellEditorButton());
-        table.getColumnModel().getColumn(7).setCellRenderer(new DeleteBookTableCellRendererButton());
-        table.getColumnModel().getColumn(7).setCellEditor(new DeleteBookTableCellEditorButton());
+        JTableHeader tab_header = table.getTableHeader();                    //获取表头
+        tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
@@ -300,15 +330,15 @@ public class LibraryAdminUI extends JFrame {
         table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
 
 
-        String[] FindStuBorrowedColumnNames ={"操作序列号","学号","索书号","操作时间","操作类型","备注"};//索书号是一本书一个
+        String[] FindStuBorrowedColumnNames = {"操作序列号", "学号", "索书号", "操作时间", "操作类型", "备注"};//索书号是一本书一个
 
         modelFind.setDataVector(dataFindStuBorrowed, FindStuBorrowedColumnNames);
         tableFindStuBorrowed.setModel(modelFind);
 
         tableFindStuBorrowed.setRowHeight(30);
-        JTableHeader tab_headerFindStuBorrowed = tableFindStuBorrowed.getTableHeader();					//获取表头
-        tab_headerFindStuBorrowed.setFont(new Font("楷体",Font.PLAIN,25));
-        tab_headerFindStuBorrowed.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
+        JTableHeader tab_headerFindStuBorrowed = tableFindStuBorrowed.getTableHeader();                    //获取表头
+        tab_headerFindStuBorrowed.setFont(new Font("楷体", Font.PLAIN, 25));
+        tab_headerFindStuBorrowed.setPreferredSize(new Dimension(tab_header.getWidth(), 30));    //修改表头的高度
 
 
         JScrollPane scrollPaneFindStuBorrowed = new JScrollPane(tableFindStuBorrowed);
@@ -316,7 +346,7 @@ public class LibraryAdminUI extends JFrame {
 
         tableFindStuBorrowed.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
 
-        Container contentPane=getContentPane();//获取控制面板
+        Container contentPane = getContentPane();//获取控制面板
         contentPane.setLayout(new BorderLayout());
         CardLayout cardLayout = new CardLayout();
         contentPane.add(TopPanel, BorderLayout.NORTH);
@@ -328,11 +358,11 @@ public class LibraryAdminUI extends JFrame {
         panel1.add(FindStuBorrowedPanel, "FindStuBorrowedPanel");
         BooksPanel.add(FindBookTex);
         BooksPanel.add(FindBookBtn);
-        BooksPanel.add(NumOfBook);
+//        BooksPanel.add(NumOfBook);
         BooksPanel.add(NumOfBookOut);
         BooksPanel.add(AddBooksBtn);
         BooksPanel.add(imageLabel);
-       
+
         FindStuBorrowedPanel.add(FindStuBorrowedTex);
         FindStuBorrowedPanel.add(FindStuBorrowedBtn);
 
@@ -345,8 +375,8 @@ public class LibraryAdminUI extends JFrame {
         FindStuBorrowedBtn.setPreferredSize(new Dimension(150, 40));
         FindStuBorrowedTex.setPreferredSize(new Dimension(150, 40));
         AddBooksBtn.setPreferredSize(new Dimension(150, 40));
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        NumOfBook.setFont(centerFont);
+        Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+
         backBtn.setFont(centerFont);
         ReportBtn.setFont(centerFont);
         FindStuBorrowedTopBtn.setFont(centerFont);
@@ -376,7 +406,6 @@ public class LibraryAdminUI extends JFrame {
         ReportPanel.add(NumOfReadersLabelOut);
 
 
-
         TopPanel.add(BooksBtn);
         TopPanel.add(ReportBtn);
         TopPanel.add(FindStuBorrowedTopBtn);
@@ -384,51 +413,22 @@ public class LibraryAdminUI extends JFrame {
         BottomPanel.add(backBtn);
         BooksPanel.add(scrollPane);
         FindStuBorrowedPanel.add(scrollPaneFindStuBorrowed);
-        //ReportPanel.add(scrollPaneChosen);
-        BooksBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel1,"BooksPanel");
-            }
-        });
-        ReportBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel1,"ReportPanel");
-            }
-        });
-        FindStuBorrowedTopBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(panel1,"FindStuBorrowedPanel");
-            }
-        });
-        AddBooksBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-                AddOrChangeBooksUI addOrChangeBooksUI=new AddOrChangeBooksUI();
-                addOrChangeBooksUI.setVisible(true);
-            }
-        });
-        FindBookBtn.addActionListener(new ActionListener() {
+
+        backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                //TODO:添加点击查找以后，表格中显示所查书名或索书号的书
-            }
-        });
-        FindStuBorrowedBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                //TODO:添加点击查找以后，表格中显示所查学生借的书
+                try {
+                    BackBtnClicked(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         springLayout.putConstraint(SpringLayout.WEST, FindBookTex, 150, SpringLayout.WEST, BooksPanel);
         springLayout.putConstraint(SpringLayout.NORTH, FindBookTex, 30, SpringLayout.NORTH, BooksPanel);
-        springLayout.putConstraint(SpringLayout.EAST, NumOfBook, -150, SpringLayout.EAST, BooksPanel);
-        springLayout.putConstraint(SpringLayout.NORTH, NumOfBook, 30, SpringLayout.NORTH, BooksPanel);
+//        springLayout.putConstraint(SpringLayout.EAST, NumOfBook, -150, SpringLayout.EAST, BooksPanel);
+//        springLayout.putConstraint(SpringLayout.NORTH, NumOfBook, 30, SpringLayout.NORTH, BooksPanel);
         springLayout.putConstraint(SpringLayout.EAST, NumOfBookOut, -100, SpringLayout.EAST, BooksPanel);
         springLayout.putConstraint(SpringLayout.NORTH, NumOfBookOut, 30, SpringLayout.NORTH, BooksPanel);
         springLayout.putConstraint(SpringLayout.WEST, FindBookBtn, 10, SpringLayout.EAST, FindBookTex);
@@ -438,28 +438,28 @@ public class LibraryAdminUI extends JFrame {
         springLayout.putConstraint(SpringLayout.WEST, AddBooksBtn, 30, SpringLayout.EAST, FindBookBtn);
         springLayout.putConstraint(SpringLayout.NORTH, AddBooksBtn, 0, SpringLayout.NORTH, FindBookBtn);
 
-        Spring childWidth=Spring.sum(Spring.sum(Spring.width(NumOfAllBooksLabel),Spring.width(NumOfAllBooksLabelOut)),
+        Spring childWidth = Spring.sum(Spring.sum(Spring.width(NumOfAllBooksLabel), Spring.width(NumOfAllBooksLabelOut)),
                 Spring.constant(0));
-        int offsetX=childWidth.getValue()/2;
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfAllBooksLabel,60,SpringLayout.NORTH,ReportPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfAllBooksLabelOut,60,SpringLayout.NORTH,ReportPanel);
-        springLayout.putConstraint(SpringLayout.EAST,NumOfAllBooksLabel,-offsetX+40,SpringLayout.HORIZONTAL_CENTER,ReportPanel);
-        springLayout.putConstraint(SpringLayout.WEST,NumOfAllBooksLabelOut,offsetX-160,SpringLayout.HORIZONTAL_CENTER,ReportPanel);
+        int offsetX = childWidth.getValue() / 2;
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfAllBooksLabel, 60, SpringLayout.NORTH, ReportPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfAllBooksLabelOut, 60, SpringLayout.NORTH, ReportPanel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfAllBooksLabel, -offsetX + 40, SpringLayout.HORIZONTAL_CENTER, ReportPanel);
+        springLayout.putConstraint(SpringLayout.WEST, NumOfAllBooksLabelOut, 60, SpringLayout.HORIZONTAL_CENTER, ReportPanel);
 
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfBookInTheLibraryLabel,60,SpringLayout.SOUTH,NumOfAllBooksLabel);
-        springLayout.putConstraint(SpringLayout.EAST,NumOfBookInTheLibraryLabel,0,SpringLayout.EAST,NumOfAllBooksLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfBookInTheLibraryLabelOut,60,SpringLayout.SOUTH,NumOfAllBooksLabelOut);
-        springLayout.putConstraint(SpringLayout.WEST,NumOfBookInTheLibraryLabelOut,0,SpringLayout.WEST,NumOfAllBooksLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBookInTheLibraryLabel, 60, SpringLayout.SOUTH, NumOfAllBooksLabel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfBookInTheLibraryLabel, 0, SpringLayout.EAST, NumOfAllBooksLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBookInTheLibraryLabelOut, 60, SpringLayout.SOUTH, NumOfAllBooksLabelOut);
+        springLayout.putConstraint(SpringLayout.WEST, NumOfBookInTheLibraryLabelOut, 0, SpringLayout.WEST, NumOfAllBooksLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfBorrowedBooksLabel,60,SpringLayout.SOUTH,NumOfBookInTheLibraryLabel);
-        springLayout.putConstraint(SpringLayout.EAST,NumOfBorrowedBooksLabel,0,SpringLayout.EAST,NumOfBookInTheLibraryLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfBorrowedBooksLabelOut,60,SpringLayout.SOUTH,NumOfBookInTheLibraryLabelOut);
-        springLayout.putConstraint(SpringLayout.WEST,NumOfBorrowedBooksLabelOut,0,SpringLayout.WEST,NumOfBookInTheLibraryLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBorrowedBooksLabel, 60, SpringLayout.SOUTH, NumOfBookInTheLibraryLabel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfBorrowedBooksLabel, 0, SpringLayout.EAST, NumOfBookInTheLibraryLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfBorrowedBooksLabelOut, 60, SpringLayout.SOUTH, NumOfBookInTheLibraryLabelOut);
+        springLayout.putConstraint(SpringLayout.WEST, NumOfBorrowedBooksLabelOut, 0, SpringLayout.WEST, NumOfBookInTheLibraryLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfReadersLabel,60,SpringLayout.SOUTH,NumOfBorrowedBooksLabel);
-        springLayout.putConstraint(SpringLayout.EAST,NumOfReadersLabel,0,SpringLayout.EAST,NumOfBorrowedBooksLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,NumOfReadersLabelOut,60,SpringLayout.SOUTH,NumOfBorrowedBooksLabelOut);
-        springLayout.putConstraint(SpringLayout.WEST,NumOfReadersLabelOut,0,SpringLayout.WEST,NumOfBorrowedBooksLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfReadersLabel, 60, SpringLayout.SOUTH, NumOfBorrowedBooksLabel);
+        springLayout.putConstraint(SpringLayout.EAST, NumOfReadersLabel, 0, SpringLayout.EAST, NumOfBorrowedBooksLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, NumOfReadersLabelOut, 60, SpringLayout.SOUTH, NumOfBorrowedBooksLabelOut);
+        springLayout.putConstraint(SpringLayout.WEST, NumOfReadersLabelOut, 0, SpringLayout.WEST, NumOfBorrowedBooksLabelOut);
 
 
         springLayout.putConstraint(SpringLayout.WEST, FindStuBorrowedTex, 150, SpringLayout.WEST, FindStuBorrowedPanel);
@@ -469,11 +469,104 @@ public class LibraryAdminUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, scrollPaneFindStuBorrowed, 50, SpringLayout.SOUTH, FindStuBorrowedTex);
         springLayout.putConstraint(SpringLayout.WEST, scrollPaneFindStuBorrowed, 100, SpringLayout.WEST, panel1);
 
-        setSize(1200,800);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+//        setResizable(false);
+        setResizable(true);
         setVisible((true));
+
+
+
+
+        /* 监听函数 */
+        BooksBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(panel1, "BooksPanel");
+            }
+        });
+        ReportBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int totalNum = 0;
+                int freeNum = 0;
+                int borrowedNum = 0;
+                LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+                UniqueMessage uniqueMessage = new UniqueMessage("yes");
+                try {
+                    totalNum = libraryClientAPI.getTotalBooksNum(uniqueMessage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                LibraryClientAPI libraryClientAPI1 = new LibraryClientAPIImpl("localhost", 8888);
+                LibraryClientAPI libraryClientAPI2 = new LibraryClientAPIImpl("localhost", 8888);
+                try {
+                    freeNum = libraryClientAPI1.getFreeBooksNum(uniqueMessage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                try {
+                    borrowedNum = libraryClientAPI2.getBorrowedBooksNum(uniqueMessage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                LibraryClientAPI libraryClientAPI6 = new LibraryClientAPIImpl("localhost",8888);
+                int[] report;
+                try {
+                    report = libraryClientAPI6.getBookReport(uniqueMessage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                NumOfBookInTheLibraryLabelOut.setText(Integer.toString(totalNum));
+                NumOfBookInTheLibraryLabelOut.setText(Integer.toString(freeNum));
+                NumOfBorrowedBooksLabelOut.setText(Integer.toString(borrowedNum));
+                if(report==null)
+                    NumOfReadersLabelOut.setText(Integer.toString(0));
+                else
+                    NumOfReadersLabelOut.setText(Integer.toString(report[3]));
+                cardLayout.show(panel1, "ReportPanel");
+
+            }
+        });
+        FindStuBorrowedTopBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(panel1, "FindStuBorrowedPanel");
+            }
+        });
+        AddBooksBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                AddBooksUI addOrChangeBooksUI = new AddBooksUI();
+                addOrChangeBooksUI.setVisible(true);
+            }
+        });
+        FindBookBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchBtnClicked();
+            }
+        });
+        FindStuBorrowedBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //TODO:添加点击查找以后，表格中显示所查学生借的书
+            }
+        });
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    BackBtnClicked(e);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
     }
 
     static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
@@ -497,7 +590,7 @@ public class LibraryAdminUI extends JFrame {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         try {
             // 设置外观为Windows外观
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -506,7 +599,6 @@ public class LibraryAdminUI extends JFrame {
             UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
             UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
             UIManager.put("control", new Color(248, 248, 230)); // 背景
-
 
 
         } catch (Exception e) {
@@ -524,161 +616,420 @@ public class LibraryAdminUI extends JFrame {
 
         new LibraryAdminUI();
     }
-}
-class AddOrChangeBooksUI extends JFrame{
-    SpringLayout springLayout=new SpringLayout();
-    JLabel BookIdLabel=new JLabel("书名");
-    JLabel BookISBNLabel=new JLabel("索书号");
-    JLabel AuthorLabel=new JLabel("作者");
-    JLabel BookTypeLabel=new JLabel("类型");
-    JLabel PublisherLabel=new JLabel("出版社");
-    JLabel BookPosLabel=new JLabel("位置");
 
-    public JTextField getBookIdTex() {
-        return BookIdTex;
+    private void deleteBtnClicked(ActionEvent e) throws IOException {
+        //System.out.println("按钮事件触发----");
+        JButton clickedButton = (JButton) e.getSource();
+        int clickedRow;
+        clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+        System.out.println("点击的行索引：" + clickedRow);
+        // ISBN号在第1列
+        Object data = table.getValueAt(clickedRow, 1);
+        String ISBNchosen = (String) data;
+
+        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
+        BookISBNMessage bookISBNMessage_1 = new BookISBNMessage(ISBNchosen);
+        Boolean flag = libraryClientAPI_1.deleteBook(bookISBNMessage_1);
+
+        if (flag) {
+            System.out.println("Delete Successfully");
+        }
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
+        String a = "yes";
+        UniqueMessage noDataReqMessage = new UniqueMessage(a);
+
+        Book[] AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        ShowTableData(AllBooks);
     }
 
-    JTextField BookIdTex=new JTextField();
+    private void SearchBtnClicked() {
+        System.out.println("Search Pressed");
+        String searchText = FindBookTex.getText(); // 获取文本框内容作为搜索文本
 
-    public JTextField getBookISBNTex() {
-        return BookISBNTex;
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost", 8888);
+        SearchBookNameMessage searchBookNameMessage = new SearchBookNameMessage(searchText);
+        Book[] bookArray;
+        try {
+            bookArray = libraryClientAPI_3.getBooksBySearchBookName(searchBookNameMessage);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        ShowTableData(bookArray);
     }
 
-    JTextField BookISBNTex=new JTextField();
-
-    public JTextField getAuthorTex() {
-        return AuthorTex;
+    private void BackBtnClicked(ActionEvent e) throws IOException {
+        System.exit(0);
     }
 
-    JTextField AuthorTex=new JTextField();
+    private void ShowTableData(Book[] bookArray) {
+        // 把得到的书籍列表放入表格
+        String[][] data;
+        String[] columnNamesChosen;
+        if (bookArray == null) {
+            int columnCount = 8;
+            columnNamesChosen = new String[]{"书名", "索书号", "作者", "类型", "出版社", "位置", "修改", "删除"};
+            data = new String[][]{null, null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null};
+            model.setDataVector(data, columnNamesChosen);
+            table.setModel(model);
+        } else {
+            int rowCount = bookArray.length;
+            int columnCount = 8;
 
-    public JTextField getBookTypeTex() {
-        return BookTypeTex;
-    }
+            columnNamesChosen = new String[]{"书名", "索书号", "作者", "类型", "出版社", "位置", "修改", "删除"};
+            // 创建二维字符串数组用于存储表格数据
+            data = new String[rowCount][columnCount];
 
-    JTextField BookTypeTex=new JTextField();
-
-    public JTextField getPublisherTex() {
-        return PublisherTex;
-    }
-
-    JTextField PublisherTex=new JTextField();
-
-    public JTextField getBookPosTex() {
-        return BookPosTex;
-    }
-
-    JTextField BookPosTex=new JTextField();
-    JButton EnsureBtn=new JButton("确认");
-
-    JButton ExitBtn=new JButton("取消");
-    JPanel panel=new JPanel(springLayout);
-
-    public AddOrChangeBooksUI(){
-        Container contentPane=getContentPane();//获取控制面板
-        contentPane.setLayout(new BorderLayout());
-
-        contentPane.add(panel,BorderLayout.CENTER);
-        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
-        BookIdLabel.setFont(centerFont);
-
-        BookISBNLabel.setFont(centerFont);
-
-        AuthorLabel.setFont(centerFont);
-
-        BookTypeLabel.setFont(centerFont);
-
-        PublisherLabel.setFont(centerFont);
-
-        BookPosLabel.setFont(centerFont);
-
-
-        EnsureBtn.setPreferredSize(new Dimension(150,30));//设置按钮大小
-        ExitBtn.setPreferredSize(new Dimension(150,30));
-        panel.add(EnsureBtn);
-        panel.add(ExitBtn);
-
-        BookIdTex.setPreferredSize(new Dimension(200,25));
-        BookISBNTex.setPreferredSize(new Dimension(200,25));
-        AuthorTex.setPreferredSize(new Dimension(200,25));
-        BookTypeTex.setPreferredSize(new Dimension(200,25));
-        PublisherTex.setPreferredSize(new Dimension(200,25));
-        BookPosTex.setPreferredSize(new Dimension(200,25));
-        panel.add(BookIdLabel);
-        panel.add(BookISBNLabel);
-        panel.add(AuthorLabel);
-        panel.add(BookTypeLabel);
-        panel.add(PublisherLabel);
-        panel.add(BookPosLabel);
-        panel.add(BookIdTex);
-        panel.add(BookISBNTex);
-        panel.add(AuthorTex);
-        panel.add(BookTypeTex);
-        panel.add(PublisherTex);
-        panel.add(BookPosTex);
-        Spring childWidth=Spring.sum(Spring.sum(Spring.width(BookIdLabel),Spring.width(BookIdTex)),
-                Spring.constant(0));
-        int offsetX=childWidth.getValue()/2;
-        springLayout.putConstraint(SpringLayout.NORTH,BookIdLabel,20,SpringLayout.NORTH,panel);
-        springLayout.putConstraint(SpringLayout.NORTH,BookIdTex,20,SpringLayout.NORTH,panel);
-        springLayout.putConstraint(SpringLayout.EAST,BookIdLabel,-offsetX+40,SpringLayout.HORIZONTAL_CENTER,panel);
-        springLayout.putConstraint(SpringLayout.WEST,BookIdTex,offsetX-160,SpringLayout.HORIZONTAL_CENTER,panel);
-
-        springLayout.putConstraint(SpringLayout.NORTH,BookISBNLabel,20,SpringLayout.SOUTH,BookIdLabel);
-        springLayout.putConstraint(SpringLayout.EAST,BookISBNLabel,0,SpringLayout.EAST,BookIdLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,BookISBNTex,20,SpringLayout.SOUTH,BookIdTex);
-        springLayout.putConstraint(SpringLayout.WEST,BookISBNTex,0,SpringLayout.WEST,BookIdTex);
-
-        springLayout.putConstraint(SpringLayout.NORTH,AuthorLabel,20,SpringLayout.SOUTH,BookISBNLabel);
-        springLayout.putConstraint(SpringLayout.EAST,AuthorLabel,0,SpringLayout.EAST,BookISBNLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,AuthorTex,20,SpringLayout.SOUTH,BookISBNTex);
-        springLayout.putConstraint(SpringLayout.WEST,AuthorTex,0,SpringLayout.WEST,BookISBNTex);
-
-        springLayout.putConstraint(SpringLayout.NORTH,BookTypeLabel,20,SpringLayout.SOUTH,AuthorLabel);
-        springLayout.putConstraint(SpringLayout.EAST,BookTypeLabel,0,SpringLayout.EAST,AuthorLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,BookTypeTex,20,SpringLayout.SOUTH,AuthorTex);
-        springLayout.putConstraint(SpringLayout.WEST,BookTypeTex,0,SpringLayout.WEST,AuthorTex);
-
-        springLayout.putConstraint(SpringLayout.NORTH,PublisherLabel,20,SpringLayout.SOUTH,BookTypeLabel);
-        springLayout.putConstraint(SpringLayout.EAST,PublisherLabel,0,SpringLayout.EAST,BookTypeLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,PublisherTex,20,SpringLayout.SOUTH,BookTypeTex);
-        springLayout.putConstraint(SpringLayout.WEST,PublisherTex,0,SpringLayout.WEST,BookTypeTex);
-
-        springLayout.putConstraint(SpringLayout.NORTH,BookPosLabel,20,SpringLayout.SOUTH,PublisherLabel);
-        springLayout.putConstraint(SpringLayout.EAST,BookPosLabel,0,SpringLayout.EAST,PublisherLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,BookPosTex,20,SpringLayout.SOUTH,PublisherTex);
-        springLayout.putConstraint(SpringLayout.WEST,BookPosTex,0,SpringLayout.WEST,PublisherTex);
-
-        springLayout.putConstraint(SpringLayout.NORTH,EnsureBtn,30,SpringLayout.SOUTH,BookPosTex);
-        springLayout.putConstraint(SpringLayout.EAST,EnsureBtn,70,SpringLayout.EAST,BookPosLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,ExitBtn,0,SpringLayout.NORTH,EnsureBtn);
-        springLayout.putConstraint(SpringLayout.WEST,ExitBtn,20,SpringLayout.EAST,EnsureBtn);
-
-
-
-
-
-
-        ExitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
+            // 将书籍信息转换为对象数组并存储在data数组中
+            // 将书籍信息转换为对象数组并存储在data数组中
+            for (int i = 0; i < rowCount; i++) {
+                Book book = bookArray[i];
+                data[i] = new String[]{
+                        book.getBookName(),
+                        book.getBookISBN(),
+                        book.getAuthor(),
+                        book.getBookType(),
+                        book.getPublisher(),
+                        book.getBookPos()
+                };
             }
-        });
+            model.setDataVector(data, columnNamesChosen);
+            table.setModel(model);
 
-        EnsureBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            LibraryAdminUI.ChangeBookTableCellEditorButton changeEditor = new ChangeBookTableCellEditorButton();
+            LibraryAdminUI.ChangeBookTableCellRendererButton changeRenderer = new ChangeBookTableCellRendererButton();
+            LibraryAdminUI.DeleteBookTableCellEditorButton deleteEditor = new DeleteBookTableCellEditorButton();
+            LibraryAdminUI.DeleteBookTableCellRendererButton deleteRenderer = new DeleteBookTableCellRendererButton();
 
-                //TODO:新增则新增图书到表格和数据库
-                //TODO:修改则在数据库和表格中修改图书信息
-            }
-        });
-        setSize(400,400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
-        setVisible((true));
+            table.getColumnModel().getColumn(6).setCellRenderer(changeRenderer);
+            table.getColumnModel().getColumn(6).setCellEditor(changeEditor);
+
+            table.getColumnModel().getColumn(7).setCellRenderer(deleteRenderer);
+            table.getColumnModel().getColumn(7).setCellEditor(deleteEditor);
+        }
+
+    }
+
+    class AddBooksUI extends JFrame {
+        SpringLayout springLayout;
+        JLabel BookIdLabel;
+        JLabel BookISBNLabel;
+        JLabel AuthorLabel;
+        JLabel BookTypeLabel;
+        JLabel PublisherLabel;
+        JLabel BookPosLabel;
+        JTextField BookIdTex;
+        JTextField BookISBNTex;
+        JTextField AuthorTex;
+        JTextField BookTypeTex;
+        JTextField PublisherTex;
+        JTextField BookPosTex;
+        JButton EnsureAddBtn;
+        JButton ExitBtn;
+        JPanel panel;
+
+
+        public AddBooksUI() {
+            setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+            springLayout = new SpringLayout();
+            BookIdLabel = new JLabel("书名");
+            BookISBNLabel = new JLabel("索书号");
+            AuthorLabel = new JLabel("作者");
+            BookTypeLabel = new JLabel("类型");
+            PublisherLabel = new JLabel("出版社");
+            BookPosLabel = new JLabel("位置");
+            BookIdTex = new JTextField();
+            BookISBNTex = new JTextField();
+            AuthorTex = new JTextField();
+            BookTypeTex = new JTextField();
+            PublisherTex = new JTextField();
+            BookPosTex = new JTextField();
+            EnsureAddBtn = new JButton("确认");
+            ExitBtn = new JButton("取消");
+            panel = new JPanel(springLayout);
+
+
+            Container contentPane = getContentPane();//获取控制面板
+            contentPane.setLayout(new BorderLayout());
+
+            contentPane.add(panel, BorderLayout.CENTER);
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            BookIdLabel.setFont(centerFont);
+
+            BookISBNLabel.setFont(centerFont);
+
+            AuthorLabel.setFont(centerFont);
+
+            BookTypeLabel.setFont(centerFont);
+
+            PublisherLabel.setFont(centerFont);
+
+            BookPosLabel.setFont(centerFont);
+
+
+            EnsureAddBtn.setPreferredSize(new Dimension(150, 30));//设置按钮大小
+            ExitBtn.setPreferredSize(new Dimension(150, 30));
+            panel.add(EnsureAddBtn);
+            panel.add(ExitBtn);
+
+            BookIdTex.setPreferredSize(new Dimension(200, 25));
+            BookISBNTex.setPreferredSize(new Dimension(200, 25));
+            AuthorTex.setPreferredSize(new Dimension(200, 25));
+            BookTypeTex.setPreferredSize(new Dimension(200, 25));
+            PublisherTex.setPreferredSize(new Dimension(200, 25));
+            BookPosTex.setPreferredSize(new Dimension(200, 25));
+            panel.add(BookIdLabel);
+            panel.add(BookISBNLabel);
+            panel.add(AuthorLabel);
+            panel.add(BookTypeLabel);
+            panel.add(PublisherLabel);
+            panel.add(BookPosLabel);
+            panel.add(BookIdTex);
+            panel.add(BookISBNTex);
+            panel.add(AuthorTex);
+            panel.add(BookTypeTex);
+            panel.add(PublisherTex);
+            panel.add(BookPosTex);
+            Spring childWidth = Spring.sum(Spring.sum(Spring.width(BookIdLabel), Spring.width(BookIdTex)),
+                    Spring.constant(0));
+            int offsetX = childWidth.getValue() / 2;
+            springLayout.putConstraint(SpringLayout.NORTH, BookIdLabel, 20, SpringLayout.NORTH, panel);
+            springLayout.putConstraint(SpringLayout.NORTH, BookIdTex, 20, SpringLayout.NORTH, panel);
+            springLayout.putConstraint(SpringLayout.EAST, BookIdLabel, -offsetX + 40, SpringLayout.HORIZONTAL_CENTER, panel);
+            springLayout.putConstraint(SpringLayout.WEST, BookIdTex, offsetX - 160, SpringLayout.HORIZONTAL_CENTER, panel);
+
+            springLayout.putConstraint(SpringLayout.NORTH, BookISBNLabel, 20, SpringLayout.SOUTH, BookIdLabel);
+            springLayout.putConstraint(SpringLayout.EAST, BookISBNLabel, 0, SpringLayout.EAST, BookIdLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, BookISBNTex, 20, SpringLayout.SOUTH, BookIdTex);
+            springLayout.putConstraint(SpringLayout.WEST, BookISBNTex, 0, SpringLayout.WEST, BookIdTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, AuthorLabel, 20, SpringLayout.SOUTH, BookISBNLabel);
+            springLayout.putConstraint(SpringLayout.EAST, AuthorLabel, 0, SpringLayout.EAST, BookISBNLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, AuthorTex, 20, SpringLayout.SOUTH, BookISBNTex);
+            springLayout.putConstraint(SpringLayout.WEST, AuthorTex, 0, SpringLayout.WEST, BookISBNTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, BookTypeLabel, 20, SpringLayout.SOUTH, AuthorLabel);
+            springLayout.putConstraint(SpringLayout.EAST, BookTypeLabel, 0, SpringLayout.EAST, AuthorLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, BookTypeTex, 20, SpringLayout.SOUTH, AuthorTex);
+            springLayout.putConstraint(SpringLayout.WEST, BookTypeTex, 0, SpringLayout.WEST, AuthorTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, PublisherLabel, 20, SpringLayout.SOUTH, BookTypeLabel);
+            springLayout.putConstraint(SpringLayout.EAST, PublisherLabel, 0, SpringLayout.EAST, BookTypeLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, PublisherTex, 20, SpringLayout.SOUTH, BookTypeTex);
+            springLayout.putConstraint(SpringLayout.WEST, PublisherTex, 0, SpringLayout.WEST, BookTypeTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, BookPosLabel, 20, SpringLayout.SOUTH, PublisherLabel);
+            springLayout.putConstraint(SpringLayout.EAST, BookPosLabel, 0, SpringLayout.EAST, PublisherLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, BookPosTex, 20, SpringLayout.SOUTH, PublisherTex);
+            springLayout.putConstraint(SpringLayout.WEST, BookPosTex, 0, SpringLayout.WEST, PublisherTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, EnsureAddBtn, 30, SpringLayout.SOUTH, BookPosTex);
+            springLayout.putConstraint(SpringLayout.EAST, EnsureAddBtn, 70, SpringLayout.EAST, BookPosLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ExitBtn, 0, SpringLayout.NORTH, EnsureAddBtn);
+            springLayout.putConstraint(SpringLayout.WEST, ExitBtn, 20, SpringLayout.EAST, EnsureAddBtn);
+
+            ExitBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
+            });
+
+            EnsureAddBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String bookNameGet = BookIdTex.getText();
+                    String bookISBNGet = BookISBNTex.getText();
+                    String bookAuthorGet = AuthorTex.getText();
+                    String bookTypeGet = BookTypeTex.getText();
+                    String bookPublishGet = PublisherTex.getText();
+                    String bookPosGet = BookPosTex.getText();
+                    Book addBook = new Book(bookISBNGet, bookNameGet, bookAuthorGet,
+                            bookTypeGet, 100.0, bookPublishGet, null, 100, 50, bookPosGet, 3
+                    );
+                    LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+                    try {
+                        libraryClientAPI.AddBook(addBook);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    //TODO:新增图书到表格
+                    LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
+                    String a = "yes";
+                    UniqueMessage noDataReqMessage = new UniqueMessage(a);
+
+                    Book[] AllBooks = new Book[0];
+                    try {
+                        AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    ShowTableData(AllBooks);
+                }
+            });
+
+            setSize(400, 400);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(HIDE_ON_CLOSE);
+//            setResizable(false);
+            setResizable(true);
+            setVisible((true));
+        }
+
+
+    }
+
+    class ChangeBooksUI extends JFrame {
+        SpringLayout springLayout = new SpringLayout();
+        JLabel ChangeBookIdLabel = new JLabel("书名");
+        JLabel ChangeAuthorLabel = new JLabel("作者");
+        JLabel ChangeBookTypeLabel = new JLabel("类型");
+        JLabel ChangePublisherLabel = new JLabel("出版社");
+        JLabel ChangeBookPosLabel = new JLabel("位置");
+
+
+        JTextField ChangeBookIdTex = new JTextField();
+
+
+        JTextField ChangeAuthorTex = new JTextField();
+
+
+        JTextField ChangeBookTypeTex = new JTextField();
+
+        JTextField ChangePublisherTex = new JTextField();
+
+        JTextField ChangeBookPosTex = new JTextField();
+        JButton ChangeEnsureBtn = new JButton("确认");
+
+        JButton ChangeExitBtn = new JButton("取消");
+        JPanel panel = new JPanel(springLayout);
+
+        public ChangeBooksUI() {
+            Container contentPane = getContentPane();//获取控制面板
+            contentPane.setLayout(new BorderLayout());
+
+            contentPane.add(panel, BorderLayout.CENTER);
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            ChangeBookIdLabel.setFont(centerFont);
+
+            ChangeAuthorLabel.setFont(centerFont);
+
+            ChangeBookTypeLabel.setFont(centerFont);
+
+            ChangePublisherLabel.setFont(centerFont);
+
+            ChangeBookPosLabel.setFont(centerFont);
+
+
+            ChangeEnsureBtn.setPreferredSize(new Dimension(150, 30));//设置按钮大小
+            ChangeExitBtn.setPreferredSize(new Dimension(150, 30));
+            panel.add(ChangeEnsureBtn);
+            panel.add(ChangeExitBtn);
+
+            ChangeBookIdTex.setPreferredSize(new Dimension(200, 25));
+            ChangeAuthorTex.setPreferredSize(new Dimension(200, 25));
+            ChangeBookTypeTex.setPreferredSize(new Dimension(200, 25));
+            ChangePublisherTex.setPreferredSize(new Dimension(200, 25));
+            ChangeBookPosTex.setPreferredSize(new Dimension(200, 25));
+            panel.add(ChangeBookIdLabel);
+            panel.add(ChangeAuthorLabel);
+            panel.add(ChangeBookTypeLabel);
+            panel.add(ChangePublisherLabel);
+            panel.add(ChangeBookPosLabel);
+            panel.add(ChangeBookIdTex);
+            panel.add(ChangeAuthorTex);
+            panel.add(ChangeBookTypeTex);
+            panel.add(ChangePublisherTex);
+            panel.add(ChangeBookPosTex);
+            Spring childWidth = Spring.sum(Spring.sum(Spring.width(ChangeBookIdLabel), Spring.width(ChangeBookIdTex)),
+                    Spring.constant(0));
+            int offsetX = childWidth.getValue() / 2;
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookIdLabel, 40, SpringLayout.NORTH, panel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookIdTex, 40, SpringLayout.NORTH, panel);
+            springLayout.putConstraint(SpringLayout.EAST, ChangeBookIdLabel, -offsetX + 40, SpringLayout.HORIZONTAL_CENTER, panel);
+            springLayout.putConstraint(SpringLayout.WEST, ChangeBookIdTex, offsetX - 160, SpringLayout.HORIZONTAL_CENTER, panel);
+
+
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeAuthorLabel, 20, SpringLayout.SOUTH, ChangeBookIdLabel);
+            springLayout.putConstraint(SpringLayout.EAST, ChangeAuthorLabel, 0, SpringLayout.EAST, ChangeBookIdLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeAuthorTex, 20, SpringLayout.SOUTH, ChangeBookIdTex);
+            springLayout.putConstraint(SpringLayout.WEST, ChangeAuthorTex, 0, SpringLayout.WEST, ChangeBookIdTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookTypeLabel, 20, SpringLayout.SOUTH, ChangeAuthorLabel);
+            springLayout.putConstraint(SpringLayout.EAST, ChangeBookTypeLabel, 0, SpringLayout.EAST, ChangeAuthorLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookTypeTex, 20, SpringLayout.SOUTH, ChangeAuthorTex);
+            springLayout.putConstraint(SpringLayout.WEST, ChangeBookTypeTex, 0, SpringLayout.WEST, ChangeAuthorTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, ChangePublisherLabel, 20, SpringLayout.SOUTH, ChangeBookTypeLabel);
+            springLayout.putConstraint(SpringLayout.EAST, ChangePublisherLabel, 0, SpringLayout.EAST, ChangeBookTypeLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangePublisherTex, 20, SpringLayout.SOUTH, ChangeBookTypeTex);
+            springLayout.putConstraint(SpringLayout.WEST, ChangePublisherTex, 0, SpringLayout.WEST, ChangeBookTypeTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookPosLabel, 20, SpringLayout.SOUTH, ChangePublisherLabel);
+            springLayout.putConstraint(SpringLayout.EAST, ChangeBookPosLabel, 0, SpringLayout.EAST, ChangePublisherLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeBookPosTex, 20, SpringLayout.SOUTH, ChangePublisherTex);
+            springLayout.putConstraint(SpringLayout.WEST, ChangeBookPosTex, 0, SpringLayout.WEST, ChangePublisherTex);
+
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeEnsureBtn, 30, SpringLayout.SOUTH, ChangeBookPosTex);
+            springLayout.putConstraint(SpringLayout.EAST, ChangeEnsureBtn, 70, SpringLayout.EAST, ChangeBookPosLabel);
+            springLayout.putConstraint(SpringLayout.NORTH, ChangeExitBtn, 0, SpringLayout.NORTH, ChangeEnsureBtn);
+            springLayout.putConstraint(SpringLayout.WEST, ChangeExitBtn, 20, SpringLayout.EAST, ChangeEnsureBtn);
+
+
+            ChangeExitBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
+            });
+
+            ChangeEnsureBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    System.out.println("点击的行索引：" + changeBtnRow);
+                    String bookNameGet = ChangeBookIdTex.getText();
+//                    String bookISBNGet = BookISBNTex.getText();
+                    Object data = table.getValueAt(changeBtnRow, 1);
+                    String bookISBNGet = (String) data;
+                    String bookAuthorGet = ChangeAuthorTex.getText();
+                    String bookTypeGet = ChangeBookTypeTex.getText();
+                    String bookPublishGet = ChangePublisherTex.getText();
+                    String bookPosGet = ChangeBookPosTex.getText();
+                    Book addBook = new Book(bookISBNGet, bookNameGet, bookAuthorGet,
+                            bookTypeGet, 100.0, bookPublishGet, null, 1, 1, bookPosGet, 0
+                    );
+                    Boolean flag = false;
+                    LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+                    try {
+                        flag = libraryClientAPI.ChangeBook(addBook);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    //TODO:修改则在数据库和表格中修改图书信息
+                    LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
+                    String a = "yes";
+                    UniqueMessage noDataReqMessage = new UniqueMessage(a);
+
+                    Book[] AllBooks = new Book[0];
+                    try {
+                        AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    ShowTableData(AllBooks);
+                }
+            });
+
+            setSize(400, 400);
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(HIDE_ON_CLOSE);
+//            setResizable(false);
+            setResizable(true);
+            setVisible((true));
+        }
     }
 }
 

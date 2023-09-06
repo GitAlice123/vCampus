@@ -123,6 +123,26 @@ public class ServerApplication {
                         serverActionTool.Action209(jsonData,clientSocket);
                         break;
                     }
+                    case 210:{
+                        serverActionTool.Action210(jsonData,clientSocket);
+                        break;
+                    }
+                    case 211:{
+                        serverActionTool.Action211(jsonData,clientSocket);
+                        break;
+                    }
+                    case 212:{
+                        serverActionTool.Action212(jsonData,clientSocket);
+                        break;
+                    }
+                    case 213:{
+                        serverActionTool.Action213(jsonData,clientSocket);
+                        break;
+                    }
+                    case 214:{
+                        serverActionTool.Action214(jsonData,clientSocket);
+                        break;
+                    }
                     default: {
                         // 处理其他消息类型
                         break;

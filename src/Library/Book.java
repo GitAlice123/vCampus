@@ -134,8 +134,6 @@ public class Book {
                 ", freeNum=" + freeNum +
                 ", bookPos='" + bookPos + '\'' +
                 ", borrowNum=" + borrowNum +
-                '}';
-
-    public Book() {}
+                '}';}
 }
 
