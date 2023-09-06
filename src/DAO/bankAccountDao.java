@@ -11,13 +11,13 @@ public class bankAccountDao {
     public boolean isLoss(String id){
         String sqlString = "select * from tblBankAccount where account_id = '" + id + "'";
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
@@ -50,13 +50,13 @@ public class bankAccountDao {
         bankAccount bankaccount = new bankAccount("" ,"","","",0,true);
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
@@ -91,13 +91,13 @@ public class bankAccountDao {
         String sqlString = "select * from tblBankAccount where account_id = '" + id + "'";
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
@@ -129,13 +129,13 @@ public class bankAccountDao {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + id + "'";
         //验证原密码是否正确
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
 
@@ -156,13 +156,13 @@ public class bankAccountDao {
         String sqlString2 = "update tblBankAccount set account_Pwd = '"+ newPwd + "' where account_id = '" + id + "'";
         //更改密码
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
             if(count == 0) return false; //若未进行更改操作，则返回false
@@ -186,13 +186,13 @@ public class bankAccountDao {
         boolean isloss =  true;
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
 
@@ -213,13 +213,13 @@ public class bankAccountDao {
         String sqlString2 = "update tblBankAccount set account_isLoss = '"+ isloss + "' where account_id = '" + id + "'";
         //更改挂失状态
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
             if(count == 0) return false; //若未进行更改操作，则返回false
@@ -243,13 +243,13 @@ public class bankAccountDao {
         double original_balance= 0;
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
 
@@ -272,13 +272,13 @@ public class bankAccountDao {
         //进行账户充值，修改余额数值
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
             if(count == 0) return false; //若未进行更改操作，则返回false
@@ -303,13 +303,13 @@ public class bankAccountDao {
         double original_balance= 0;
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
 
@@ -333,13 +333,13 @@ public class bankAccountDao {
         //进行消费，修改账户余额值
 
         try {
-            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
-            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:ucanaccess://+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             int count = sta.executeUpdate(sqlString2);
             if(count == 0) return false; //若未进行更改操作，则返回false
@@ -367,14 +367,14 @@ public class bankAccountDao {
 
         try {
             // 加载 Access 驱动
-            Class.forName("com.hxtt.sql.access.AccessDriver");
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         try {
             // 建立数据库连接
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\database\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://.\\src\\database\\vCampus.mdb", "", "");
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
