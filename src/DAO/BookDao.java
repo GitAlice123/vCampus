@@ -142,7 +142,7 @@ public class BookDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\db\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             sta.executeUpdate(sqlString2);
@@ -393,5 +393,47 @@ public class BookDao {
 
         return allBooks;
     }
+
+    /**
+     * 查询图书馆报告
+     *
+     * @return int类型数组，长度为4，分别代表馆藏图书数量、在馆图书数量、借出图书数量、读者数量
+     */
+    public int[] getReport(){
+        int[] reports = new int[4];
+        reports[0]=reports[1]=reports[2]=reports[3]=0;
+
+        String sqlString = "select * from tblBook";
+
+        try {
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet res = sta.executeQuery(sqlString);
+
+            int index = 0;
+            while (res.next()) {//不断的移动光标到下一个数据
+                reports[0]+=res.getInt(8);
+                reports[1]+=res.getInt(9);
+                reports[3]+=res.getInt(11);
+                index++;
+            }
+
+            con.close();//关闭数据库连接
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        reports[2]=reports[0]-reports[1];
+
+        return reports;
+    }
+
 
 }

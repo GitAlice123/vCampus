@@ -345,6 +345,53 @@ public class IBankClientAPIImpl implements IBankClientAPI{
         bankAccount result = bankA;
         return result;
     }
+
+    /**
+     * 用一卡通号查询并返回所有的银行账户信息。管理员用
+     *
+     * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
+     */
+    public String[][] findBankAccounts(String id){
+        //以下发送用户id给服务器
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+            BankIDMessage bankIDMessage=new BankIDMessage(id);
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(bankIDMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream,jsonData,1006);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //接收服务器响应
+        String receivedJsonData = null;
+        try {
+            receivedJsonData = rwTool.ClientReadStream(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String[][] result = null;
+        try {
+            result = objectMapper.readValue(mess, String[][].class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+//      处理结果
+        //String[][] result = stringArrayRespMessage.getData();
+        return result;
+    }
 }
 
 

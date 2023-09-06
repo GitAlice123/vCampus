@@ -61,6 +61,18 @@ public class Course {//学生视角的课程
         return CourseType;
     }
 
+    public String getCourseType(String s){
+        switch (this.CourseType) {
+            case Compulsory:
+                return  "Compulsory";
+            case Optional:
+                return "Optional";
+            case Limitative:
+                return "Limitative";
+        }
+        return null;
+    }
+
     public void setCourseType(CourseType courseType) {
         this.CourseType = courseType;
     }
@@ -69,10 +81,13 @@ public class Course {//学生视角的课程
         switch (courseType) {
             case "Compulsory":
                 this.CourseType = CourseType.Compulsory;
+                break;
             case "Optional":
                 this.CourseType = CourseType.Optional;
+                break;
             case "Limitative":
                 this.CourseType = CourseType.Limitative;
+                break;
         }
     }
 

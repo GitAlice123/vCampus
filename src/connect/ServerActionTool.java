@@ -291,8 +291,7 @@ public class ServerActionTool {
 
         /* 以下是和数据库交互部分借阅图书 */
 
-        BookDao bookDao = new BookDao();
-        flag_1 = bookDao.Borrow(bookOperationRecord.getISBN());
+
 
         BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
         // TODO:借书操作，需要传入用户id
@@ -301,7 +300,17 @@ public class ServerActionTool {
         BookHoldDao bookHoldDao = new BookHoldDao();
         flag_3 = bookHoldDao.Borrow(bookOperationRecord);
 
-        Boolean flag = flag_1&&flag_2&&flag_3;
+        Boolean flag = false;
+        if(flag_3)
+        {
+            BookDao bookDao = new BookDao();
+            flag_1 = bookDao.Borrow(bookOperationRecord.getISBN());
+            flag = flag_1&&flag_2&&flag_3;
+        }
+        else {
+            flag = false;
+        }
+
 
         //下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
@@ -438,6 +447,178 @@ public class ServerActionTool {
         //下面将response信息返回客户端
         try {
             String outputData = objectMapper.writeValueAsString(bookMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action210(String jsonData, Socket clientSocket){
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 210");
+        BookDao bookDao = new BookDao();
+        Book[] bookList = bookDao.findAllBooks();
+
+        //下面将response信息返回客户端
+
+        BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action211(String jsonData, Socket clientSocket){
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 211");
+        BookDao bookDao = new BookDao();
+        Book[] bookList = bookDao.findAllBooks();
+
+        //下面将response信息返回客户端
+
+        BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action212(String jsonData, Socket clientSocket){
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 212");
+        BookDao bookDao = new BookDao();
+        Book[] bookList = bookDao.findAllBooks();
+
+        //下面将response信息返回客户端
+
+        BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action213(String jsonData, Socket clientSocket){
+        // 续借书籍
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        BookOperationRecord bookOperationRecord = null;
+        try {
+            bookOperationRecord = objectMapper.readValue(jsonData, BookOperationRecord.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 213");
+        Boolean flag_2 = false;
+        Boolean flag_3 = false;
+
+        /* 以下是和数据库交互部分续借图书 */
+
+        BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
+        // TODO:借书操作，需要传入用户id
+        flag_2 = bookOperationRecordDao.AddBookOperationRecord(bookOperationRecord);
+
+        BookHoldDao bookHoldDao = new BookHoldDao();
+        flag_3 = bookHoldDao.Renew(bookOperationRecord);
+
+        Boolean flag = flag_2&&flag_3;
+
+        //下面将response信息返回客户端
+        BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
+        try {
+            String outputData = objectMapper.writeValueAsString(boolRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action214(String jsonData, Socket clientSocket){
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 214");
+        BookDao bookDao = new BookDao();
+        int[] report = bookDao.getReport();
+
+        //下面将response信息返回客户端
+
+        LibraryReportRespMessage bookListRespMessage = new LibraryReportRespMessage(report);
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action215(String jsonData, Socket clientSocket){
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        RegisterReqMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, RegisterReqMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 215");
+        BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
+        BookOperationRecord[] report = bookOperationRecordDao.findBookOperationRecordById(uniqueMessage.getUserId());
+
+        //下面将response信息返回客户端
+
+        BookAdminSearchRespMessage bookListRespMessage = new BookAdminSearchRespMessage(report);
+
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
             System.out.println(outputData);
             OutputStream outputStream = clientSocket.getOutputStream();
             rwTool.ServerSendOutStream(outputStream, outputData);

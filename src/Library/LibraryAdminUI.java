@@ -722,7 +722,7 @@ public class LibraryAdminUI extends JFrame {
     }
 
     private void ShowOprTable() throws IOException {
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
         BookOperationRecord[] bookArray;
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         bookArray = libraryClientAPI.getBookAllOperationRecord(uniqueMessage);
@@ -765,8 +765,8 @@ public class LibraryAdminUI extends JFrame {
         }
     }
 
-    private void ShowSearchOprTable(String searchText) throws IOException {
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+    private void ShowSearchOprTable(String searchText) throws IOException{
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(searchText);
         BookOperationRecord[] bookArray;
         bookArray = libraryClientAPI.getBookOprRecordByUid(registerReqMessage);
@@ -775,7 +775,7 @@ public class LibraryAdminUI extends JFrame {
         String[][] data;
         String[] columnNamesChosen;
         if (bookArray == null) {
-            JOptionPane.showMessageDialog(this, "搜索不到该学生记录！");
+            JOptionPane.showMessageDialog(this,"搜索不到该学生记录！");
             FindStuBorrowedTex.setText("");
             ShowOprTable();
         } else {
