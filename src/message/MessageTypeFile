@@ -14,8 +14,12 @@
 还书请求,BookISBNMessage,206
 修改书籍请求,Book,207
 用索书号查找书籍并返回该书,BookISBNMessage,208
-
 得到所有书籍操作记录,UniqueMessage,209
+得到所有馆藏书总量,UniqueMessage,210
+得到所有在馆图书数量，UniqueMessage,211
+得到借出图书总数量,UniqueMessage,212
+续借该用户图书,BookOprRecordMessage,213
+得到馆藏图书信息（在馆人数之类）,UniqueMessage,214
 
 Bank：
 挂失:1000

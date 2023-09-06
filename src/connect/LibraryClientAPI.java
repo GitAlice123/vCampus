@@ -40,4 +40,24 @@ public interface LibraryClientAPI {
     public String getNextOPRId(UniqueMessage uniqueMessage)
             throws IOException;
 
+    public int getTotalBooksNum(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public int getFreeBooksNum(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public int getBorrowedBooksNum(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public Boolean renewBook(BookOperationRecord bookOperationRecord)
+            throws IOException;
+
+    public int[] getBookReport(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public BookOperationRecord[] getBookAllOperationRecord(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public BookOperationRecord[] getBookOprRecordByUid(RegisterReqMessage registerReqMessage)
+            throws IOException;
 }

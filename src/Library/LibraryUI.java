@@ -180,7 +180,7 @@ public class LibraryUI extends JFrame {
         }
     }
 
-    static class RenewBookTableCellEditorButton extends DefaultCellEditor {
+    class RenewBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
         private int clickedRow;
@@ -203,7 +203,11 @@ public class LibraryUI extends JFrame {
                     System.out.println("点击的行索引：" + clickedRow);
 
                     // TODO:此处要添加续借操作，将该行对应的书在该学生的已借书的表格和数据库中将过期时间后延
-
+                    try {
+                        RenewBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
 
@@ -247,6 +251,19 @@ public class LibraryUI extends JFrame {
     JButton ReturnToAllBookBtn;
 
     public LibraryUI() throws IOException {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initComponents();
     }
 
@@ -484,8 +501,6 @@ public class LibraryUI extends JFrame {
 
     private void ShowTableData(Book[] bookArray) {
         // 把得到的书籍列表放入表格
-        if(bookArray.length==0)
-            return;
         int rowCount = bookArray.length;
         int columnCount = 7;
 
@@ -531,6 +546,12 @@ public class LibraryUI extends JFrame {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        if(bookArray==null)
+        {
+            JOptionPane.showMessageDialog(this,"没有该书籍库存！");
+            FindBookTex.setText("");
+            return;
+        }
         ShowTableData(bookArray);
     }
 
@@ -541,10 +562,11 @@ public class LibraryUI extends JFrame {
         clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
         System.out.println("点击的行索引：" + clickedRow);
 
-
-        // 点击显示在馆数量
         Object data = table.getValueAt(clickedRow, 1);
         String ISBNchosen = (String) data;
+
+
+        // 点击显示在馆数量
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
         BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBNchosen);
         Book bookGet = libraryClientAPI.getBookByISBN(bookISBNMessage);
@@ -552,7 +574,7 @@ public class LibraryUI extends JFrame {
 
         Date currentDate = new Date();
         // 实施借书操作
-        // TODO:全局用户ID还未设置，现在是假的
+
         LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost", 8888);
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         String nextOPRid = libraryClientAPI_4.getNextOPRId(uniqueMessage);
@@ -561,11 +583,15 @@ public class LibraryUI extends JFrame {
         LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
         BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
                 ISBNchosen,currentDate,"BOR",null);
+        // TODO:全局用户ID还未设置，现在是假的
         Boolean flag = libraryClientAPI_1.BorrowBook(bookOperationRecord);
         if (flag) {
-            System.out.println("Borrow Successfully");
+            JOptionPane.showMessageDialog(this,"借阅成功！");
         }
-
+        else{
+            JOptionPane.showMessageDialog(this,"无法借阅！");
+            return;
+        }
         LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl("localhost",8888);
         String uID = "213213000";
         // TODO：全局用户ID还未设置
@@ -583,6 +609,11 @@ public class LibraryUI extends JFrame {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        // 点击显示在馆数量
+        LibraryClientAPI libraryClientAPI5 = new LibraryClientAPIImpl("localhost", 8888);
+        BookISBNMessage bookISBNMessage2 = new BookISBNMessage(ISBNchosen);
+        Book bookGet3 = libraryClientAPI5.getBookByISBN(bookISBNMessage2);
+        NumOfBook.setText("在馆数量：" + Integer.toString(bookGet3.freeNum)); // 使用 Integer.toString
 
     }
 
@@ -654,6 +685,55 @@ public class LibraryUI extends JFrame {
 
         Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
         ShowTableData(AllBooks);
+    }
+
+    private void RenewBtnClicked(ActionEvent e) throws IOException {
+        //System.out.println("按钮事件触发----");
+        JButton clickedButton = (JButton) e.getSource();
+        int clickedRow;
+        clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+        System.out.println("点击的行索引：" + clickedRow);
+
+
+        // 点击显示在馆数量
+        Object data = table.getValueAt(clickedRow, 1);
+        String ISBNchosen = (String) data;
+
+
+        Date currentDate = new Date();
+        // 实施续借操作
+        // TODO:全局用户ID还未设置，现在是假的
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost", 8888);
+        UniqueMessage uniqueMessage = new UniqueMessage("yes");
+        String nextOPRid = libraryClientAPI_4.getNextOPRId(uniqueMessage);
+
+
+        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+                ISBNchosen,currentDate,"REN",null);
+        Boolean flag = libraryClientAPI_1.renewBook(bookOperationRecord);
+        if (flag) {
+            System.out.println("Renew Successfully");
+        }
+
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl("localhost",8888);
+        String uID = "213213000";
+        // TODO：全局用户ID还未设置
+        RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
+
+        BookHold[] AllHoldBooks= new BookHold[0];
+        try {
+            AllHoldBooks = libraryClientAPI_5.getBorrowedBooks(registerReqMessage);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        try {
+            ShowBorrowedTableData(AllHoldBooks);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
     public static void main(String[] args) throws IOException {
         try {

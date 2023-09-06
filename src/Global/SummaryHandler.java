@@ -3,12 +3,14 @@
 package view.Global;
 
 import view.Global.SummaryUI;
+import view.Library.LibraryUI;
 import view.Login.logInUI;
 import view.Bank.BankTeacherStudentUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.io.IOException;
 import javax.swing.*;
 
 public class SummaryHandler extends KeyAdapter implements ActionListener
@@ -28,7 +30,14 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
         switch (text){
             case "学生学籍管理":System.out.println("学生学籍管理");break;
             case "选课系统":System.out.println("选课系统");break;
-            case "图书馆":System.out.println("图书馆");break;
+            case "图书馆":
+                summaryview.dispose();
+                try {
+                    new LibraryUI();//跳转页面的判断逻辑待写
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.out.println("图书馆");break;
             case "商店":System.out.println("商店");break;
             case "医院":System.out.println("医院");break;
             case "银行":

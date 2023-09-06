@@ -402,4 +402,246 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
         return str;
     }
 
+    @Override
+    public int getTotalBooksNum(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 210);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
+
+        int totalNum=0;
+//      处理结果
+        Book[] books = bookListRespMessage.getBooks();
+        for (Book book : books) {
+            totalNum+=book.getTotalNum();
+        }
+        return totalNum;
+
+    }
+
+    @Override
+    public int getFreeBooksNum(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 211);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
+
+        int totalNum=0;
+//      处理结果
+        Book[] books = bookListRespMessage.getBooks();
+        for (Book book : books) {
+            totalNum+=book.getFreeNum();
+        }
+        return totalNum;
+    }
+
+    @Override
+    public int getBorrowedBooksNum(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 212);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
+
+        int totalNum=0;
+//      处理结果
+        Book[] books = bookListRespMessage.getBooks();
+        for (Book book : books) {
+            totalNum+=book.getBorrowNum();
+        }
+        return totalNum;
+    }
+
+    @Override
+    public Boolean renewBook(BookOperationRecord bookOperationRecord) throws IOException {
+        //添加图书
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 213);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BoolRespMessage boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+
+//      处理结果
+        Boolean result = boolRespMessage.getFlag();
+
+        return result;
+    }
+
+    @Override
+    public int[] getBookReport(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 214);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        LibraryReportRespMessage bookListRespMessage = objectMapper.readValue(mess, LibraryReportRespMessage.class);
+
+        int[] report = new int[0];
+//      处理结果
+        report = bookListRespMessage.getBookReports();
+
+        return report;
+    }
+
+    @Override
+    public BookOperationRecord[] getBookAllOperationRecord(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 209);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookOPRListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookOPRListRespMessage.class);
+
+//      处理结果
+        BookOperationRecord[] result = bookListRespMessage.getBooks();
+
+        return result;
+    }
+
+    @Override
+    public BookOperationRecord[] getBookOprRecordByUid(RegisterReqMessage registerReqMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(registerReqMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 215);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookAdminSearchRespMessage bookListRespMessage = objectMapper.readValue(mess, BookAdminSearchRespMessage.class);
+
+//      处理结果
+        BookOperationRecord[] result = bookListRespMessage.getBookReports();
+
+        return result;
+    }
+
 }
