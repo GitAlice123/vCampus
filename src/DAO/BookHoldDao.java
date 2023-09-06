@@ -252,4 +252,50 @@ public class BookHoldDao {
 
         return true;
     }
+
+    /**
+     * 查找所有用户的当前借书情况（管理员系统可用）
+     *
+     * @return 所有用户的当前借书情况，以BookHol[]的形式返回
+     */
+    public BookHold[] findAllBookHolds(){
+        String sqlString = "select * from tblBookHold";
+        BookHold[] bookHolds = new BookHold[10];
+
+        try {
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet res = sta.executeQuery(sqlString);
+
+            res.last();
+            int count = res.getRow();
+            res.beforeFirst();
+
+            if (count == 0) {
+                return null;
+            }
+
+            bookHolds = new BookHold[count];
+            int index = 0;
+            while (res.next()) {//不断的移动光标到下一个数据
+                bookHolds[index] = new BookHold(res.getString(1), res.getString(2), res.getDate(3),
+                        res.getDate(4));
+                index++;
+            }
+
+            con.close();//关闭数据库连接
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookHolds;
+    }
+
 }

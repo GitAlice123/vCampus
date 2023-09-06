@@ -3,6 +3,7 @@ package view.Library;
 import view.connect.LibraryClientAPI;
 import view.connect.LibraryClientAPIImpl;
 import view.message.BookISBNMessage;
+import view.message.RegisterReqMessage;
 import view.message.SearchBookNameMessage;
 import view.message.UniqueMessage;
 
@@ -287,7 +288,6 @@ public class LibraryAdminUI extends JFrame {
 
 
         NumOfReadersLabelOut = new JLabel("当前还未知");
-        // TODO:这里需要补充获得所有读者数量
         NumOfBookOut = new JLabel(BookNum);
         backBtn = new JButton("退出");
 
@@ -511,7 +511,7 @@ public class LibraryAdminUI extends JFrame {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                LibraryClientAPI libraryClientAPI6 = new LibraryClientAPIImpl("localhost",8888);
+                LibraryClientAPI libraryClientAPI6 = new LibraryClientAPIImpl("localhost", 8888);
                 int[] report;
                 try {
                     report = libraryClientAPI6.getBookReport(uniqueMessage);
@@ -521,7 +521,7 @@ public class LibraryAdminUI extends JFrame {
                 NumOfBookInTheLibraryLabelOut.setText(Integer.toString(totalNum));
                 NumOfBookInTheLibraryLabelOut.setText(Integer.toString(freeNum));
                 NumOfBorrowedBooksLabelOut.setText(Integer.toString(borrowedNum));
-                if(report==null)
+                if (report == null)
                     NumOfReadersLabelOut.setText(Integer.toString(0));
                 else
                     NumOfReadersLabelOut.setText(Integer.toString(report[3]));
@@ -532,6 +532,11 @@ public class LibraryAdminUI extends JFrame {
         FindStuBorrowedTopBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    ShowOprTable();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 cardLayout.show(panel1, "FindStuBorrowedPanel");
             }
         });
@@ -552,8 +557,15 @@ public class LibraryAdminUI extends JFrame {
         FindStuBorrowedBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                System.out.println("Search Pressed");
+                String searchText = FindStuBorrowedTex.getText(); // 获取文本框内容作为搜索文本
+                try {
+                    ShowSearchOprTable(searchText);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 //TODO:添加点击查找以后，表格中显示所查学生借的书
+
             }
         });
         backBtn.addActionListener(new ActionListener() {
@@ -588,7 +600,6 @@ public class LibraryAdminUI extends JFrame {
             return cellComponent;
         }
     }
-
 
     public static void main(String[] args) throws IOException {
         try {
@@ -708,6 +719,90 @@ public class LibraryAdminUI extends JFrame {
             table.getColumnModel().getColumn(7).setCellEditor(deleteEditor);
         }
 
+    }
+
+    private void ShowOprTable() throws IOException {
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+        BookOperationRecord[] bookArray;
+        UniqueMessage uniqueMessage = new UniqueMessage("yes");
+        bookArray = libraryClientAPI.getBookAllOperationRecord(uniqueMessage);
+        // 把得到的书籍列表放入表格
+        String[][] data;
+        String[] columnNamesChosen;
+        if (bookArray == null) {
+            int columnCount = 6;
+
+            String[] FindStuBorrowedColumnNames = {"操作序列号", "学号", "索书号", "操作时间", "操作类型", "备注"};//索书号是一本书一个
+
+            data = new String[][]{null, null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null};
+            modelFind.setDataVector(data, FindStuBorrowedColumnNames);
+            tableFindStuBorrowed.setModel(modelFind);
+        } else {
+            int rowCount = bookArray.length;
+            int columnCount = 6;
+
+            columnNamesChosen = new String[]{"操作序列号", "学号", "索书号", "操作时间", "操作类型", "备注"};
+            // 创建二维字符串数组用于存储表格数据
+            data = new String[rowCount][columnCount];
+
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            // 将书籍信息转换为对象数组并存储在data数组中
+            // 将书籍信息转换为对象数组并存储在data数组中
+            for (int i = 0; i < rowCount; i++) {
+                BookOperationRecord book = bookArray[i];
+                data[i] = new String[]{
+                        book.getOprId(),
+                        book.getuId(),
+                        book.getISBN(),
+                        ft.format(book.getOprTime()),
+                        book.getOprtype(),
+                        book.getOprMark(),
+                };
+            }
+            modelFind.setDataVector(data, columnNamesChosen);
+            tableFindStuBorrowed.setModel(modelFind);
+        }
+    }
+
+    private void ShowSearchOprTable(String searchText) throws IOException{
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+        RegisterReqMessage registerReqMessage = new RegisterReqMessage(searchText);
+        BookOperationRecord[] bookArray;
+        bookArray = libraryClientAPI.getBookOprRecordByUid(registerReqMessage);
+
+        // 把得到的书籍列表放入表格
+        String[][] data;
+        String[] columnNamesChosen;
+        if (bookArray == null) {
+            JOptionPane.showMessageDialog(this,"搜索不到该学生记录！");
+            FindStuBorrowedTex.setText("");
+            ShowOprTable();
+        } else {
+            int rowCount = bookArray.length;
+            int columnCount = 6;
+
+            columnNamesChosen = new String[]{"操作序列号", "学号", "索书号", "操作时间", "操作类型", "备注"};
+            // 创建二维字符串数组用于存储表格数据
+            data = new String[rowCount][columnCount];
+
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            // 将书籍信息转换为对象数组并存储在data数组中
+            // 将书籍信息转换为对象数组并存储在data数组中
+            for (int i = 0; i < rowCount; i++) {
+                BookOperationRecord book = bookArray[i];
+                data[i] = new String[]{
+                        book.getOprId(),
+                        book.getuId(),
+                        book.getISBN(),
+                        ft.format(book.getOprTime()),
+                        book.getOprtype(),
+                        book.getOprMark(),
+                };
+            }
+            modelFind.setDataVector(data, columnNamesChosen);
+            tableFindStuBorrowed.setModel(modelFind);
+        }
     }
 
     class AddBooksUI extends JFrame {

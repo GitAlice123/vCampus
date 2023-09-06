@@ -251,6 +251,19 @@ public class LibraryUI extends JFrame {
     JButton ReturnToAllBookBtn;
 
     public LibraryUI() throws IOException {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initComponents();
     }
 

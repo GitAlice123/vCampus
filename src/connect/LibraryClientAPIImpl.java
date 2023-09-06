@@ -578,4 +578,70 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
         return report;
     }
 
+    @Override
+    public BookOperationRecord[] getBookAllOperationRecord(UniqueMessage uniqueMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 209);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookOPRListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookOPRListRespMessage.class);
+
+//      处理结果
+        BookOperationRecord[] result = bookListRespMessage.getBooks();
+
+        return result;
+    }
+
+    @Override
+    public BookOperationRecord[] getBookOprRecordByUid(RegisterReqMessage registerReqMessage) throws IOException {
+        //发送书名，得到书籍列表
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(registerReqMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream, jsonData, 215);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BookAdminSearchRespMessage bookListRespMessage = objectMapper.readValue(mess, BookAdminSearchRespMessage.class);
+
+//      处理结果
+        BookOperationRecord[] result = bookListRespMessage.getBookReports();
+
+        return result;
+    }
+
 }

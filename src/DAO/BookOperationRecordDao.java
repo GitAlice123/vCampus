@@ -119,5 +119,58 @@ public class BookOperationRecordDao {
         return allRecords;
     }
 
+    /**
+     * 通过uId查找并返回该用户所有的书籍操作记录信息
+     *
+     * @param uId 需查询的用户的一卡通号
+     * @return BookOperationRecord类数组allRecords，代表数据库中所有的书籍操作记录，根据操作时间升序排序
+     */
+    public BookOperationRecord[] findBookOperationRecordById(String uId){
+        String sqlString = "select * from tblBookOperationRecord where uId = '"+ uId +"' order by oprTime";
+        BookOperationRecord[] allRecords = new BookOperationRecord[10];
+
+        try {
+            Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb?serverTimezone=UTC+8", "", "");
+            //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet res = sta.executeQuery(sqlString);
+
+            res.last();
+            int count = res.getRow();
+            res.beforeFirst();
+
+            if (count == 0) {
+                return null;    //如果无书籍操作记录，则返回null
+            }
+
+            allRecords = new BookOperationRecord[count];
+            int index = 0;
+            while (res.next()) {//不断的移动光标到下一个数据
+                Calendar cal1 = Calendar.getInstance();
+                Calendar cal2 = Calendar.getInstance();
+                res.getDate(4, cal1);
+                res.getTime(4, cal2);
+                cal1.set(Calendar.HOUR_OF_DAY, cal2.get(Calendar.HOUR_OF_DAY));
+                cal1.set(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
+                cal1.set(Calendar.SECOND, cal2.get(Calendar.SECOND));
+                Date oprTime = cal1.getTime();
+                allRecords[index] = new BookOperationRecord(res.getString(1), res.getString(2), res.getString(3), oprTime, res.getString(5), res.getString(6));
+                index++;
+            }
+
+            con.close();//关闭数据库连接
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allRecords;
+    }
 
 }
+

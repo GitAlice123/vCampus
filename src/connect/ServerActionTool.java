@@ -599,6 +599,33 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+    public void Action215(String jsonData, Socket clientSocket){
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        RegisterReqMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, RegisterReqMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 215");
+        BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
+        BookOperationRecord[] report = bookOperationRecordDao.findBookOperationRecordById(uniqueMessage.getUserId());
+
+        //下面将response信息返回客户端
+
+        BookAdminSearchRespMessage bookListRespMessage = new BookAdminSearchRespMessage(report);
+
+        try {
+            String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

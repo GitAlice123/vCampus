@@ -54,4 +54,10 @@ public interface LibraryClientAPI {
 
     public int[] getBookReport(UniqueMessage uniqueMessage)
             throws IOException;
+
+    public BookOperationRecord[] getBookAllOperationRecord(UniqueMessage uniqueMessage)
+            throws IOException;
+
+    public BookOperationRecord[] getBookOprRecordByUid(RegisterReqMessage registerReqMessage)
+            throws IOException;
 }
