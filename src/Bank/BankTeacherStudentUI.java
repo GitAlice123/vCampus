@@ -1,6 +1,7 @@
 package view.Bank;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -146,11 +147,18 @@ public class BankTeacherStudentUI extends JFrame {
 //        setIconImage(image);
 
         //导航栏
+        Color customColor = new Color(180, 218, 192);
+        rechargeBtn.setBackground(customColor);
         rechargeBtn.setFont(buttonFont);
+        billBtn.setBackground(customColor);
         billBtn.setFont(buttonFont);
+        cardimageBtn.setBackground(customColor);
         cardimageBtn.setFont(buttonFont);
+        changepwdBtn.setBackground(customColor);
         changepwdBtn.setFont(buttonFont);
+        freezeBtn.setBackground(customColor);
         freezeBtn.setFont(buttonFont);
+        backBtn.setBackground(customColor);
         backBtn.setFont(buttonFont);
         rechargeBtn.setPreferredSize(new Dimension(150,40));
         cardimageBtn.setPreferredSize(new Dimension(150,40));
@@ -177,6 +185,7 @@ public class BankTeacherStudentUI extends JFrame {
         amountField.setPreferredSize(new Dimension(200,30));//设置输入框大小
         amountField.setFont(centerFont);
         confirmrechargeBtn.setFont(buttonFont);
+        confirmrechargeBtn.setBackground(customColor);
         rechargepwdLabel.setFont(centerFont);
         rechargepwdField.setPreferredSize(new Dimension(200,30));
         rechargepwdField.setFont(centerFont);
@@ -218,6 +227,7 @@ public class BankTeacherStudentUI extends JFrame {
         oldpwdLabel.setFont(centerFont);
         ensurepwdLabel.setFont(centerFont);
         confirmchangepwdBtn.setFont(buttonFont);
+        confirmchangepwdBtn.setBackground(customColor);
         oldpwdField.setPreferredSize(new Dimension(200,30));
         newpwdField.setPreferredSize(new Dimension(200,30));
         ensurepwdField.setPreferredSize(new Dimension(200,30));
@@ -298,10 +308,11 @@ public class BankTeacherStudentUI extends JFrame {
         searchField.setPreferredSize(new Dimension(200,30));
         searchField.setFont(centerFont);
         searchBtn.setFont(buttonFont);
+        searchBtn.setBackground(customColor);
         yearLabel.setFont(centerFont);
         monthLabel.setFont(centerFont);
         billtable.setFont(new Font("楷体",Font.PLAIN,20));
-
+        billtable.setDefaultRenderer(Object.class, new BankManagerUI.TableBackgroundColorRenderer());
         bill.add(searchBtn);
         bill.add(searchField);
         bill.add(billpane);
@@ -381,6 +392,7 @@ public class BankTeacherStudentUI extends JFrame {
         cardpwdField.setPreferredSize(new Dimension(200,30));
         cardpwdField.setFont(centerFont);
         confirmfreezeBtn.setFont(buttonFont);
+        confirmfreezeBtn.setBackground(customColor);
 
 
         reportloss.add(reportlossLabel);
@@ -691,7 +703,38 @@ public class BankTeacherStudentUI extends JFrame {
 //        {
 //            //TODO exception
 //        }
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(118, 218, 198)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(240, 255, 240)); // 按钮
+            UIManager.put("control", new Color(240, 248, 240)); // 背景
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new BankTeacherStudentUI();
+    }
+    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                setForeground(Color.BLACK);
+            } else {
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(225, 235, 155);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(225, 235, 205);
+                    cellComponent.setBackground(customColor2);
+                }
+            }
+            return cellComponent;
+        }
     }
 }

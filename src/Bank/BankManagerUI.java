@@ -1,10 +1,7 @@
 package view.Bank;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +10,7 @@ import java.net.URL;
 
 import view.Global.GlobalData;
 import view.Global.SummaryUI;
+import view.Library.LibraryAdminUI;
 
 public class BankManagerUI extends JFrame {
 
@@ -56,6 +54,8 @@ public class BankManagerUI extends JFrame {
             JButton button = new JButton("挂失");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
+            Color customColor = new Color(180, 218, 192);
+            button.setBackground(customColor);
             return button;
         }
     }
@@ -72,6 +72,8 @@ public class BankManagerUI extends JFrame {
             btn = new JButton("挂失");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
+            Color customColor = new Color(180, 218, 192);
+            btn.setBackground(customColor);
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -109,7 +111,7 @@ public class BankManagerUI extends JFrame {
 
         model.setDataVector(data, header);
         table.setModel(model);
-
+        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         table.getColumnModel().getColumn(5).setCellRenderer(new TableCellRendererButton());
         table.getColumnModel().getColumn(5).setCellEditor(new TableCellEditorButton());
         JScrollPane scrollPane = new JScrollPane(table);
@@ -120,6 +122,8 @@ public class BankManagerUI extends JFrame {
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));    //修改表头的高度
 
         searchBtn.setFont(centerFont);
+        Color customColor = new Color(180, 218, 192);
+        searchBtn.setBackground(customColor);
         searchField.setPreferredSize(new Dimension(200, 30));
         searchField.setFont(centerFont);
         table.setFont(new Font("楷体",Font.PLAIN,20));
@@ -147,6 +151,7 @@ public class BankManagerUI extends JFrame {
 
         //退出
         backBtn.setFont(centerFont);
+        backBtn.setBackground(customColor);
         BottomPanel.add(backBtn);
 
         //表格显示初始化
@@ -239,6 +244,39 @@ public class BankManagerUI extends JFrame {
 
     public static void main(String[] args)
     {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(118, 218, 198)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(240, 255, 240)); // 按钮
+            UIManager.put("control", new Color(240, 248, 240)); // 背景
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new BankManagerUI();
     }
+    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                setForeground(Color.BLACK);
+            } else {
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(225, 235, 155);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(225, 235, 205);
+                    cellComponent.setBackground(customColor2);
+                }
+            }
+            return cellComponent;
+        }
+    }
+
 }
