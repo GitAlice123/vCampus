@@ -1,4 +1,6 @@
-package view;
+package view.Hospital;
+
+import view.Global.SummaryUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
