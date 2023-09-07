@@ -64,9 +64,9 @@ public class HospitalTeacherStudentUI extends JFrame {
     public HospitalTeacherStudentUI(){
         super("医院");
 
-        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
-        Image image = new ImageIcon(resource).getImage();
-        setIconImage(image);
+//        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
+//        Image image = new ImageIcon(resource).getImage();
+//        setIconImage(image);
 
         //导航栏
         registerBtn=new JButton("预约挂号");
@@ -116,7 +116,7 @@ public class HospitalTeacherStudentUI extends JFrame {
 
         //预约挂号
         model = new DefaultTableModel();
-        registerheader = new String[]{"科室编号","科室类型", "科室主任", "科室电话", "科室地址","医生类型", "操作"};
+        registerheader = new String[]{"科室编号","科室类型", "挂号医生", "科室电话", "科室地址","医生类型", "操作"};
         registerdata = new Object[][]{
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null}
@@ -198,7 +198,7 @@ public class HospitalTeacherStudentUI extends JFrame {
         historyLabel.setFont(titleFont);
         historytable.setFont(new Font("楷体",Font.PLAIN,20));
 
-        String[] historyheader = {"挂号编号","科室编号", "科室主任", "挂号时间", "总金额" ,"状态"};
+        String[] historyheader = {"挂号编号","科室编号", "挂号医生", "挂号时间", "总金额" ,"状态"};
         Object[][] historydata = {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}

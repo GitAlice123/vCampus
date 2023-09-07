@@ -63,9 +63,9 @@ public class HospitalManagerUI extends JFrame {
     public HospitalManagerUI(){
         super("医院");
 
-        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
-        Image image = new ImageIcon(resource).getImage();
-        setIconImage(image);
+//        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
+//        Image image = new ImageIcon(resource).getImage();
+//        setIconImage(image);
 
         informationBtn=new JButton("科室信息");
         adddeleteBtn=new JButton("增删科室");
@@ -114,7 +114,7 @@ public class HospitalManagerUI extends JFrame {
 
         //科室信息
         model = new DefaultTableModel();
-        informationheader = new String[]{"科室编号","科室类型", "科室主任", "科室电话", "科室地址","医生类型"};
+        informationheader = new String[]{"科室编号","科室类型", "挂号医生", "科室电话", "科室地址","医生类型"};
         informationdata = new Object[][]{
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
@@ -190,7 +190,7 @@ public class HospitalManagerUI extends JFrame {
         addLabel=new JLabel("添加科室");
         IDLabel=new JLabel("科室编号");
         typeLabel=new JLabel("科室类型");
-        nameLabel=new JLabel("科室主任");
+        nameLabel=new JLabel("挂号医生");
         phonenumberLabel=new JLabel("科室电话");
         addressLabel=new JLabel("科室地址");
         doctortypeLabel=new JLabel("医生类型");

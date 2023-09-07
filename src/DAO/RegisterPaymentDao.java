@@ -1,6 +1,5 @@
 package view.DAO;
 
-import view.Hospital.Payment;
 import view.Hospital.Register;
 
 import java.sql.*;
@@ -22,15 +21,13 @@ public class RegisterPaymentDao {
             if (test.next()) {
                 return false;
             }
-            sta.executeUpdate("insert into tblRegisterPayment(Patient_ID,Register_date,Register_depart,Register_doc,Register_ID,Ifpaid_pay,Payment_amount,Payment_reim) values('" +
+            sta.executeUpdate("insert into tblRegisterPayment(Patient_ID,Register_date,Register_depart,Register_ID,Ifpaid_pay,Payment_amount) values('" +
                     reg.getPatient_ID() + "','" +
                     ft.format(reg.getRegister_date()) + "','" +
                     reg.getRegister_depart() + "','" +
-                    reg.getRegister_doc() + "','" +
                     reg.getRegister_ID() + "','" +
                     false + "','" +
-                    String.valueOf(payment_amount) + "','" +
-                    false + "')");
+                    String.valueOf(payment_amount) + "')");
 
             con.close();//关闭数据库连接
 
@@ -70,8 +67,9 @@ public class RegisterPaymentDao {
                         res.getDate(2),
                         res.getString(3),
                         res.getString(4),
-                        res.getString(5)
-                        );
+                        res.getBoolean(5),
+                        res.getDouble(6)
+                );
                 index++;
             }
 
@@ -83,8 +81,8 @@ public class RegisterPaymentDao {
         return regs;
     }
 
-    public Payment[] findPaymentByUserID(String ID) {
-        Payment[] pays = new Payment[1];
+    public Register[] findPaymentByUserID(String ID) {
+        Register[] pays = new Register[1];
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -95,22 +93,28 @@ public class RegisterPaymentDao {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet res = sta.executeQuery("select * from tblRegisterPayment where Patient_ID = '" + ID + "'");
-            res.last();
-            int count = res.getRow();
+            ResultSet res = sta.executeQuery("select * from tblRegisterPayment where Patient_ID = '" + ID + "' and Ifpaid_pay = ‘" + false + "'");
+
+            int count = 0;
+            while (res.next()) {
+                count++;
+            }
             res.beforeFirst();
 
             if (count == 0) {
                 return null;
             }
 
-            pays = new Payment[count];
+            pays = new Register[count];
             int index = 0;
             while (res.next()) {//不断的移动光标到下一个数据
-                pays[index] = new Payment(
-                        res.getBoolean(6),
-                        res.getString(5),
-                        res.getDouble(7)
+                pays[index] = new Register(
+                        res.getString(1),
+                        res.getDate(2),
+                        res.getString(3),
+                        res.getString(4),
+                        res.getBoolean(5),
+                        res.getDouble(6)
                 );
                 index++;
             }

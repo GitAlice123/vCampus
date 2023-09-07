@@ -6,8 +6,9 @@ public class Register {
     String Patient_ID;//和总的id对应
     Date Register_date;//挂号日期
     String Register_depart;//挂号科室
-    String Register_doc;//挂号医生ID
     String Register_ID;//挂号记录的唯一编号
+    boolean Register_Ifpaid;//1为已缴费，0为未缴费
+    double Register_amount;//应缴费金额
 
     public String getPatient_ID() {
         return Patient_ID;
@@ -33,14 +34,6 @@ public class Register {
         Register_depart = register_depart;
     }
 
-    public String getRegister_doc() {
-        return Register_doc;
-    }
-
-    public void setRegister_doc(String register_doc) {
-        Register_doc = register_doc;
-    }
-
     public String getRegister_ID() {
         return Register_ID;
     }
@@ -49,14 +42,31 @@ public class Register {
         Register_ID = register_ID;
     }
 
+    public boolean isRegister_Ifpaid() {
+        return Register_Ifpaid;
+    }
+
+    public void setRegister_Ifpaid(boolean register_Ifpaid) {
+        Register_Ifpaid = register_Ifpaid;
+    }
+
+    public double getRegister_amount() {
+        return Register_amount;
+    }
+
+    public void setRegister_amount(double register_amount) {
+        Register_amount = register_amount;
+    }
+
     public Register() {
     }
 
-    public Register(String patient_ID, Date register_date, String register_depart, String register_doc, String register_ID) {
+    public Register(String patient_ID, Date register_date, String register_depart, String register_ID, boolean register_Ifpaid, double register_amount) {
         Patient_ID = patient_ID;
         Register_date = register_date;
         Register_depart = register_depart;
-        Register_doc = register_doc;
         Register_ID = register_ID;
+        Register_Ifpaid = register_Ifpaid;
+        Register_amount = register_amount;
     }
 }
