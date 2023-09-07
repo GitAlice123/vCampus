@@ -110,9 +110,7 @@ public class RegisterPaymentDao {
                 pays[index] = new Payment(
                         res.getBoolean(6),
                         res.getString(5),
-                        res.getDouble(7),
-                        res.getBoolean(8)
-
+                        res.getDouble(7)
                 );
                 index++;
             }

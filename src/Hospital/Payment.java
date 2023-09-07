@@ -4,15 +4,13 @@ public class Payment {
     boolean Ifpaid_pay;//1为已缴费，0为未缴费
     String Register_ID;//十位挂号记录编号
     double Payment_amount;//应缴费金额
-    boolean Payment_reim;//1为已报销，0为未报销
 
     public Payment() {    }
 
-    public Payment(boolean ifpaid_pay, String register_ID, double payment_amount, boolean payment_reim) {
+    public Payment(boolean ifpaid_pay, String register_ID, double payment_amount) {
         Ifpaid_pay = ifpaid_pay;
         Register_ID = register_ID;
         Payment_amount = payment_amount;
-        Payment_reim = payment_reim;
     }
 
     public boolean isIfpaid_pay() {
@@ -39,11 +37,4 @@ public class Payment {
         Payment_amount = payment_amount;
     }
 
-    public boolean isPayment_reim() {
-        return Payment_reim;
-    }
-
-    public void setPayment_reim(boolean payment_reim) {
-        Payment_reim = payment_reim;
-    }
 }
