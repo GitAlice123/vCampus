@@ -8,7 +8,7 @@ public class Department {
     String Department_phone;//医生电话
     String Department_addr;//医生所在房间地址
 
-    public boolean isDepartment_level() {
+    public boolean getDepartment_level() {
         return Department_level;
     }
 
