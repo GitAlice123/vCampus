@@ -1,23 +1,36 @@
 package view.connect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import okhttp3.*;
 import view.DAO.*;
 
 import view.Library.*;
 
 import view.Library.BookHold;
 import view.Login.User;
+import view.chat.Text;
 import view.message.*;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Collections;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
 
 public class ServerActionTool {
     public ServerActionTool() {
     }
+
     private RWTool rwTool = new RWTool();
+
+    private static final String KEY = "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";
+    private static final String URL = "https://api.openai.com/v1/chat/completions";
+    private static final String HOST = "localhost";
+    private static final int PORT = 8888;
+
     public void Action100(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -35,20 +48,22 @@ public class ServerActionTool {
         boolean flag = false;
         if (user != null && user.getuPwd().equals(loginMessage.getPassword())
                 && user.getuRole().equals(loginMessage.getRole())) {
-            flag = true;}
-            //下面将response信息返回客户端
-            BoolRespMessage respMessage = new BoolRespMessage(flag);
-            try {
-                // 将 LoginMessage 对象转换为 JSON 字符串
-                String outputData = objectMapper.writeValueAsString(respMessage);
-                OutputStream outputStream = clientSocket.getOutputStream();
-                rwTool.ServerSendOutStream(outputStream, outputData);
+            flag = true;
+        }
+        //下面将response信息返回客户端
+        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    public void Action101(String jsonData, Socket clientSocket){
+
+    public void Action101(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -78,7 +93,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action102(String jsonData, Socket clientSocket){
+
+    public void Action102(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -115,7 +131,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action200(String jsonData, Socket clientSocket){
+
+    public void Action200(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -131,7 +148,7 @@ public class ServerActionTool {
         /* 以下是和数据库交互部分,最后返回一个BookListRespMessage */
         // TODO:服务器端返回馆藏书籍列表
         BookDao bookDao = new BookDao();
-        Book[] bookList= bookDao.findAllBooks();
+        Book[] bookList = bookDao.findAllBooks();
 
 //        UserDao userdao = new UserDao();
 //        view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
@@ -151,7 +168,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action201(String jsonData, Socket clientSocket){
+
+    public void Action201(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -185,7 +203,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action202(String jsonData, Socket clientSocket){
+
+    public void Action202(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -212,7 +231,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action203(String jsonData, Socket clientSocket){
+
+    public void Action203(String jsonData, Socket clientSocket) {
         // 删除图书,成功返回true
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -242,7 +262,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action204(String jsonData, Socket clientSocket){
+
+    public void Action204(String jsonData, Socket clientSocket) {
         // 增加图书
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -272,7 +293,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action205(String jsonData, Socket clientSocket){
+
+    public void Action205(String jsonData, Socket clientSocket) {
         // 借阅书籍
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -292,7 +314,6 @@ public class ServerActionTool {
         /* 以下是和数据库交互部分借阅图书 */
 
 
-
         BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
         // TODO:借书操作，需要传入用户id
         flag_2 = bookOperationRecordDao.AddBookOperationRecord(bookOperationRecord);
@@ -301,13 +322,11 @@ public class ServerActionTool {
         flag_3 = bookHoldDao.Borrow(bookOperationRecord);
 
         Boolean flag = false;
-        if(flag_3)
-        {
+        if (flag_3) {
             BookDao bookDao = new BookDao();
             flag_1 = bookDao.Borrow(bookOperationRecord.getISBN());
-            flag = flag_1&&flag_2&&flag_3;
-        }
-        else {
+            flag = flag_1 && flag_2 && flag_3;
+        } else {
             flag = false;
         }
 
@@ -323,7 +342,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action206(String jsonData, Socket clientSocket){
+
+    public void Action206(String jsonData, Socket clientSocket) {
         // 还书
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -352,7 +372,7 @@ public class ServerActionTool {
         BookHoldDao bookHoldDao = new BookHoldDao();
         flag_3 = bookHoldDao.Return(bookOperationRecord);
 
-        Boolean flag = flag_1&&flag_2&&flag_3;
+        Boolean flag = flag_1 && flag_2 && flag_3;
         // TODO:还书还要调用其他函数
 
         //下面将response信息返回客户端
@@ -366,7 +386,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action207(String jsonData, Socket clientSocket){
+
+    public void Action207(String jsonData, Socket clientSocket) {
         // 修改图书
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -395,7 +416,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action208(String jsonData, Socket clientSocket){
+
+    public void Action208(String jsonData, Socket clientSocket) {
         // 用ISBN找书
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -423,7 +445,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action209(String jsonData, Socket clientSocket){
+
+    public void Action209(String jsonData, Socket clientSocket) {
         // 取回所有操作记录
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -454,7 +477,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action210(String jsonData, Socket clientSocket){
+
+    public void Action210(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -481,7 +505,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action211(String jsonData, Socket clientSocket){
+
+    public void Action211(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -508,7 +533,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action212(String jsonData, Socket clientSocket){
+
+    public void Action212(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -535,7 +561,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action213(String jsonData, Socket clientSocket){
+
+    public void Action213(String jsonData, Socket clientSocket) {
         // 续借书籍
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -560,7 +587,7 @@ public class ServerActionTool {
         BookHoldDao bookHoldDao = new BookHoldDao();
         flag_3 = bookHoldDao.Renew(bookOperationRecord);
 
-        Boolean flag = flag_2&&flag_3;
+        Boolean flag = flag_2 && flag_3;
 
         //下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
@@ -573,7 +600,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action214(String jsonData, Socket clientSocket){
+
+    public void Action214(String jsonData, Socket clientSocket) {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
@@ -599,7 +627,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action215(String jsonData, Socket clientSocket){
+
+    public void Action215(String jsonData, Socket clientSocket) {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
@@ -619,6 +648,66 @@ public class ServerActionTool {
 
         try {
             String outputData = objectMapper.writeValueAsString(bookListRespMessage);
+            System.out.println(outputData);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action400(String jsonData, Socket clientSocket) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        ChatQuesMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, ChatQuesMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 400");
+
+
+
+
+        //将服务器作为中转服务器和GPT连接
+        String content = uniqueMessage.getqueString();
+        // 创建 ObjectMapper 用于解析 JSON
+        objectMapper = new ObjectMapper();
+        Text text = new Text();
+        // 设置模型
+        text.setModel("gpt-3.5-turbo");
+        text.setTemperature(0.7);
+        text.setMessages(Collections.singletonList(new Text.MessagesBean("user", content)));
+        // 创建 OkHttpClient 实例
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        // 创建请求体，携带 JSON 参数
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                objectMapper.writeValueAsString(text));
+        // 创建请求
+        Request request =
+                new Request.Builder().url(URL).addHeader("Authorization", "Bearer ".concat(KEY)).post(requestBody).build();
+        // 发送请求并处理响应
+        JsonNode jsonNode = null;
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+            // 解析json 获取结果
+            jsonNode = objectMapper.readTree(response.body().string());
+            System.out.println(jsonNode.get("choices").get(0).get("message").get("content").asText());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        //下面将response信息返回客户端
+        String answer = jsonNode.get("choices").get(0).get("message").get("content").asText();
+        GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
+
+        try {
+            String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
             System.out.println(outputData);
             OutputStream outputStream = clientSocket.getOutputStream();
             rwTool.ServerSendOutStream(outputStream, outputData);

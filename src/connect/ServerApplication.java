@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import view.Bank.bankServerActionTool;
 
 public class ServerApplication {
@@ -49,7 +50,7 @@ public class ServerApplication {
     }
 }
 
-class ClientHandler implements Runnable{
+class ClientHandler implements Runnable {
     private Socket clientSocket;
     private RWTool rwTool;
     private ServerActionTool serverActionTool;
@@ -61,6 +62,7 @@ class ClientHandler implements Runnable{
         this.serverActionTool = serverActionTool;
         this.bankServerActionTool = bankServerActionTool;
     }
+
     @Override
     public void run() {
         try {
@@ -85,7 +87,7 @@ class ClientHandler implements Runnable{
                     break;
                 }
                 case 102: {
-                    serverActionTool.Action102(jsonData,clientSocket);
+                    serverActionTool.Action102(jsonData, clientSocket);
                     break;
                 }
                 case 1000: {
@@ -94,98 +96,102 @@ class ClientHandler implements Runnable{
                     bankServerActionTool.Action1000(jsonData, clientSocket);
                     break;
                 }
-                case 1001:{
+                case 1001: {
                     //充值：1001
                     bankServerActionTool.Action1001(jsonData, clientSocket);
                     break;
                 }
-                case 1002:{
+                case 1002: {
                     //消费
                     bankServerActionTool.Action1002(jsonData, clientSocket);
                     break;
                 }
-                case 1003:{
+                case 1003: {
                     //修改密码
                     bankServerActionTool.Action1003(jsonData, clientSocket);
                     break;
                 }
-                case 1004:{
+                case 1004: {
                     //查询筛选账单
                     bankServerActionTool.Action1004(jsonData, clientSocket);
                     break;
                 }
-                case 1005:{
+                case 1005: {
                     //用id查找account
                     bankServerActionTool.Action1005(jsonData, clientSocket);
                     break;
                 }
-                case 1006:{
+                case 1006: {
                     //管理员查看所有account
                     bankServerActionTool.Action1006(jsonData, clientSocket);
                     break;
                 }
                 case 200: {
-                    serverActionTool.Action200(jsonData,clientSocket);
+                    serverActionTool.Action200(jsonData, clientSocket);
                     break;
                 }
                 case 201: {
-                    serverActionTool.Action201(jsonData,clientSocket);
+                    serverActionTool.Action201(jsonData, clientSocket);
                     break;
                 }
                 case 202: {
-                    serverActionTool.Action202(jsonData,clientSocket);
+                    serverActionTool.Action202(jsonData, clientSocket);
                     break;
                 }
                 case 203: {
-                    serverActionTool.Action203(jsonData,clientSocket);
+                    serverActionTool.Action203(jsonData, clientSocket);
                     break;
                 }
                 case 204: {
-                    serverActionTool.Action204(jsonData,clientSocket);
+                    serverActionTool.Action204(jsonData, clientSocket);
                     break;
                 }
                 case 205: {
-                    serverActionTool.Action205(jsonData,clientSocket);
+                    serverActionTool.Action205(jsonData, clientSocket);
                     break;
                 }
                 case 206: {
-                    serverActionTool.Action206(jsonData,clientSocket);
+                    serverActionTool.Action206(jsonData, clientSocket);
                     break;
                 }
                 case 207: {
-                    serverActionTool.Action207(jsonData,clientSocket);
+                    serverActionTool.Action207(jsonData, clientSocket);
                     break;
                 }
                 case 208: {
-                    serverActionTool.Action208(jsonData,clientSocket);
+                    serverActionTool.Action208(jsonData, clientSocket);
                     break;
                 }
-                case 209:{
-                    serverActionTool.Action209(jsonData,clientSocket);
+                case 209: {
+                    serverActionTool.Action209(jsonData, clientSocket);
                     break;
                 }
-                case 210:{
-                    serverActionTool.Action210(jsonData,clientSocket);
+                case 210: {
+                    serverActionTool.Action210(jsonData, clientSocket);
                     break;
                 }
-                case 211:{
-                    serverActionTool.Action211(jsonData,clientSocket);
+                case 211: {
+                    serverActionTool.Action211(jsonData, clientSocket);
                     break;
                 }
-                case 212:{
-                    serverActionTool.Action212(jsonData,clientSocket);
+                case 212: {
+                    serverActionTool.Action212(jsonData, clientSocket);
                     break;
                 }
-                case 213:{
-                    serverActionTool.Action213(jsonData,clientSocket);
+                case 213: {
+                    serverActionTool.Action213(jsonData, clientSocket);
                     break;
                 }
-                case 214:{
-                    serverActionTool.Action214(jsonData,clientSocket);
+                case 214: {
+                    serverActionTool.Action214(jsonData, clientSocket);
                     break;
                 }
-                case 215:{
-                    serverActionTool.Action215(jsonData,clientSocket);
+                case 215: {
+                    serverActionTool.Action215(jsonData, clientSocket);
+                    break;
+                }
+                case 400:{
+                    serverActionTool.Action400(jsonData, clientSocket);
                     break;
                 }
                 default: {
