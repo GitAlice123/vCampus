@@ -98,15 +98,7 @@ public class BookOperationRecordDao {
             allRecords = new BookOperationRecord[count];
             int index=0;
             while (res.next()) {//不断的移动光标到下一个数据
-                Calendar cal1 = Calendar.getInstance();
-                Calendar cal2 = Calendar.getInstance();
-                res.getDate(4,cal1);
-                res.getTime(4,cal2);
-                cal1.set(Calendar.HOUR_OF_DAY,cal2.get(Calendar.HOUR_OF_DAY));
-                cal1.set(Calendar.MINUTE,cal2.get(Calendar.MINUTE));
-                cal1.set(Calendar.SECOND,cal2.get(Calendar.SECOND));
-                Date oprTime = cal1.getTime();
-                allRecords[index] = new BookOperationRecord(res.getString(1),res.getString(2),res.getString(3),oprTime,res.getString(5),res.getString(6));
+                allRecords[index] = new BookOperationRecord(res.getString(1), res.getString(2), res.getString(3), res.getTimestamp(4), res.getString(5), res.getString(6));
                 index++;
             }
 
@@ -152,15 +144,7 @@ public class BookOperationRecordDao {
             allRecords = new BookOperationRecord[count];
             int index = 0;
             while (res.next()) {//不断的移动光标到下一个数据
-                Calendar cal1 = Calendar.getInstance();
-                Calendar cal2 = Calendar.getInstance();
-                res.getDate(4, cal1);
-                res.getTime(4, cal2);
-                cal1.set(Calendar.HOUR_OF_DAY, cal2.get(Calendar.HOUR_OF_DAY));
-                cal1.set(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
-                cal1.set(Calendar.SECOND, cal2.get(Calendar.SECOND));
-                Date oprTime = cal1.getTime();
-                allRecords[index] = new BookOperationRecord(res.getString(1), res.getString(2), res.getString(3), oprTime, res.getString(5), res.getString(6));
+                allRecords[index] = new BookOperationRecord(res.getString(1), res.getString(2), res.getString(3), res.getTimestamp(4), res.getString(5), res.getString(6));
                 index++;
             }
 
@@ -174,4 +158,3 @@ public class BookOperationRecordDao {
     }
 
 }
-
