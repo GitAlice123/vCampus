@@ -183,8 +183,7 @@ public class CourseClassDao {
                     dao.findStudentIdByClassId(res.getString(1)));
 
             con.close();//关闭数据库连接
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return classes;
