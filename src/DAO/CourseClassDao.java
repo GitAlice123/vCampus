@@ -260,12 +260,12 @@ public class CourseClassDao {
     public boolean ModifyClass(CourseClass courseClass) {
         String sqlString = "update tblClass " +
                 "set courseId = " + courseClass.getCourseNum() +
-                "set classTeacher = " + courseClass.getCourseNum() +
-                "set classTeacherId = " + courseClass.getCourseNum() +
-                "set classPlace = " + courseClass.getCourseNum() +
-                "set classMax = " + courseClass.getCourseNum() +
-                "set classTemp = " + courseClass.getCourseNum() +
-                "set classTime = " + courseClass.getCourseNum() +
+                "set classTeacher = " + "Null"+
+                "set classTeacherId = " + courseClass.getClassTeacher() +
+                "set classPlace = " + courseClass.getClassPlace() +
+                "set classMax = " + courseClass.getClassMax() +
+                "set classTemp = " + courseClass.getClassTemp()+
+                "set classTime = " + courseClass.getClassTime() +
                 " where classId = '" + courseClass.getClassID() + "'";
 
         try {
