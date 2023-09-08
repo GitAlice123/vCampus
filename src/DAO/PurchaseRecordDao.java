@@ -95,15 +95,7 @@ public class PurchaseRecordDao {
             allRecords = new PurchaseRecord[count];
             int index=0;
             while (res.next()) {//不断的移动光标到下一个数据
-                Calendar cal1 = Calendar.getInstance();
-                Calendar cal2 = Calendar.getInstance();
-                res.getDate(5,cal1);
-                res.getTime(5,cal2);
-                cal1.set(Calendar.HOUR_OF_DAY,cal2.get(Calendar.HOUR_OF_DAY));
-                cal1.set(Calendar.MINUTE,cal2.get(Calendar.MINUTE));
-                cal1.set(Calendar.SECOND,cal2.get(Calendar.SECOND));
-                Date oprTime = cal1.getTime();
-                allRecords[index] = new PurchaseRecord(res.getString(1),res.getString(2),res.getInt(3),res.getString(4),oprTime);
+                allRecords[index] = new PurchaseRecord(res.getString(1), res.getString(2), res.getInt(3), res.getString(4), res.getTimestamp(5));
                 index++;
             }
 
