@@ -6,8 +6,8 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 
 public class RegisterPaymentDao {
-    public boolean createRegisterInfo(Register reg, double payment_amount) {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
+    public boolean createRegisterInfo(Register reg) {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
         } catch (ClassNotFoundException e) {
@@ -27,7 +27,7 @@ public class RegisterPaymentDao {
                     reg.getRegister_depart() + "','" +
                     reg.getRegister_ID() + "','" +
                     false + "','" +
-                    String.valueOf(payment_amount) + "')");
+                    reg.getRegister_amount() + "')");
 
             con.close();//关闭数据库连接
 
@@ -64,7 +64,7 @@ public class RegisterPaymentDao {
             while (res.next()) {//不断的移动光标到下一个数据
                 regs[index] = new Register(
                         res.getString(1),
-                        res.getDate(2),
+                        res.getTimestamp(2),
                         res.getString(3),
                         res.getString(4),
                         res.getBoolean(5),
@@ -110,7 +110,7 @@ public class RegisterPaymentDao {
             while (res.next()) {//不断的移动光标到下一个数据
                 pays[index] = new Register(
                         res.getString(1),
-                        res.getDate(2),
+                        res.getTimestamp(2),
                         res.getString(3),
                         res.getString(4),
                         res.getBoolean(5),
