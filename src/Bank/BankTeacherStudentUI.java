@@ -564,48 +564,81 @@ public class BankTeacherStudentUI extends JFrame {
         String selectedYear = (String) year.getSelectedItem();
         String query=searchField.getText();
         String[][] bills=null;
-        if(!selectedMonth.equals("")&&(!selectedYear.equals(""))){//如果选择了年月
-            System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
-            IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+//        if(!selectedMonth.equals("")&&(!selectedYear.equals(""))){//如果选择了年月
+//            System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
+//            IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
+//
+//            // 构建日期字符串
+//            String dateString = selectedYear + "-" + selectedMonth + "-01";
+//
+//            // 定义日期格式
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            Date firstSecondOfMonth=new Date();
+//            Date lastSecondOfMonth=new Date();
+//            try {
+//                // 解析日期字符串为日期对象
+//                Date date = dateFormat.parse(dateString);
+//
+//                // 获取日历实例
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTime(date);
+//
+//                // 设置为当月的第一天
+//                calendar.set(Calendar.DAY_OF_MONTH, 1);
+//                calendar.set(Calendar.HOUR_OF_DAY, 0);
+//                calendar.set(Calendar.MINUTE, 0);
+//                calendar.set(Calendar.SECOND, 0);
+//
+//                // 获取当月的第一秒
+//                firstSecondOfMonth = calendar.getTime();
+//                System.out.println("第一秒：" + firstSecondOfMonth);
+//
+//                // 设置为下个月的第一天
+//                calendar.add(Calendar.MONTH, 1);
+//                calendar.set(Calendar.DAY_OF_MONTH, 1);
+//                calendar.add(Calendar.SECOND, -1);
+//
+//                // 获取当月的最后一秒
+//                lastSecondOfMonth = calendar.getTime();
+//                System.out.println("最后一秒：" + lastSecondOfMonth);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            iBankClientAPI.billForSometime(thisAccount.getId(), firstSecondOfMonth, lastSecondOfMonth,query);
+//            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间,等xpl
+//        }
 
-            // 构建日期字符串
-            String dateString = selectedYear + "-" + selectedMonth + "-01";
+        if (!selectedMonth.equals("") && !selectedYear.equals("")) {
+            System.out.println("输入的年：" + selectedYear + "，输入的月：" + selectedMonth);
+            IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
 
-            // 定义日期格式
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date firstSecondOfMonth=new Date();
-            Date lastSecondOfMonth=new Date();
-            try {
-                // 解析日期字符串为日期对象
-                Date date = dateFormat.parse(dateString);
+            // 解析年份和月份
+            int year = Integer.parseInt(selectedYear);
+            int month = Integer.parseInt(selectedMonth);
 
-                // 获取日历实例
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
+            // 获取指定年份和月份的起始时间
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month - 1); // 月份从0开始，所以需要减1
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Date firstSecondOfMonth = calendar.getTime();
+            System.out.println("第一秒：" + firstSecondOfMonth);
 
-                // 设置为当月的第一天
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
+            // 设置为下个月的第一天
+            calendar.add(Calendar.MONTH, 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.MILLISECOND, -1);
 
-                // 获取当月的第一秒
-                firstSecondOfMonth = calendar.getTime();
-                System.out.println("第一秒：" + firstSecondOfMonth);
+            // 获取指定年份和月份的结束时间
+            Date lastSecondOfMonth = calendar.getTime();
+            System.out.println("最后一秒：" + lastSecondOfMonth);
 
-                // 设置为下个月的第一天
-                calendar.add(Calendar.MONTH, 1);
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                calendar.add(Calendar.SECOND, -1);
+            bills=iBankClientAPI.billForSometime(thisAccount.getId(), firstSecondOfMonth, lastSecondOfMonth, query);
 
-                // 获取当月的最后一秒
-                lastSecondOfMonth = calendar.getTime();
-                System.out.println("最后一秒：" + lastSecondOfMonth);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            iBankClientAPI.billForSometime(thisAccount.getId(), firstSecondOfMonth, lastSecondOfMonth,query);
-            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间,等xpl
         }
 
         if(selectedMonth.equals("")||selectedYear.equals("")){//如果年月没有选择，把时间范围设大

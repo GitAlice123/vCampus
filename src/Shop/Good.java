@@ -4,12 +4,19 @@ package view.Shop;
  * 商品实体类
  */
 public class Good {
-    private String goodId;
-    private String goodName;
-    private double goodPrice;
-    private String category;
-    private String provider;
-    private int goodStock;
+    private String goodId;//商品序号
+    private String goodName;//商品名称
+    private double goodPrice;//商品价格
+    private String category;//商品类别
+    private String provider;//供应商
+    private int goodStock;//商品库存数
+
+    /**
+     * 无参构造函数
+     * */
+    public Good(){
+
+    }
 
     /**
      * 创建商品对象

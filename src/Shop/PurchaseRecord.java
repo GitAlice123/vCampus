@@ -13,6 +13,10 @@ public class PurchaseRecord {
     private String uId; // 购买人的Id
     private Date purchaseTime; // 购买时间
 
+    public PurchaseRecord(){
+
+    }
+
     /**
      * 构造函数
      *

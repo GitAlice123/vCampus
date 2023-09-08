@@ -15,6 +15,13 @@ public class bankBill {
     private double amount; // 交易金额
 
     /**
+     * 无参构造
+     * */
+    public bankBill(){
+
+    }
+
+    /**
      * 构造方法
      *
      * @param description 商品说明

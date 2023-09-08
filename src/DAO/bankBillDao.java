@@ -45,6 +45,7 @@ public class bankBillDao {
                 index++;
             }
 
+
             con.close();//关闭数据库连接
 
         } catch (SQLException e) {
@@ -89,6 +90,7 @@ public class bankBillDao {
                         res.getString(4), res.getTimestamp(5), res.getBoolean(6), res.getDouble(7));
                 index++;
             }
+
 
             con.close();//关闭数据库连接
 
@@ -198,6 +200,7 @@ public class bankBillDao {
                         res.getString(4), res.getTimestamp(5), res.getBoolean(6), res.getDouble(7));
                 index++;
             }
+
 
             con.close();//关闭数据库连接
 

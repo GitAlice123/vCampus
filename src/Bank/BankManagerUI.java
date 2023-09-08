@@ -32,7 +32,7 @@ public class BankManagerUI extends JFrame {
     JButton searchBtn = new JButton("查询");
     JTextField searchField = new JTextField();
 
-//    MyTableModel model = new MyTableModel(header,data);
+    //    MyTableModel model = new MyTableModel(header,data);
 //    JTable table = new JTable(model);
     DefaultTableModel model = new DefaultTableModel();
     JTable table = new JTable(model);
@@ -51,7 +51,7 @@ public class BankManagerUI extends JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
-            JButton button = new JButton("挂失");
+            JButton button = new JButton("挂失/解挂");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
             Color customColor = new Color(180, 218, 192);
@@ -69,7 +69,7 @@ public class BankManagerUI extends JFrame {
             super(new JTextField());
             //设置点击一次就激活，否则默认好像是点击2次激活。
             this.setClickCountToStart(1);
-            btn = new JButton("挂失");
+            btn = new JButton("挂失/解挂");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
             Color customColor = new Color(180, 218, 192);
@@ -201,9 +201,10 @@ public class BankManagerUI extends JFrame {
         accounts[clickedRow][4]=(accounts[clickedRow][4].equals("正常")?"已挂失":"正常");
 
         // 修改对应按钮单元格的值
-        String buttonText = clickedButton.getText();
-        String newButtonText = buttonText.equals("挂失") ? "解挂" : "挂失";
-        model.setValueAt(newButtonText, clickedRow, 5); // 修改第 5 列的值
+        //String buttonText = clickedButton.getText();
+        //String newButtonText = buttonText.equals("挂失") ? "解挂" : "挂失";
+
+        //model.setValueAt(newButtonText, clickedRow, 5); // 修改第 5 列的值
         // TODO 这里按钮的值不变！！！
     }
 
