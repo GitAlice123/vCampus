@@ -160,6 +160,10 @@ class ClientHandler implements Runnable {
                         serverActionTool.Action215(jsonData,clientSocket);
                         break;
                     }
+                    case 400:{
+                        serverActionTool.Action400(jsonData,clientSocket);
+                        break;
+                    }
                     case 900: {
                         // 根据商品ID或商品名称查询商品信息，供学生使用 900
                         // 根据消息的类型决定服务器要采取的动作

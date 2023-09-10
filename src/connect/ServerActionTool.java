@@ -17,6 +17,15 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Collections;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
@@ -50,7 +59,7 @@ public class ServerActionTool {
                 && user.getuRole().equals(loginMessage.getRole())) {
             flag = true;
         }
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage respMessage = new BoolRespMessage(flag);
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -82,7 +91,7 @@ public class ServerActionTool {
         if (user != null) {
             flag = true;
         }
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage respMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(respMessage);
@@ -117,10 +126,10 @@ public class ServerActionTool {
         user.setuPwd(password);
         user.setuRole(role);
         UserDao userdao = new UserDao();
-        userdao.CreateUser(user);//创建新用户
+        userdao.CreateUser(user);// 创建新用户
         flag = true;
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage respMessage = new BoolRespMessage(flag);
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -150,14 +159,14 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         Book[] bookList = bookDao.findAllBooks();
 
-//        UserDao userdao = new UserDao();
-//        view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
-//        boolean flag = false;
-//        // flag = true表示user已经在表单里了
-//        if (user != null) {
-//            flag = true;
-//        }
-        //下面将response信息返回客户端
+        // UserDao userdao = new UserDao();
+        // view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
+        // boolean flag = false;
+        // // flag = true表示user已经在表单里了
+        // if (user != null) {
+        // flag = true;
+        // }
+        // 下面将response信息返回客户端
         BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
         try {
             String outputData = objectMapper.writeValueAsString(bookListRespMessage);
@@ -182,18 +191,18 @@ public class ServerActionTool {
         }
         System.out.println("Into object 201");
         /* 以下是和数据库交互部分,最后返回一个BookHoldListRespMessage,表示用户借了哪些书 */
-        //TODO:服务器端返回用户借书列表
+        // TODO:服务器端返回用户借书列表
         BookHoldDao bookDao = new BookHoldDao();
         BookHold[] bookHolds = bookDao.findBookHoldsById(registerReqMessage.getUserId());
         BookHoldListRespMessage bookHoldListRespMessage = new BookHoldListRespMessage(bookHolds);
-//        UserDao userdao = new UserDao();
-//        view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
-//        boolean flag = false;
-//        // flag = true表示user已经在表单里了
-//        if (user != null) {
-//            flag = true;
-//        }
-        //下面将response信息返回客户端
+        // UserDao userdao = new UserDao();
+        // view.Login.User user = userdao.findUserByuId(registerReqMessage.getUserId());
+        // boolean flag = false;
+        // // flag = true表示user已经在表单里了
+        // if (user != null) {
+        // flag = true;
+        // }
+        // 下面将response信息返回客户端
         try {
             String outputData = objectMapper.writeValueAsString(bookHoldListRespMessage);
             System.out.println(outputData);
@@ -219,7 +228,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         Book[] bookList = bookDao.findBookByBookName(searchBookNameMessage.getBookName());
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
         try {
@@ -250,8 +259,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         flag = bookDao.DeleteBook(bookISBNMessage.getBookISBN());
 
-
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -282,7 +290,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         flag = bookDao.addBook(bookMessage);
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -313,7 +321,6 @@ public class ServerActionTool {
 
         /* 以下是和数据库交互部分借阅图书 */
 
-
         BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
         // TODO:借书操作，需要传入用户id
         flag_2 = bookOperationRecordDao.AddBookOperationRecord(bookOperationRecord);
@@ -330,8 +337,7 @@ public class ServerActionTool {
             flag = false;
         }
 
-
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -375,7 +381,7 @@ public class ServerActionTool {
         Boolean flag = flag_1 && flag_2 && flag_3;
         // TODO:还书还要调用其他函数
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -405,7 +411,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         flag = bookDao.ModifyBook(bookMessage);
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -435,7 +441,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         bookMessage = bookDao.findBookByISBN(bookISBNMessage.getBookISBN());
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         try {
             String outputData = objectMapper.writeValueAsString(bookMessage);
             System.out.println(outputData);
@@ -467,7 +473,7 @@ public class ServerActionTool {
 
         BookOPRListRespMessage bookMessage = new BookOPRListRespMessage(bookOperationRecords);
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         try {
             String outputData = objectMapper.writeValueAsString(bookMessage);
             System.out.println(outputData);
@@ -493,7 +499,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         Book[] bookList = bookDao.findAllBooks();
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
         try {
@@ -521,7 +527,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         Book[] bookList = bookDao.findAllBooks();
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
         try {
@@ -549,7 +555,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         Book[] bookList = bookDao.findAllBooks();
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         BookListRespMessage bookListRespMessage = new BookListRespMessage(bookList);
         try {
@@ -589,7 +595,7 @@ public class ServerActionTool {
 
         Boolean flag = flag_2 && flag_3;
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
         BoolRespMessage boolRespMessage = new BoolRespMessage(flag);
         try {
             String outputData = objectMapper.writeValueAsString(boolRespMessage);
@@ -615,7 +621,7 @@ public class ServerActionTool {
         BookDao bookDao = new BookDao();
         int[] report = bookDao.getReport();
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         LibraryReportRespMessage bookListRespMessage = new LibraryReportRespMessage(report);
         try {
@@ -642,7 +648,7 @@ public class ServerActionTool {
         BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
         BookOperationRecord[] report = bookOperationRecordDao.findBookOperationRecordById(uniqueMessage.getUserId());
 
-        //下面将response信息返回客户端
+        // 下面将response信息返回客户端
 
         BookAdminSearchRespMessage bookListRespMessage = new BookAdminSearchRespMessage(report);
 
@@ -655,7 +661,8 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    public void Action400(String jsonData, Socket clientSocket) throws JsonProcessingException {
+
+    public void Action400(String jsonData, Socket clientSocket) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
@@ -667,54 +674,94 @@ public class ServerActionTool {
         }
         System.out.println("Into object 400");
 
-
-
-
-        //将服务器作为中转服务器和GPT连接
+        // 将服务器作为中转服务器和GPT连接
         String content = uniqueMessage.getqueString();
-        // 创建 ObjectMapper 用于解析 JSON
-        objectMapper = new ObjectMapper();
-        Text text = new Text();
-        // 设置模型
-        text.setModel("gpt-3.5-turbo");
-        text.setTemperature(0.7);
-        text.setMessages(Collections.singletonList(new Text.MessagesBean("user", content)));
-        // 创建 OkHttpClient 实例
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        // 创建请求体，携带 JSON 参数
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                objectMapper.writeValueAsString(text));
-        // 创建请求
-        Request request =
-                new Request.Builder().url(URL).addHeader("Authorization", "Bearer ".concat(KEY)).post(requestBody).build();
-        // 发送请求并处理响应
-        JsonNode jsonNode = null;
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            // 解析json 获取结果
-            jsonNode = objectMapper.readTree(response.body().string());
-            System.out.println(jsonNode.get("choices").get(0).get("message").get("content").asText());
-        } catch (IOException e) {
-            e.printStackTrace();
+        String accessToken = getAccessToken();
+
+        String url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions" +
+                "?access_token=" + accessToken;
+
+        ChatRequest request = new ChatRequest();
+        ChatMessage message = new ChatMessage();
+        message.setRole("user");
+        message.setContent(content);
+        request.getMessages().add(message);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson = mapper.writeValueAsString(request);
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(requestJson.getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        int responseCode = connection.getResponseCode();
+        String response = null;
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Reading the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            response = reader.readLine();
+            reader.close();
+
+            System.out.println(response);
+        } else {
+            // Error handling
+            System.err.println("Failed to make chat completions. Response code: " + responseCode);
         }
 
-
-
-        //下面将response信息返回客户端
-        String answer = jsonNode.get("choices").get(0).get("message").get("content").asText();
+        ChatInnerResp chatInnerResp = new ChatInnerResp();
+        chatInnerResp = objectMapper.readValue(response, ChatInnerResp.class);
+        // 下面将response信息返回客户端
+        String answer = chatInnerResp.getResult();
         GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
 
         try {
             String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
             System.out.println(outputData);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            OutputStream outputStream2 = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream2, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private static String getAccessToken() throws IOException {
+        String apiKey = "lNiXykCWosvV8mWOt1VGAFFQ";
+        String secretKey = "28VenBQWggxqSGhHlYSn4dCOCx8NpILm";
+        String url = "https://aip.baidubce.com/oauth/2.0/token?" +
+                "grant_type=client_credentials&" +
+                "client_id=" + apiKey + "&" +
+                "client_secret=" + secretKey;
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write("".getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Reading the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String response = reader.readLine();
+            reader.close();
+
+            ObjectMapper mapper = new ObjectMapper();
+            TokenResponse tokenResponse = mapper.readValue(response, TokenResponse.class);
+            return tokenResponse.getAccess_token();
+        } else {
+            // Error handling
+            throw new IOException("Failed to obtain access token. Response code: " + responseCode);
+        }
+    }
+
 }
-
-
