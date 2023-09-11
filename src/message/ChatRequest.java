@@ -1,7 +1,5 @@
 package view.message;
 
-import view.connect.ServerActionTool;
-
 import java.util.ArrayList;
 import java.util.List;
 

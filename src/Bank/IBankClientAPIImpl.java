@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import view.connect.RWTool;
 import view.message.*;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Date;
 
-public class IBankClientAPIImpl implements IBankClientAPI{
+public class IBankClientAPIImpl implements IBankClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private RWTool rwTool = new RWTool();
+
     //构造函数
     public IBankClientAPIImpl(String serverAddress, int serverPort) {
         try {
@@ -31,24 +31,25 @@ public class IBankClientAPIImpl implements IBankClientAPI{
 
     /**
      * 充值
-     * @param id 用户一卡通ID
+     *
+     * @param id    用户一卡通ID
      * @param money 充值金额
-     * @param pwd 用户输入的密码
+     * @param pwd   用户输入的密码
      * @return 充值结果，true表示充值成功，false表示充值失败
      */
     @Override
-    public boolean recharge(String id, double money, String pwd){
+    public boolean recharge(String id, double money, String pwd) {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankMoneyMessage bankMoneyMessage=new BankMoneyMessage(id,money,pwd);
+            BankMoneyMessage bankMoneyMessage = new BankMoneyMessage(id, money, pwd);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankMoneyMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1001);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1001);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,26 +84,27 @@ public class IBankClientAPIImpl implements IBankClientAPI{
 
     /**
      * 修改密码
-     * @param id 用户一卡通ID
-     * @param oldPwd 原密码
-     * @param newPwd 新密码
+     *
+     * @param id        用户一卡通ID
+     * @param oldPwd    原密码
+     * @param newPwd    新密码
      * @param newNewPwd 确认新密码
      * @return 修改密码结果，true表示修改成功，false表示修改失败
      */
     @Override
-    public boolean changePwd(String id, String oldPwd, String newPwd,String newNewPwd)
-            throws NullPointerException{
+    public boolean changePwd(String id, String oldPwd, String newPwd, String newNewPwd)
+            throws NullPointerException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankChangePwdMessage bankChangePwdMessage=new BankChangePwdMessage(id,oldPwd,newPwd,newNewPwd);
+            BankChangePwdMessage bankChangePwdMessage = new BankChangePwdMessage(id, oldPwd, newPwd, newNewPwd);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankChangePwdMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1003);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1003);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,10 +139,10 @@ public class IBankClientAPIImpl implements IBankClientAPI{
     /**
      * 查找并返回数据库中一卡通号为id、账单描述（类型）为query、且时间在startTime和endTime之间的所有账单信息
      *
-     * @param id       需查询账户的一卡通号
+     * @param id        需查询账户的一卡通号
      * @param startTime 查询时间段的开始时间
      * @param endTime   查询时间段的结束时间
-     * @param query    查询关键字，即账单描述
+     * @param query     查询关键字，即账单描述
      * @return bankBill类数组allbills，代表数据库中所有的账单
      */
     @Override
@@ -195,26 +197,26 @@ public class IBankClientAPIImpl implements IBankClientAPI{
     }
 
 
-
     /**
      * 挂失/解挂
-     * @param id 一卡通号
+     *
+     * @param id  一卡通号
      * @param pwd 用户输入的密码
      * @return 挂失/解挂结果，true表示挂失/解挂成功，false表示挂失/解挂失败
      */
     @Override
-    public boolean changeLoss(String id,String pwd) throws NullPointerException{
+    public boolean changeLoss(String id, String pwd) throws NullPointerException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankIDMessage bankIDMessage=new BankIDMessage(id,pwd);
+            BankIDMessage bankIDMessage = new BankIDMessage(id, pwd);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1000);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1000);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -249,23 +251,24 @@ public class IBankClientAPIImpl implements IBankClientAPI{
 
     /**
      * 消费
-     * @param id 用户一卡通ID
+     *
+     * @param id   用户一卡通ID
      * @param bill 账单信息
-     * @param pwd 用户输入的密码
+     * @param pwd  用户输入的密码
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    public boolean bankConsume(String id, bankBill bill,String pwd) throws IOException {
+    public boolean bankConsume(String id, bankBill bill, String pwd) throws IOException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankBillMessage bankBillMessage=new BankBillMessage(id,bill,pwd);
+            BankBillMessage bankBillMessage = new BankBillMessage(id, bill, pwd);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankBillMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1002);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1002);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -299,22 +302,23 @@ public class IBankClientAPIImpl implements IBankClientAPI{
 
     /**
      * 通过一卡通号查找account
+     *
      * @param id 一卡通号
      * @return bankAccount 账户信息
      */
     @Override
-    public bankAccount findBankAccountById(String id) throws NullPointerException{
+    public bankAccount findBankAccountById(String id) throws NullPointerException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankIDMessage bankIDMessage=new BankIDMessage(id);
+            BankIDMessage bankIDMessage = new BankIDMessage(id);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1005);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1005);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,18 +355,18 @@ public class IBankClientAPIImpl implements IBankClientAPI{
      *
      * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
      */
-    public String[][] findBankAccounts(String id){
+    public String[][] findBankAccounts(String id) {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankIDMessage bankIDMessage=new BankIDMessage(id);
+            BankIDMessage bankIDMessage = new BankIDMessage(id);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1006);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1006);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -395,18 +399,18 @@ public class IBankClientAPIImpl implements IBankClientAPI{
 
 
     //1007
-    public boolean addBankAccount(bankAccount bankaccount){
+    public boolean addBankAccount(bankAccount bankaccount) {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankAccountMessage bankAccountMessage=new BankAccountMessage(bankaccount);
+            BankAccountMessage bankAccountMessage = new BankAccountMessage(bankaccount);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankAccountMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,1007);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 1007);
 
         } catch (Exception e) {
             e.printStackTrace();

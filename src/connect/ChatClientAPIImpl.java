@@ -1,20 +1,21 @@
 package view.connect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
+import view.message.ChatQuesMessage;
+import view.message.GPTAnsRepMessage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import view.Global.GlobalData;
-import view.Library.*;
-import view.message.*;
-
-public class ChatClientAPIImpl implements ChatClientAPI{
+public class ChatClientAPIImpl implements ChatClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private RWTool rwTool = new RWTool();
+
     public ChatClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -25,6 +26,7 @@ public class ChatClientAPIImpl implements ChatClientAPI{
             e.printStackTrace();
         }
     }
+
     @Override
     public String getGPTAnswer(ChatQuesMessage chatQuesMessage) throws IOException {
         //以下发送无数据的请求消息给服务器

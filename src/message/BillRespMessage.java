@@ -1,5 +1,6 @@
 package view.message;
-import view.Bank.*;
+
+import view.Bank.bankAccount;
 
 /**
  * BillRespMessage 类表示账户响应消息，包含银行账户信息。

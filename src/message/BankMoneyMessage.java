@@ -8,7 +8,7 @@ public class BankMoneyMessage {
     private double money;  // 充值或消费的金额
     private String pwd;    // 密码
 
-    public BankMoneyMessage(){
+    public BankMoneyMessage() {
 
     }
 

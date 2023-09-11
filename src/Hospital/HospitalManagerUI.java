@@ -3,7 +3,6 @@ package view.Hospital;
 import view.Bank.bankAccount;
 import view.DAO.bankAccountDao;
 import view.Global.SummaryUI;
-import view.Shop.ShopTeacherStudentUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,13 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HospitalManagerUI extends JFrame {
-    String[][] registers=null;//显示的购买记录
-    String[][] departments=null;//显示的医生信息
+    String[][] registers = null;//显示的购买记录
+    String[][] departments = null;//显示的医生信息
 
     //导航栏
     JButton informationBtn;
@@ -42,7 +40,7 @@ public class HospitalManagerUI extends JFrame {
     JLabel typeLabel;
     JLabel nameLabel;
     JLabel doctortypeLabel;
-    JComboBox<String>doctortype;
+    JComboBox<String> doctortype;
     JLabel phonenumberLabel;
     JLabel addressLabel;
     JTextField IDField;
@@ -56,30 +54,31 @@ public class HospitalManagerUI extends JFrame {
     JTextField IDField2;
     JButton confirmdeleteBtn;
 
-    JPanel backPanel=new JPanel();
-    CardLayout cardLayout=new CardLayout();
-    SpringLayout springLayout=new SpringLayout();
-    JPanel cardPanel=new JPanel(cardLayout);
-    JPanel hospitalcard=new JPanel();
+    JPanel backPanel = new JPanel();
+    CardLayout cardLayout = new CardLayout();
+    SpringLayout springLayout = new SpringLayout();
+    JPanel cardPanel = new JPanel(cardLayout);
+    JPanel hospitalcard = new JPanel();
     JPanel blankPanel = new JPanel();
     JPanel informationPanel = new JPanel(springLayout);
     JPanel registerhistoryPanel = new JPanel(springLayout);
-    JPanel adddeletePanel=new JPanel(springLayout);
+    JPanel adddeletePanel = new JPanel(springLayout);
 
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
-    public HospitalManagerUI(){
+
+    public HospitalManagerUI() {
         super("医院");
 
 //        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
 //        Image image = new ImageIcon(resource).getImage();
 //        setIconImage(image);
 
-        informationBtn=new JButton("医生信息");
-        adddeleteBtn=new JButton("增删医生");
-        historyBtn=new JButton("挂号记录");
-        backBtn=new JButton("退出");
+        informationBtn = new JButton("医生信息");
+        adddeleteBtn = new JButton("增删医生");
+        historyBtn = new JButton("挂号记录");
+        backBtn = new JButton("退出");
 
         informationBtn.setFont(buttonFont);
         historyBtn.setFont(buttonFont);
@@ -136,16 +135,16 @@ public class HospitalManagerUI extends JFrame {
 
         //医生信息
         model = new DefaultTableModel();
-        informationheader = new String[]{"医生编号","科室类型", "挂号医生", "科室电话", "科室地址","医生类型"};
+        informationheader = new String[]{"医生编号", "科室类型", "挂号医生", "科室电话", "科室地址", "医生类型"};
         informationdata = new Object[][]{
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
         };
-        informationtable=new JTable();
-        searchBtn=new JButton("查询");
-        searchField=new JTextField();
+        informationtable = new JTable();
+        searchBtn = new JButton("查询");
+        searchField = new JTextField();
 
-        informationtable.setFont(new Font("楷体",Font.PLAIN,20));
+        informationtable.setFont(new Font("楷体", Font.PLAIN, 20));
         model.setDataVector(informationdata, informationheader);
         informationtable.setModel(model);
         JScrollPane informationPane = new JScrollPane(informationtable);
@@ -155,7 +154,7 @@ public class HospitalManagerUI extends JFrame {
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));
 
-        searchField.setPreferredSize(new Dimension(200,30));
+        searchField.setPreferredSize(new Dimension(200, 30));
         searchField.setFont(centerFont);
         searchBtn.setFont(buttonFont);
 
@@ -163,24 +162,24 @@ public class HospitalManagerUI extends JFrame {
         informationPanel.add(searchBtn);
         informationPanel.add(informationPane);
 
-        springLayout.putConstraint(SpringLayout.WEST,searchField,120,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,searchField,80,SpringLayout.NORTH,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,searchBtn,40,SpringLayout.EAST,searchField);
-        springLayout.putConstraint(SpringLayout.NORTH,searchBtn,0,SpringLayout.NORTH,searchField);
+        springLayout.putConstraint(SpringLayout.WEST, searchField, 120, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, searchField, 80, SpringLayout.NORTH, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, searchBtn, 40, SpringLayout.EAST, searchField);
+        springLayout.putConstraint(SpringLayout.NORTH, searchBtn, 0, SpringLayout.NORTH, searchField);
         //表格位置
-        springLayout.putConstraint(SpringLayout.WEST,informationPane,100,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,informationPane,40,SpringLayout.SOUTH,searchField);
+        springLayout.putConstraint(SpringLayout.WEST, informationPane, 100, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, informationPane, 40, SpringLayout.SOUTH, searchField);
 
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //根据文本框中输入的科室ID查找科室
-                String dID=searchField.getText();
-                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+                String dID = searchField.getText();
+                HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
                 try {
-                    Department[] departments1=new Department[1];
-                    departments1[0]=hospitalClientAPI.GetDepartmentByID(dID);
-                    departments=convertDepartmentToStringArray(departments1);
+                    Department[] departments1 = new Department[1];
+                    departments1[0] = hospitalClientAPI.GetDepartmentByID(dID);
+                    departments = convertDepartmentToStringArray(departments1);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -191,18 +190,18 @@ public class HospitalManagerUI extends JFrame {
 
         //挂号记录
         model2 = new DefaultTableModel();
-        historyLabel=new JLabel("挂号记录");
-        historytable=new JTable();
+        historyLabel = new JLabel("挂号记录");
+        historytable = new JTable();
 
         historyLabel.setFont(titleFont);
-        historytable.setFont(new Font("楷体",Font.PLAIN,20));
+        historytable.setFont(new Font("楷体", Font.PLAIN, 20));
 
-        String[] historyheader = {"挂号编号","学生姓名","科室名称","挂号时间", "总金额" ,"状态"};
+        String[] historyheader = {"挂号编号", "学生姓名", "科室名称", "挂号时间", "总金额", "状态"};
         Object[][] historydata = {
-                {null, null, null, null, null, null,null,null},
-                {null, null, null, null, null, null,null,null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
         };
-        model2.setDataVector(historydata,historyheader);
+        model2.setDataVector(historydata, historyheader);
         historytable.setModel(model2);
         JScrollPane historyscrollPane = new JScrollPane(historytable);
         historytable.setRowHeight(30);
@@ -214,30 +213,30 @@ public class HospitalManagerUI extends JFrame {
         registerhistoryPanel.add(historyscrollPane);
         registerhistoryPanel.add(historyLabel);
 
-        springLayout.putConstraint(SpringLayout.NORTH,historyLabel,40,SpringLayout.NORTH,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,historyLabel,500,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,historyscrollPane,40,SpringLayout.SOUTH,historyLabel);
-        springLayout.putConstraint(SpringLayout.WEST,historyscrollPane,100,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, historyLabel, 40, SpringLayout.NORTH, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, historyLabel, 500, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, historyscrollPane, 40, SpringLayout.SOUTH, historyLabel);
+        springLayout.putConstraint(SpringLayout.WEST, historyscrollPane, 100, SpringLayout.WEST, cardPanel);
 
         //增删医生
-        addLabel=new JLabel("添加医生");
-        IDLabel=new JLabel("医生编号");
-        typeLabel=new JLabel("科室类型");
-        nameLabel=new JLabel("挂号医生");
-        phonenumberLabel=new JLabel("科室电话");
-        addressLabel=new JLabel("科室地址");
-        doctortypeLabel=new JLabel("医生类型");
-        doctortype=new JComboBox<String>();
-        IDField=new JTextField();
-        typeField=new JTextField();
-        nameField=new JTextField();
-        phonenumberField=new JTextField();
-        addressField=new JTextField();
-        confirmaddBtn=new JButton("确认添加");
-        deleteLabel=new JLabel("删除医生");
-        IDLabel2=new JLabel("医生编号");
-        IDField2=new JTextField();
-        confirmdeleteBtn=new JButton("确认删除");
+        addLabel = new JLabel("添加医生");
+        IDLabel = new JLabel("医生编号");
+        typeLabel = new JLabel("科室类型");
+        nameLabel = new JLabel("挂号医生");
+        phonenumberLabel = new JLabel("科室电话");
+        addressLabel = new JLabel("科室地址");
+        doctortypeLabel = new JLabel("医生类型");
+        doctortype = new JComboBox<String>();
+        IDField = new JTextField();
+        typeField = new JTextField();
+        nameField = new JTextField();
+        phonenumberField = new JTextField();
+        addressField = new JTextField();
+        confirmaddBtn = new JButton("确认添加");
+        deleteLabel = new JLabel("删除医生");
+        IDLabel2 = new JLabel("医生编号");
+        IDField2 = new JTextField();
+        confirmdeleteBtn = new JButton("确认删除");
 
         addLabel.setFont(titleFont);
         IDLabel.setFont(centerFont);
@@ -246,7 +245,7 @@ public class HospitalManagerUI extends JFrame {
         phonenumberLabel.setFont(centerFont);
         addressLabel.setFont(centerFont);
         doctortypeLabel.setFont(centerFont);
-        doctortype.setFont(new Font("楷体",Font.PLAIN,20));
+        doctortype.setFont(new Font("楷体", Font.PLAIN, 20));
         IDField.setFont(centerFont);
         typeField.setFont(centerFont);
         nameField.setFont(centerFont);
@@ -262,13 +261,13 @@ public class HospitalManagerUI extends JFrame {
         doctortype.addItem("专家");
         doctortype.addItem("普通");
 
-        IDField.setPreferredSize(new Dimension(200,30));
-        typeField.setPreferredSize(new Dimension(200,30));
-        nameField.setPreferredSize(new Dimension(200,30));
-        phonenumberField.setPreferredSize(new Dimension(200,30));
-        addressField.setPreferredSize(new Dimension(200,30));
-        IDField2.setPreferredSize(new Dimension(200,30));
-        doctortype.setPreferredSize(new Dimension(80,40));
+        IDField.setPreferredSize(new Dimension(200, 30));
+        typeField.setPreferredSize(new Dimension(200, 30));
+        nameField.setPreferredSize(new Dimension(200, 30));
+        phonenumberField.setPreferredSize(new Dimension(200, 30));
+        addressField.setPreferredSize(new Dimension(200, 30));
+        IDField2.setPreferredSize(new Dimension(200, 30));
+        doctortype.setPreferredSize(new Dimension(80, 40));
 
         adddeletePanel.add(addLabel);
         adddeletePanel.add(IDLabel);
@@ -289,67 +288,67 @@ public class HospitalManagerUI extends JFrame {
         adddeletePanel.add(IDField2);
         adddeletePanel.add(confirmdeleteBtn);
 
-        springLayout.putConstraint(SpringLayout.NORTH,addLabel,40,SpringLayout.NORTH,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,addLabel,240,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,IDLabel,40,SpringLayout.SOUTH,addLabel);
-        springLayout.putConstraint(SpringLayout.WEST,IDLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,IDField,0,SpringLayout.NORTH,IDLabel);
-        springLayout.putConstraint(SpringLayout.WEST,IDField,60,SpringLayout.EAST,IDLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,typeLabel,40,SpringLayout.SOUTH,IDLabel);
-        springLayout.putConstraint(SpringLayout.WEST,typeLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,typeField,0,SpringLayout.NORTH,typeLabel);
-        springLayout.putConstraint(SpringLayout.WEST,typeField,60,SpringLayout.EAST,typeLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,nameLabel,40,SpringLayout.SOUTH,typeLabel);
-        springLayout.putConstraint(SpringLayout.WEST,nameLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,nameField,0,SpringLayout.NORTH,nameLabel);
-        springLayout.putConstraint(SpringLayout.WEST,nameField,60,SpringLayout.EAST,nameLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,phonenumberLabel,40,SpringLayout.SOUTH,nameLabel);
-        springLayout.putConstraint(SpringLayout.WEST,phonenumberLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,phonenumberField,0,SpringLayout.NORTH,phonenumberLabel);
-        springLayout.putConstraint(SpringLayout.WEST,phonenumberField,60,SpringLayout.EAST,phonenumberLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,addressLabel,40,SpringLayout.SOUTH,phonenumberLabel);
-        springLayout.putConstraint(SpringLayout.WEST,addressLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,addressField,0,SpringLayout.NORTH,addressLabel);
-        springLayout.putConstraint(SpringLayout.WEST,addressField,60,SpringLayout.EAST,addressLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,doctortypeLabel,40,SpringLayout.SOUTH,addressLabel);
-        springLayout.putConstraint(SpringLayout.WEST,doctortypeLabel,150,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,doctortype,0,SpringLayout.NORTH,doctortypeLabel);
-        springLayout.putConstraint(SpringLayout.WEST,doctortype,60,SpringLayout.EAST,doctortypeLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmaddBtn,40,SpringLayout.SOUTH,doctortypeLabel);
-        springLayout.putConstraint(SpringLayout.WEST,confirmaddBtn,270,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,deleteLabel,40,SpringLayout.NORTH,cardPanel);
-        springLayout.putConstraint(SpringLayout.WEST,deleteLabel,750,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,IDLabel2,0,SpringLayout.NORTH,IDLabel);
-        springLayout.putConstraint(SpringLayout.WEST,IDLabel2,650,SpringLayout.WEST,cardPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,IDField2,0,SpringLayout.NORTH,IDLabel2);
-        springLayout.putConstraint(SpringLayout.WEST,IDField2,60,SpringLayout.EAST,IDLabel2);
-        springLayout.putConstraint(SpringLayout.NORTH,confirmdeleteBtn,60,SpringLayout.SOUTH,IDLabel2);
-        springLayout.putConstraint(SpringLayout.WEST,confirmdeleteBtn,780,SpringLayout.WEST,cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, addLabel, 40, SpringLayout.NORTH, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, addLabel, 240, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, IDLabel, 40, SpringLayout.SOUTH, addLabel);
+        springLayout.putConstraint(SpringLayout.WEST, IDLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, IDField, 0, SpringLayout.NORTH, IDLabel);
+        springLayout.putConstraint(SpringLayout.WEST, IDField, 60, SpringLayout.EAST, IDLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, typeLabel, 40, SpringLayout.SOUTH, IDLabel);
+        springLayout.putConstraint(SpringLayout.WEST, typeLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, typeField, 0, SpringLayout.NORTH, typeLabel);
+        springLayout.putConstraint(SpringLayout.WEST, typeField, 60, SpringLayout.EAST, typeLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, nameLabel, 40, SpringLayout.SOUTH, typeLabel);
+        springLayout.putConstraint(SpringLayout.WEST, nameLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, nameField, 0, SpringLayout.NORTH, nameLabel);
+        springLayout.putConstraint(SpringLayout.WEST, nameField, 60, SpringLayout.EAST, nameLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, phonenumberLabel, 40, SpringLayout.SOUTH, nameLabel);
+        springLayout.putConstraint(SpringLayout.WEST, phonenumberLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, phonenumberField, 0, SpringLayout.NORTH, phonenumberLabel);
+        springLayout.putConstraint(SpringLayout.WEST, phonenumberField, 60, SpringLayout.EAST, phonenumberLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, addressLabel, 40, SpringLayout.SOUTH, phonenumberLabel);
+        springLayout.putConstraint(SpringLayout.WEST, addressLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, addressField, 0, SpringLayout.NORTH, addressLabel);
+        springLayout.putConstraint(SpringLayout.WEST, addressField, 60, SpringLayout.EAST, addressLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, doctortypeLabel, 40, SpringLayout.SOUTH, addressLabel);
+        springLayout.putConstraint(SpringLayout.WEST, doctortypeLabel, 150, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, doctortype, 0, SpringLayout.NORTH, doctortypeLabel);
+        springLayout.putConstraint(SpringLayout.WEST, doctortype, 60, SpringLayout.EAST, doctortypeLabel);
+        springLayout.putConstraint(SpringLayout.NORTH, confirmaddBtn, 40, SpringLayout.SOUTH, doctortypeLabel);
+        springLayout.putConstraint(SpringLayout.WEST, confirmaddBtn, 270, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, deleteLabel, 40, SpringLayout.NORTH, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, deleteLabel, 750, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, IDLabel2, 0, SpringLayout.NORTH, IDLabel);
+        springLayout.putConstraint(SpringLayout.WEST, IDLabel2, 650, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, IDField2, 0, SpringLayout.NORTH, IDLabel2);
+        springLayout.putConstraint(SpringLayout.WEST, IDField2, 60, SpringLayout.EAST, IDLabel2);
+        springLayout.putConstraint(SpringLayout.NORTH, confirmdeleteBtn, 60, SpringLayout.SOUTH, IDLabel2);
+        springLayout.putConstraint(SpringLayout.WEST, confirmdeleteBtn, 780, SpringLayout.WEST, cardPanel);
 
         confirmaddBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //添加医生
-                String ID=IDField.getText();
-                String type=typeField.getText();
-                String DorName=nameField.getText();
-                String phoneNumber=phonenumberField.getText();
-                String address=addressField.getText();
-                boolean DorType=false;
+                String ID = IDField.getText();
+                String type = typeField.getText();
+                String DorName = nameField.getText();
+                String phoneNumber = phonenumberField.getText();
+                String address = addressField.getText();
+                boolean DorType = false;
                 String selectedValue = (String) doctortype.getSelectedItem();
-                if(selectedValue.equals("专家")){
-                    DorType=true;
-                }else{
-                    DorType=false;
+                if (selectedValue.equals("专家")) {
+                    DorType = true;
+                } else {
+                    DorType = false;
                 }
 
-                Department d=new Department(type,ID,DorName,DorType,phoneNumber,address);
-                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+                Department d = new Department(type, ID, DorName, DorType, phoneNumber, address);
+                HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
 
                 try {
-                    if(hospitalClientAPI.AddDepartmentByInfo(d)){
+                    if (hospitalClientAPI.AddDepartmentByInfo(d)) {
                         JOptionPane.showMessageDialog(adddeletePanel, "添加成功！");
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(adddeletePanel, "添加失败！");
                     }
                 } catch (IOException ex) {
@@ -362,13 +361,13 @@ public class HospitalManagerUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //删除医生
-                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
-                String uID=IDField2.getText();
+                HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
+                String uID = IDField2.getText();
                 //修改后端数据
                 try {
-                    if(hospitalClientAPI.DeleteDepartmentByID(uID)){
+                    if (hospitalClientAPI.DeleteDepartmentByID(uID)) {
                         JOptionPane.showMessageDialog(adddeletePanel, "成功删除！");
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(adddeletePanel, "删除失败！");
                     }
                 } catch (IOException ex) {
@@ -382,7 +381,7 @@ public class HospitalManagerUI extends JFrame {
         cardPanel.add(blankPanel);
         cardPanel.add(informationPanel, "医生信息");
         cardPanel.add(registerhistoryPanel, "挂号记录");
-        cardPanel.add(adddeletePanel,"增删医生");
+        cardPanel.add(adddeletePanel, "增删医生");
 
         Container contentPane = getContentPane();//获取控制面板
         contentPane.add(cardPanel, BorderLayout.CENTER);
@@ -395,19 +394,21 @@ public class HospitalManagerUI extends JFrame {
         setVisible(true);
     }
 
-    //前端获取所有的医生信息
-    public void getAllDepartments() throws IOException {
-        HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
-        departments=convertDepartmentToStringArray(hospitalClientAPI.GetAllDepartments());
+    public static void main(String[] args) {
+        new HospitalManagerUI();
     }
 
+    //前端获取所有的医生信息
+    public void getAllDepartments() throws IOException {
+        HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
+        departments = convertDepartmentToStringArray(hospitalClientAPI.GetAllDepartments());
+    }
 
     //前端获取所有的挂号记录
     public void getAllRegisterRecord() throws IOException {
-        HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
-        registers=convertRegisterToStringArray(hospitalClientAPI.GetAllRegisters());
+        HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
+        registers = convertRegisterToStringArray(hospitalClientAPI.GetAllRegisters());
     }
-
 
     /**
      * 将Department[]类数据转换为String[][]。
@@ -416,7 +417,7 @@ public class HospitalManagerUI extends JFrame {
      * @return 转换后的String二维数组
      */
     public String[][] convertDepartmentToStringArray(Department[] departments) {
-        if(departments==null){
+        if (departments == null) {
             return null;
         }
         String[][] departmentStringArray = new String[departments.length][6];
@@ -428,7 +429,7 @@ public class HospitalManagerUI extends JFrame {
             departmentStringArray[i][2] = department.Department_dir;//挂号医生
             departmentStringArray[i][3] = department.Department_phone;//科室电话
             departmentStringArray[i][4] = department.Department_addr;//科室地址
-            departmentStringArray[i][5] = department.Department_level?"专家":"普通";
+            departmentStringArray[i][5] = department.Department_level ? "专家" : "普通";
         }
 
         return departmentStringArray;
@@ -441,22 +442,21 @@ public class HospitalManagerUI extends JFrame {
      * @return 转换后的String二维数组
      */
     public String[][] convertRegisterToStringArray(Register[] registers) {
-        if(registers==null)
-        {
+        if (registers == null) {
             return null;
         }
         String[][] registerStringArray = new String[registers.length][6];
-        bankAccountDao bA=new bankAccountDao();
+        bankAccountDao bA = new bankAccountDao();
         for (int i = 0; i < registers.length; i++) {
             Register register = registers[i];
-            bankAccount bankA=bA.findBankAccountById(register.Patient_ID);
+            bankAccount bankA = bA.findBankAccountById(register.Patient_ID);
 
             registerStringArray[i][0] = register.getRegister_ID();//挂号编号
             registerStringArray[i][1] = bankA.getName();//学生姓名
             registerStringArray[i][2] = register.getRegister_depart();//挂号科室
             registerStringArray[i][3] = formatDate(register.getRegister_date());//挂号时间
             registerStringArray[i][4] = String.valueOf(register.getRegister_amount());//总金额
-            registerStringArray[i][5] = register.Register_Ifpaid?"已缴费":"未缴费";
+            registerStringArray[i][5] = register.Register_Ifpaid ? "已缴费" : "未缴费";
         }
 
         return registerStringArray;
@@ -473,10 +473,9 @@ public class HospitalManagerUI extends JFrame {
         return sdf.format(date);
     }
 
-
     /**
-    * 显示医生信息的表格信息
-    * */
+     * 显示医生信息的表格信息
+     */
     private void ShowTableDataModel(String[][] data) {
         //若查询结果为空
         if (data == null) {
@@ -499,10 +498,10 @@ public class HospitalManagerUI extends JFrame {
 
     /**
      * 显示挂号记录的表格信息
-     * */
+     */
     private void ShowTableDataModel2(String[][] data) {
         //若查询结果为空
-        if(data==null){
+        if (data == null) {
             System.out.println("查询结果为空");
             model2.setRowCount(0);
             return;
@@ -519,11 +518,10 @@ public class HospitalManagerUI extends JFrame {
         model2.fireTableDataChanged();
     }
 
-
     /**
      * 清空文字框
      */
-    public void refreshpage(){
+    public void refreshpage() {
         searchField.setText("");
         IDField.setText("");
         typeField.setText("");
@@ -531,10 +529,5 @@ public class HospitalManagerUI extends JFrame {
         phonenumberField.setText("");
         addressField.setText("");
         IDField2.setText("");
-    }
-
-
-    public static void main(String[] args) {
-        new HospitalManagerUI();
     }
 }

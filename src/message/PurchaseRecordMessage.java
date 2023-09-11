@@ -25,20 +25,20 @@ public class PurchaseRecordMessage {
     }
 
     /**
-     * 设置购买记录。
-     *
-     * @param purchaseRecord 要设置的购买记录。
-     */
-    public void setPurchaseRecord(PurchaseRecord purchaseRecord) {
-        this.purchaseRecord = purchaseRecord;
-    }
-
-    /**
      * 获取购买记录。
      *
      * @return 购买记录。
      */
     public PurchaseRecord getPurchaseRecord() {
         return purchaseRecord;
+    }
+
+    /**
+     * 设置购买记录。
+     *
+     * @param purchaseRecord 要设置的购买记录。
+     */
+    public void setPurchaseRecord(PurchaseRecord purchaseRecord) {
+        this.purchaseRecord = purchaseRecord;
     }
 }

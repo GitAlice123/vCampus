@@ -15,6 +15,9 @@ public class BookHold {
         this.outdateTime = outdateTime;
     }
 
+    public BookHold() {
+    }
+
     public String getuId() {
         return uId;
     }
@@ -45,9 +48,6 @@ public class BookHold {
 
     public void setOutdateTime(Date outdateTime) {
         this.outdateTime = outdateTime;
-    }
-
-    public BookHold() {
     }
 
     @Override

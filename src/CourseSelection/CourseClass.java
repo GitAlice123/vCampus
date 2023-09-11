@@ -1,14 +1,14 @@
 package view.CourseSelection;
 
 public class CourseClass {
-        private String classID;        // 课程班编号
-        private String courseID;      // 课程编号
-        private String classTeacher;   // 任课教师ID
-        private String classPlace;     // 上课地点
-        private int classMax;          // 最大人数
-        private int classTemp;         // 当前人数
-        private String classTime;      // 上课时间
-        private String[] classStudent; // 选本班级的学生ID
+    private String classID;        // 课程班编号
+    private String courseID;      // 课程编号
+    private String classTeacher;   // 任课教师ID
+    private String classPlace;     // 上课地点
+    private int classMax;          // 最大人数
+    private int classTemp;         // 当前人数
+    private String classTime;      // 上课时间
+    private String[] classStudent; // 选本班级的学生ID
 
     public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime, String[] classStudent) {
         this.classID = classID;

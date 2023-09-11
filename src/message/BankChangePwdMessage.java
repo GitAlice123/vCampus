@@ -18,16 +18,16 @@ public class BankChangePwdMessage {
     /**
      * 构造一个 BankChangePwdMessage 对象。
      *
-     * @param id     一卡通号
-     * @param oldPwd 旧密码
-     * @param newPwd 新密码
+     * @param id        一卡通号
+     * @param oldPwd    旧密码
+     * @param newPwd    新密码
      * @param newNewPwd 确认新密码
      */
-    public BankChangePwdMessage(String id, String oldPwd, String newPwd,String newNewPwd) {
+    public BankChangePwdMessage(String id, String oldPwd, String newPwd, String newNewPwd) {
         this.id = id;
         this.oldPwd = oldPwd;
         this.newPwd = newPwd;
-        this.newNewPwd=newNewPwd;
+        this.newNewPwd = newNewPwd;
     }
 
     /**
@@ -92,7 +92,6 @@ public class BankChangePwdMessage {
     public String getnewNewPwd() {
         return newNewPwd;
     }
-
 
 
 }

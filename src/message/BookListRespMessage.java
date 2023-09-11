@@ -8,10 +8,12 @@ public class BookListRespMessage {
     public BookListRespMessage() {
         // 无参数构造函数
     }
+
     public BookListRespMessage(Book[] books) {
         this.books = books;
     }
-    public Book[] getBooks(){
+
+    public Book[] getBooks() {
         return books;
     }
 }

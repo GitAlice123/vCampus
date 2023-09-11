@@ -1,7 +1,5 @@
 package view.message;
 
-import view.Library.BookOperationRecord;
-
 public class GPTAnsRepMessage {
     private String gptanswer;
 

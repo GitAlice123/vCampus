@@ -1,10 +1,10 @@
 package view.connect;
 
+import view.message.ChatQuesMessage;
+
 import java.io.IOException;
-import view.Library.*;
-import view.message.*;
 
 public interface ChatClientAPI {
     public String getGPTAnswer(ChatQuesMessage chatQuesMessage)
-        throws IOException;
+            throws IOException;
 }

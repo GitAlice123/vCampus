@@ -10,6 +10,18 @@ public class Register {
     boolean Register_Ifpaid;//1为已缴费，0为未缴费
     double Register_amount;//应缴费金额
 
+    public Register() {
+    }
+
+    public Register(String patient_ID, Date register_date, String register_depart, String register_ID, boolean register_Ifpaid, double register_amount) {
+        Patient_ID = patient_ID;
+        Register_date = register_date;
+        Register_depart = register_depart;
+        Register_ID = register_ID;
+        Register_Ifpaid = register_Ifpaid;
+        Register_amount = register_amount;
+    }
+
     public String getPatient_ID() {
         return Patient_ID;
     }
@@ -55,18 +67,6 @@ public class Register {
     }
 
     public void setRegister_amount(double register_amount) {
-        Register_amount = register_amount;
-    }
-
-    public Register() {
-    }
-
-    public Register(String patient_ID, Date register_date, String register_depart, String register_ID, boolean register_Ifpaid, double register_amount) {
-        Patient_ID = patient_ID;
-        Register_date = register_date;
-        Register_depart = register_depart;
-        Register_ID = register_ID;
-        Register_Ifpaid = register_Ifpaid;
         Register_amount = register_amount;
     }
 }

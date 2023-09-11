@@ -1,9 +1,14 @@
 package view.connect;
 
-import java.io.IOException;
+import view.Library.Book;
+import view.Library.BookHold;
+import view.Library.BookOperationRecord;
+import view.message.BookISBNMessage;
+import view.message.RegisterReqMessage;
+import view.message.SearchBookNameMessage;
+import view.message.UniqueMessage;
 
-import view.Library.*;
-import view.message.*;
+import java.io.IOException;
 
 public interface LibraryClientAPI {
     // 让服务器调取当前在馆书籍列表

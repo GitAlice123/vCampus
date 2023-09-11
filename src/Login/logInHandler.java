@@ -1,18 +1,17 @@
 package view.Login;
 
-import java.io.IOException;
+import view.Global.GlobalData;
+import view.Global.SummaryUI;
+import view.connect.LoginClientAPI;
+import view.connect.LoginClientAPIImpl;
+import view.message.LoginMessage;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-import view.Bank.BankTeacherStudentUI;
-import view.Global.GlobalData;
-import view.Global.SummaryUI;
-import view.connect.*;
-import view.message.*;
-
-import javax.swing.*;
+import java.io.IOException;
 
 /**
  * logInHandler 类是登录界面的事件处理程序，实现了 ActionListener 和 KeyAdapter 接口。
@@ -83,16 +82,13 @@ public class logInHandler extends KeyAdapter implements ActionListener {
 
         String role = "";
         int typeNum = 0;
-        if (loginView.studentRadioButton.isSelected()){
+        if (loginView.studentRadioButton.isSelected()) {
             role = "ST";
             typeNum = 1;
-        }
-        else if (loginView.teacherRadioButton.isSelected()){
+        } else if (loginView.teacherRadioButton.isSelected()) {
             role = "TC";
             typeNum = 2;
-        }
-        else if (loginView.adminRadioButton.isSelected())
-        {
+        } else if (loginView.adminRadioButton.isSelected()) {
             role = "AD";
             typeNum = 3;
         }
@@ -109,7 +105,7 @@ public class logInHandler extends KeyAdapter implements ActionListener {
         /*与后端连接部分修改结束*/
         if (flag) {
             JOptionPane.showMessageDialog(loginView, "登录成功！");
-            GlobalData.setUser(userId,typeNum);
+            GlobalData.setUser(userId, typeNum);
             loginView.dispose();
             new SummaryUI();//跳转页面的判断逻辑待写
             System.out.println("总界面");

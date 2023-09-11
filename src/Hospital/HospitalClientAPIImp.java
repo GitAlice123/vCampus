@@ -1,22 +1,21 @@
 package view.Hospital;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.Hospital.Department;
-import view.Hospital.Register;
+import view.connect.RWTool;
 import view.message.*;
-import view.connect.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class HospitalClientAPIImp implements HospitalClientAPI{
+public class HospitalClientAPIImp implements HospitalClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private RWTool rwTool = new RWTool();
-    public HospitalClientAPIImp (String serverAddress, int serverPort) {
+
+    public HospitalClientAPIImp(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
             socket = new Socket(serverAddress, serverPort);
@@ -38,7 +37,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,500);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 500);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +53,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         DepartmentsMessage RespMessage = objectMapper.readValue(mess, DepartmentsMessage.class);
-        Department[] departments=RespMessage.getDepartments();
+        Department[] departments = RespMessage.getDepartments();
 //      处理结果
         return departments;
     }
@@ -65,12 +64,12 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,501);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 501);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +85,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         RegisterMessage RespMessage = objectMapper.readValue(mess, RegisterMessage.class);
-        Register[] registers=RespMessage.getRegisters();
+        Register[] registers = RespMessage.getRegisters();
 //      处理结果
         return registers;
     }
@@ -97,12 +96,12 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,502);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 502);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,12 +117,12 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         RegisterMessage RespMessage = objectMapper.readValue(mess, RegisterMessage.class);
-        Register[] registers=RespMessage.getRegisters();
+        Register[] registers = RespMessage.getRegisters();
 
-        if(registers==null){
+        if (registers == null) {
             System.out.println("**********空空空为什么为什么1");
-        }else{
-            System.out.println("1***************长度为："+registers.length);
+        } else {
+            System.out.println("1***************长度为：" + registers.length);
         }
 //      处理结果
         return registers;
@@ -139,7 +138,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             String jsonData = objectMapper.writeValueAsString(register);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,503);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 503);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +154,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }
@@ -167,11 +166,11 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            UniqueMessage uniqueMessage=new UniqueMessage(rID);
+            UniqueMessage uniqueMessage = new UniqueMessage(rID);
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,504);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 504);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,7 +186,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }
@@ -199,11 +198,11 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            StringPariMessage registerMessage=new StringPariMessage(type,level);
+            StringPariMessage registerMessage = new StringPariMessage(type, level);
             String jsonData = objectMapper.writeValueAsString(registerMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,505);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 505);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -219,7 +218,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         DepartmentsMessage RespMessage = objectMapper.readValue(mess, DepartmentsMessage.class);
-        Department[] departments=RespMessage.getDepartments();
+        Department[] departments = RespMessage.getDepartments();
 //      处理结果
         return departments;
     }
@@ -231,11 +230,11 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,506);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 506);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,7 +250,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         DepartmentsMessage RespMessage = objectMapper.readValue(mess, DepartmentsMessage.class);
-        Department department=RespMessage.getDepartment();
+        Department department = RespMessage.getDepartment();
 //      处理结果
         return department;
     }
@@ -263,11 +262,11 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            IDReqMessage idReqMessage=new IDReqMessage();
+            IDReqMessage idReqMessage = new IDReqMessage();
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,507);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 507);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -283,7 +282,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         RegisterMessage RespMessage = objectMapper.readValue(mess, RegisterMessage.class);
-        Register[] registers=RespMessage.getRegisters();
+        Register[] registers = RespMessage.getRegisters();
 //      处理结果
         return registers;
     }
@@ -298,7 +297,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
             String jsonData = objectMapper.writeValueAsString(department);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,508);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 508);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -314,7 +313,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }

@@ -1,47 +1,37 @@
 package view.Bank;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-
-import java.io.*;
 import java.math.BigDecimal;
-import java.util.*;
-
-import javax.swing.*;
 
 /**
  * 银行账户类
  */
 public class bankAccount {
-    private String cardId="";  // 校园卡账户，六位数字
-    private String name="";  // 姓名
-    private String id="";  // 一卡通号，9位
-    private String PaymentPwd="";//密码，6为数字
-    private double balance=0.00;  // 余额
-    private boolean isLoss=true;  // 是否挂失，true表示正常，false表示挂失
+    private String cardId = "";  // 校园卡账户，六位数字
+    private String name = "";  // 姓名
+    private String id = "";  // 一卡通号，9位
+    private String PaymentPwd = "";//密码，6为数字
+    private double balance = 0.00;  // 余额
+    private boolean isLoss = true;  // 是否挂失，true表示正常，false表示挂失
 
-    public bankAccount(){
+    public bankAccount() {
 
     }
 
     /**
      * 构造函数
      *
-     * @param cardId   校园卡账户
-     * @param name     姓名
-     * @param id       一卡通号
-     * @param paymentPwd   密码
-     * @param balance  余额
-     * @param isLoss   是否挂失
+     * @param cardId     校园卡账户
+     * @param name       姓名
+     * @param id         一卡通号
+     * @param paymentPwd 密码
+     * @param balance    余额
+     * @param isLoss     是否挂失
      */
-    public bankAccount(String cardId, String name, String id, String paymentPwd,double balance, boolean isLoss) {
+    public bankAccount(String cardId, String name, String id, String paymentPwd, double balance, boolean isLoss) {
         this.cardId = cardId;
         this.name = name;
         this.id = id;
-        this.PaymentPwd=paymentPwd;
+        this.PaymentPwd = paymentPwd;
         this.balance = balance;
         this.isLoss = isLoss;
     }

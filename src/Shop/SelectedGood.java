@@ -18,10 +18,10 @@ public class SelectedGood {
     /**
      * 使用指定的商品编号、商品名称、商品价格和商品数量创建SelectedGood对象的有参构造函数。
      *
-     * @param goodId   商品编号
-     * @param goodName 商品名称
+     * @param goodId    商品编号
+     * @param goodName  商品名称
      * @param goodPrice 商品价格
-     * @param goodNums 选择加入购物车的商品数量
+     * @param goodNums  选择加入购物车的商品数量
      */
     public SelectedGood(String goodId, String goodName, double goodPrice, int goodNums) {
         this.GoodId = goodId;

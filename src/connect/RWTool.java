@@ -13,7 +13,7 @@ public class RWTool {
     /**
      * 无参构造函数。
      */
-    public RWTool(){
+    public RWTool() {
     }
 
     /**
@@ -81,7 +81,7 @@ public class RWTool {
      */
     public String ClientReadStream(InputStream inputStream) throws IOException {
         byte[] lengthBytes = new byte[4];
-        System.out.println("Client inputStream status: "+inputStream.available());
+        System.out.println("Client inputStream status: " + inputStream.available());
         try {
             inputStream.read(lengthBytes);  // 读取消息长度
         } catch (IOException e) {
@@ -103,15 +103,15 @@ public class RWTool {
      * @param index        消息编号
      * @throws IOException 如果写入过程中发生 I/O 错误
      */
-    public void ClientSendOutStream(OutputStream outputStream, String jsonData,int index) throws IOException {
-            byte[] jsonDataBytes = jsonData.getBytes(StandardCharsets.UTF_8);
-            int messageLength = jsonDataBytes.length;
-            byte[] lengthBytes = ByteBuffer.allocate(4).putInt(messageLength).array();
-            byte[] indexInfo = ByteBuffer.allocate(4).putInt(index).array();
-            outputStream.write(lengthBytes,0,4);  // 写入消息长度
-            outputStream.write(indexInfo,0,4);// 写入消息编码
-            outputStream.write(jsonDataBytes);  // 写入消息内容
-            outputStream.flush();
+    public void ClientSendOutStream(OutputStream outputStream, String jsonData, int index) throws IOException {
+        byte[] jsonDataBytes = jsonData.getBytes(StandardCharsets.UTF_8);
+        int messageLength = jsonDataBytes.length;
+        byte[] lengthBytes = ByteBuffer.allocate(4).putInt(messageLength).array();
+        byte[] indexInfo = ByteBuffer.allocate(4).putInt(index).array();
+        outputStream.write(lengthBytes, 0, 4);  // 写入消息长度
+        outputStream.write(indexInfo, 0, 4);// 写入消息编码
+        outputStream.write(jsonDataBytes);  // 写入消息内容
+        outputStream.flush();
     }
 
     /**

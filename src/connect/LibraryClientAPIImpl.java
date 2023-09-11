@@ -1,12 +1,16 @@
 package view.connect;
 
-import java.io.*;
-import java.net.Socket;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Global.GlobalData;
-import view.Library.*;
+import view.Library.Book;
+import view.Library.BookHold;
+import view.Library.BookOperationRecord;
 import view.message.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 
 public class LibraryClientAPIImpl implements LibraryClientAPI {
     private Socket socket;
@@ -388,8 +392,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
 
 //      处理结果
         BookOperationRecord[] result = bookOPRListRespMessage.getBooks();
-        if(result==null)
-        {
+        if (result == null) {
             int num = 1;
             String str = String.format("%011d", num);
             return str;
@@ -397,7 +400,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
         BookOperationRecord lastElement = result[result.length - 1];
         String lastOPRid = lastElement.getOprId();
         int number = Integer.parseInt(lastOPRid);
-        int idNumber = number+1;
+        int idNumber = number + 1;
         String str = String.format("%011d", idNumber);
 
         return str;
@@ -430,11 +433,11 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
 //      将 JSON 数据转换为对象
         BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
 
-        int totalNum=0;
+        int totalNum = 0;
 //      处理结果
         Book[] books = bookListRespMessage.getBooks();
         for (Book book : books) {
-            totalNum+=book.getTotalNum();
+            totalNum += book.getTotalNum();
         }
         return totalNum;
 
@@ -467,11 +470,11 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
 //      将 JSON 数据转换为对象
         BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
 
-        int totalNum=0;
+        int totalNum = 0;
 //      处理结果
         Book[] books = bookListRespMessage.getBooks();
         for (Book book : books) {
-            totalNum+=book.getFreeNum();
+            totalNum += book.getFreeNum();
         }
         return totalNum;
     }
@@ -503,11 +506,11 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
 //      将 JSON 数据转换为对象
         BookListRespMessage bookListRespMessage = objectMapper.readValue(mess, BookListRespMessage.class);
 
-        int totalNum=0;
+        int totalNum = 0;
 //      处理结果
         Book[] books = bookListRespMessage.getBooks();
         for (Book book : books) {
-            totalNum+=book.getBorrowNum();
+            totalNum += book.getBorrowNum();
         }
         return totalNum;
     }

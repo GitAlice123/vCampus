@@ -12,9 +12,9 @@ public class GoodDao {
      * @param productName 商品名称
      * @return 查询到的商品对象
      */
-    public Good findGoodByProductName(String productName){
+    public Good findGoodByProductName(String productName) {
         String sqlString = "select * from tblGood where good_name = '" + productName + "'";
-        Good good = new Good("","",0,"","",0);
+        Good good = new Good("", "", 0, "", "", 0);
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -24,10 +24,10 @@ public class GoodDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if(!res.next()){
+            if (!res.next()) {
                 return null;
             }//如果在数据库找不到该商品信息，则返回null
             res.beforeFirst();
@@ -56,9 +56,9 @@ public class GoodDao {
      * @param goodId 商品号
      * @return 查询到的商品对象
      */
-    public Good findGoodByGoodId(String goodId){
+    public Good findGoodByGoodId(String goodId) {
         String sqlString = "select * from tblGood where good_id = '" + goodId + "'";
-        Good good = new Good("","",0,"","",0);
+        Good good = new Good("", "", 0, "", "", 0);
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -68,10 +68,10 @@ public class GoodDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if(!res.next()){
+            if (!res.next()) {
                 return null;
             }//如果在数据库找不到该商品信息，则返回null
             res.beforeFirst();
@@ -100,12 +100,12 @@ public class GoodDao {
      * @param goodId 商品id
      * @param num    商品减少的数量
      * @return 商品是否减少成功，若该商品原库存量小于减少数量num,则返回false
-     *          如果减少后商品库存刚好为0，则在数据库中删除该商品相关数据
+     * 如果减少后商品库存刚好为0，则在数据库中删除该商品相关数据
      */
-    public boolean reduceGood(String goodId,int num){
+    public boolean reduceGood(String goodId, int num) {
         String sqlString1 = "select * from tblGood where good_id = '" + goodId + "'";
         //查询原有余额
-        int original_stock= 0;
+        int original_stock = 0;
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -115,16 +115,16 @@ public class GoodDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString1);
 
-            if(!res.next()){
+            if (!res.next()) {
                 return false;
             } //如果该商品不存在，则返回false
             res.beforeFirst();
 
             res.next();
-            original_stock=res.getInt(6); //查询该商品原本的库存
+            original_stock = res.getInt(6); //查询该商品原本的库存
 
             con.close();//关闭数据库连接
 
@@ -132,10 +132,10 @@ public class GoodDao {
             e.printStackTrace();
         }
 
-        int new_stock=original_stock-num;
-        if(new_stock<0)return false;  //若减少数量大于现有库存，则不进行减少操作，并返回false
-        if(new_stock>0){
-            String sqlString2 = "update tblGood set good_stock = '"+ new_stock + "' where good_id = '" + goodId + "'";
+        int new_stock = original_stock - num;
+        if (new_stock < 0) return false;  //若减少数量大于现有库存，则不进行减少操作，并返回false
+        if (new_stock > 0) {
+            String sqlString2 = "update tblGood set good_stock = '" + new_stock + "' where good_id = '" + goodId + "'";
             //若减少数量后还有库存,则进行减少操作，修改商品库存量的值
 
             try {
@@ -146,16 +146,16 @@ public class GoodDao {
             try {
                 Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
                 //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 int count = sta.executeUpdate(sqlString2);
-                if(count == 0) return false; //若未进行更改操作，则返回false
+                if (count == 0) return false; //若未进行更改操作，则返回false
 
                 con.close();//关闭数据库连接
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             String sqlString2 = "delete from tblGood where good_id = '" + goodId + "'";
             //若减少数量后，库存刚好为0，则不在系统中显示该商品，在数据库中删除该商品相关数据
 
@@ -167,9 +167,9 @@ public class GoodDao {
             try {
                 Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
                 //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 int count = sta.executeUpdate(sqlString2);
-                if(count == 0) return false; //若未进行删除操作，则返回false
+                if (count == 0) return false; //若未进行删除操作，则返回false
 
                 con.close();//关闭数据库连接
 
@@ -190,9 +190,9 @@ public class GoodDao {
      *             如原本该商品在数据库中不存在，则视为新增加商品操作，传入参数good的所有属性值作为一条数据insert到数据库中
      * @return 进货\增加商品 操作是否成果
      */
-    public boolean addGood(Good good){
+    public boolean addGood(Good good) {
         boolean exist = false; //用exist变量表示传入的参数good所代表的商品在数据库中是否已经存在
-        int old_stock =0; //若该商品在数据库中原本存在，则用old_stock在查找时记录该商品的原库存量
+        int old_stock = 0; //若该商品在数据库中原本存在，则用old_stock在查找时记录该商品的原库存量
 
 
         String sqlString = "select * from tblGood where good_id = '" + good.getGoodId() + "'";
@@ -204,13 +204,13 @@ public class GoodDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if(!res.next()){
+            if (!res.next()) {
                 exist = false;
-            }else {
-                exist =true;
+            } else {
+                exist = true;
                 old_stock = res.getInt(6);
             }
             res.beforeFirst();
@@ -219,10 +219,10 @@ public class GoodDao {
             e.printStackTrace();
         }
 
-        if(!exist){
+        if (!exist) {
             //如果传入参数代表的商品在原数据库不存在，则在数据库插入一条代表该good信息的数据
             String sqlString2 = "insert into tblGood values('" + good.getGoodId() + "','" + good.getGoodName() + "'," +
-                    good.getGoodPrice() + ",'" + good.getCategory()  + "','" + good.getProvider() + "'," + good.getGoodStock() + ")";
+                    good.getGoodPrice() + ",'" + good.getCategory() + "','" + good.getProvider() + "'," + good.getGoodStock() + ")";
 
             try {
                 Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -232,7 +232,7 @@ public class GoodDao {
             try {
                 Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
                 //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 sta.executeUpdate(sqlString2);
 
                 con.close();//关闭数据库连接
@@ -241,11 +241,11 @@ public class GoodDao {
                 e.printStackTrace();
             }
 
-        }else{
+        } else {
             //如果传入参数代表的商品在原数据库已存在，则修改其库存量属性的值，且此时将传入参数good的库存量goodStock值视作进货进了多少的数量
             int new_stock = old_stock + good.getGoodStock();
 
-            String sqlString2 = "update tblGood set good_stock = '"+ new_stock + "' where good_id = '" + good.getGoodId() + "'";
+            String sqlString2 = "update tblGood set good_stock = '" + new_stock + "' where good_id = '" + good.getGoodId() + "'";
 
             try {
                 Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -255,9 +255,9 @@ public class GoodDao {
             try {
                 Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
                 //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 int count = sta.executeUpdate(sqlString2);
-                if(count == 0) return false; //若未进行更改操作，则返回false
+                if (count == 0) return false; //若未进行更改操作，则返回false
 
                 con.close();//关闭数据库连接
 
@@ -274,7 +274,7 @@ public class GoodDao {
      *
      * @return 查询到的所有商品对象，以Good类数组的形式返回
      */
-    public Good[] findAllGoods(){
+    public Good[] findAllGoods() {
         String sqlString = "select * from tblGood order by good_id";
         Good[] allGoods = new Good[10];
 

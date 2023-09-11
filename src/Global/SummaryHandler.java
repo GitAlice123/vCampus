@@ -3,43 +3,39 @@
 package view.Global;
 
 import view.Bank.BankManagerUI;
+import view.Bank.BankTeacherStudentUI;
 import view.CourseSelection.CurriculumAdminUI;
 import view.CourseSelection.CurriculumStudentUI;
 import view.CourseSelection.CurriculumTeacherUI;
-import view.Global.SummaryUI;
 import view.Hospital.HospitalManagerUI;
 import view.Hospital.HospitalTeacherStudentUI;
 import view.Library.LibraryAdminUI;
 import view.Library.LibraryUI;
 import view.Login.logInUI;
-import view.Bank.BankTeacherStudentUI;
 import view.Shop.ShopManagerUI;
 import view.Shop.ShopTeacherStudentUI;
 import view.chat.ChatFrameUI;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.io.IOException;
-import javax.swing.*;
 
-public class SummaryHandler extends KeyAdapter implements ActionListener
-{
+public class SummaryHandler extends KeyAdapter implements ActionListener {
     private SummaryUI summaryview;
-    public SummaryHandler(SummaryUI summaryview)
-    {
-        this.summaryview=summaryview;
+
+    public SummaryHandler(SummaryUI summaryview) {
+        this.summaryview = summaryview;
     }
 
-    public void actionPerformed(ActionEvent e)
-    {
-        JButton jButton=(JButton) e.getSource();
-        String text=jButton.getText();
+    public void actionPerformed(ActionEvent e) {
+        JButton jButton = (JButton) e.getSource();
+        String text = jButton.getText();
 
         //summaryview.dispose();
-        switch (text){
-            case "学生学籍管理":
-            {
+        switch (text) {
+            case "学生学籍管理": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1) {
                     try {
@@ -47,25 +43,23 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                } else if (GlobalData.getUType() == 2)
-                {
+                } else if (GlobalData.getUType() == 2) {
                     try {
                         new CurriculumTeacherUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                }
-                else {
+                } else {
                     try {
                         new CurriculumAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
-                System.out.println("学生学籍管理");break;
+                System.out.println("学生学籍管理");
+                break;
             }
-            case "选课系统":
-            {
+            case "选课系统": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1) {
                     try {
@@ -73,15 +67,13 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                } else if (GlobalData.getUType() == 2)
-                {
+                } else if (GlobalData.getUType() == 2) {
                     try {
                         new CurriculumTeacherUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                }
-                else {
+                } else {
                     try {
                         new CurriculumAdminUI();
                     } catch (IOException ex) {
@@ -91,8 +83,7 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
                 System.out.println("选课");
                 break;
             }
-            case "图书馆":
-            {
+            case "图书馆": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
                     try {
@@ -110,19 +101,17 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
                 System.out.println("图书馆");
                 break;
             }
-            case "商店":
-            {
+            case "商店": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
-                        new ShopTeacherStudentUI();
+                    new ShopTeacherStudentUI();
                 } else {
-                        new ShopManagerUI();
+                    new ShopManagerUI();
                 }
                 System.out.println("商店");
                 break;
             }
-            case "医院":
-            {
+            case "医院": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
                     new HospitalTeacherStudentUI();
@@ -132,16 +121,16 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
                 System.out.println("医院");
                 break;
             }
-            case "银行":
-            {
+            case "银行": {
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
-                        new BankTeacherStudentUI();//跳转页面的判断逻辑待写
+                    new BankTeacherStudentUI();//跳转页面的判断逻辑待写
                 } else {
-                        new BankManagerUI();
+                    new BankManagerUI();
                 }
 
-                System.out.println("银行");break;
+                System.out.println("银行");
+                break;
             }
             case "chat":
                 summaryview.dispose();

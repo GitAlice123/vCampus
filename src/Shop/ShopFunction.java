@@ -8,11 +8,26 @@ import java.util.ArrayList;
 
 
 public class ShopFunction {
-    private GoodDao GD=new GoodDao();
-    private PurchaseRecordDao PD=new PurchaseRecordDao();
-
     // 创建动态数组,购物车数组
     ArrayList<SelectedGood> selectedGoods = new ArrayList<>();
+    private GoodDao GD = new GoodDao();
+    private PurchaseRecordDao PD = new PurchaseRecordDao();
+
+    public static Object[][] convertArrayListToObjectArray(ArrayList<SelectedGood> selectedGoods) {
+        int size = selectedGoods.size();
+        Object[][] result = new Object[size][4];
+
+        for (int i = 0; i < size; i++) {
+            SelectedGood selectedGood = selectedGoods.get(i);
+
+            result[i][0] = selectedGood.getGoodName();  // 名称，String 类型
+            result[i][1] = Integer.toString(selectedGood.getGoodNums());  // 数量，String 类型
+            result[i][2] = Double.toString(selectedGood.getGoodPrice() * selectedGood.getGoodNums());  // 总金额，String 类型
+            result[i][3] = false;  // 是否选中，boolean 类型
+        }
+
+        return result;
+    }
 
     /**
      * 根据商品ID或商品名称查询商品信息，供学生使用。
@@ -23,10 +38,10 @@ public class ShopFunction {
     public String[][] findGoodST(String query) {
         Good g1 = GD.findGoodByGoodId(query);
         Good g2 = GD.findGoodByProductName(query);
-        Good[] G1=new Good[1];
-        G1[0]=g1;
-        Good[] G2=new Good[1];
-        G2[0]=g2;
+        Good[] G1 = new Good[1];
+        G1[0] = g1;
+        Good[] G2 = new Good[1];
+        G2[0] = g2;
         if (g1 == null && g2 == null) {
             return null;
         } else if (g1 == null && g2 != null) {
@@ -47,10 +62,10 @@ public class ShopFunction {
     public String[][] findGoodM(String query) {
         Good g1 = GD.findGoodByGoodId(query);
         Good g2 = GD.findGoodByProductName(query);
-        Good[] G1=new Good[1];
-        G1[0]=g1;
-        Good[] G2=new Good[1];
-        G2[0]=g2;
+        Good[] G1 = new Good[1];
+        G1[0] = g1;
+        Good[] G2 = new Good[1];
+        G2[0] = g2;
         if (g1 == null && g2 == null) {
             return null;
         } else if (g1 == null && g2 != null) {
@@ -71,10 +86,10 @@ public class ShopFunction {
     public String[][] findGoodAllInfo(String query) {
         Good g1 = GD.findGoodByGoodId(query);
         Good g2 = GD.findGoodByProductName(query);
-        Good[] G1=new Good[1];
-        G1[0]=g1;
-        Good[] G2=new Good[1];
-        G2[0]=g2;
+        Good[] G1 = new Good[1];
+        G1[0] = g1;
+        Good[] G2 = new Good[1];
+        G2[0] = g2;
         if (g1 == null && g2 == null) {
             return null;
         } else if (g1 == null && g2 != null) {
@@ -88,15 +103,15 @@ public class ShopFunction {
 
     /**
      * 向购物车中增加商品
-     * */
+     */
 
     public boolean addSelectedGood(String goodName, int num) {
         Good g = GD.findGoodByProductName(goodName);
 
-        System.out.println(g.getGoodId()+"********************1");
+        System.out.println(g.getGoodId() + "********************1");
         for (SelectedGood selectedGood : selectedGoods) {
             System.out.println(selectedGood.getGoodId());
-            }
+        }
         if (g == null) {
             System.out.println("要加入购物车的商品未找到");
             return false;
@@ -104,9 +119,9 @@ public class ShopFunction {
             // 检查购物车中是否已存在相同商品
             for (SelectedGood selectedGood : selectedGoods) {
                 if (selectedGood.getGoodId() == g.getGoodId()) {
-                    System.out.println(g.getGoodId()+"********************");
+                    System.out.println(g.getGoodId() + "********************");
                     // 商品已存在，增加对应数量
-                    selectedGood.setGoodNums(selectedGood.getGoodNums()+num);
+                    selectedGood.setGoodNums(selectedGood.getGoodNums() + num);
                     return true;
                 }
             }
@@ -118,10 +133,9 @@ public class ShopFunction {
         }
     }
 
-
     /**
      * 在后端的购物车数组中删除商品
-     * */
+     */
     public boolean removeSelectedGood(String goodName) {
         boolean found = false;
 
@@ -139,19 +153,6 @@ public class ShopFunction {
 
         return found;
     }
-
-    /**
-     * 返回购物车中的商品列表，以String[][]形式表示。
-     *
-     * @return 购物车中商品的String[][]形式
-     */
-    public Object[][] getSelectedGoods() {
-        if(selectedGoods.size()==0){
-            return null;
-        }else{
-            return convertArrayListToObjectArray(selectedGoods);
-        }
-    }
 //    public String[][] getSelectedGoods() {
 //        if(selectedGoods.size()==0){
 //            return null;
@@ -159,6 +160,19 @@ public class ShopFunction {
 //            return convertArrayListToStringArray(selectedGoods);
 //        }
 //    }
+
+    /**
+     * 返回购物车中的商品列表，以String[][]形式表示。
+     *
+     * @return 购物车中商品的String[][]形式
+     */
+    public Object[][] getSelectedGoods() {
+        if (selectedGoods.size() == 0) {
+            return null;
+        } else {
+            return convertArrayListToObjectArray(selectedGoods);
+        }
+    }
 
     /**
      * 返回商店中所有商品的列表，以String[][]形式表示。学生用
@@ -188,8 +202,6 @@ public class ShopFunction {
         return convertGoodsToStringM(GD.findAllGoods());
     }
 
-
-
     /**
      * 管理员进货操作，将指定的商品信息加入到商品数据库中。
      *
@@ -216,26 +228,24 @@ public class ShopFunction {
         return GD.reduceGood(GoodID, num);
     }
 
-
     /**
      * 查找并返回数据库所有的购买记录信息
      *
      * @return PurchaseRecord类数组allRecords，代表数据库中所有的购买记录，根据购买时间升序排序
      */
-    public String[][] getAllPurchaseRecord(){
+    public String[][] getAllPurchaseRecord() {
         return convertPurchaseRecordsToStringM(PD.findAllPurchaseRecord());
     }
 
     /**
      * 查找并返回数据库中一卡通号为uId的所有购买记录信息
      *
-     * @param uId    查询购买记录的用户的一卡通号
+     * @param uId 查询购买记录的用户的一卡通号
      * @return PurchaseRecord类数组allRecords，代表数据库中一卡通号为uId的所有购买记录，根据购买时间升序排序
      */
-    public String[][] getPurchaseRecordById(String uId){
+    public String[][] getPurchaseRecordById(String uId) {
         return convertPurchaseRecordsToStringST(PD.findPurchaseRecordById(uId));
     }
-
 
     /**
      * 将Good对象转换为String[][]类型，以便在前端显示。学生用，因为学生界面显示需要五列
@@ -331,23 +341,6 @@ public class ShopFunction {
         }
     }
 
-
-    public static Object[][] convertArrayListToObjectArray(ArrayList<SelectedGood> selectedGoods) {
-        int size = selectedGoods.size();
-        Object[][] result = new Object[size][4];
-
-        for (int i = 0; i < size; i++) {
-            SelectedGood selectedGood = selectedGoods.get(i);
-
-            result[i][0] = selectedGood.getGoodName();  // 名称，String 类型
-            result[i][1] = Integer.toString(selectedGood.getGoodNums());  // 数量，String 类型
-            result[i][2] = Double.toString(selectedGood.getGoodPrice() * selectedGood.getGoodNums());  // 总金额，String 类型
-            result[i][3] = false;  // 是否选中，boolean 类型
-        }
-
-        return result;
-    }
-
 //    /**
 //     * 将ArrayList<SelectedGood>转换为String[][]类型。
 //     *
@@ -370,8 +363,6 @@ public class ShopFunction {
 //        return result;
 //    }
 
-
-
     /**
      * 将PurchaseRecord对象转换为String[][]类型，以便在前端显示。学生用
      *
@@ -387,16 +378,16 @@ public class ShopFunction {
             for (int i = 0; i < records.length; i++) {
                 PurchaseRecord record = records[i];
 
-                Good g=GD.findGoodByGoodId(record.getGoodId());
+                Good g = GD.findGoodByGoodId(record.getGoodId());
                 //System.out.println(record.getGoodId()+"---------------------");
 
                 recordstrings[i][0] = g.getGoodName();   //商品名称
                 recordstrings[i][1] = Integer.toString(record.getNums());   // 购买数量
-                recordstrings[i][2] = Double.toString(record.getNums()*g.getGoodPrice());//支付金额
+                recordstrings[i][2] = Double.toString(record.getNums() * g.getGoodPrice());//支付金额
                 // 将Date转换为String
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 recordstrings[i][3] = dateFormat.format(record.getPurchaseTime());//购买日期
-                System.out.println("recordstrings[i][3]:"+recordstrings[i][3]);
+                System.out.println("recordstrings[i][3]:" + recordstrings[i][3]);
 
             }
             return recordstrings;
@@ -421,18 +412,18 @@ public class ShopFunction {
             for (int i = 0; i < records.length; i++) {
                 PurchaseRecord record = records[i];
 
-                Good g=GD.findGoodByGoodId(record.getGoodId());
+                Good g = GD.findGoodByGoodId(record.getGoodId());
 
                 recordstrings[i][0] = record.getOrderId();    //订单号
                 recordstrings[i][1] = record.getUserId();  // 购买人ID
                 recordstrings[i][2] = g.getGoodName();//商品名称
                 recordstrings[i][3] = Integer.toString(record.getNums());   // 购买数量
-                recordstrings[i][4] = Double.toString(record.getNums()*g.getGoodPrice());//支付金额
-                System.out.println("原格式:"+record.getPurchaseTime());
+                recordstrings[i][4] = Double.toString(record.getNums() * g.getGoodPrice());//支付金额
+                System.out.println("原格式:" + record.getPurchaseTime());
                 // 将Date转换为String
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 recordstrings[i][5] = dateFormat.format(record.getPurchaseTime());
-                System.out.println("recordstrings[i][5]:"+recordstrings[i][5]);
+                System.out.println("recordstrings[i][5]:" + recordstrings[i][5]);
 
             }
             return recordstrings;
@@ -445,10 +436,10 @@ public class ShopFunction {
     /**
      * 新增购买记录信息
      *
-     * @param purchaseRecord  需要新增的购买记录的信息
+     * @param purchaseRecord 需要新增的购买记录的信息
      * @return 新增是否成功，如果数据库中原本就存在该购买记录，则不进行新增插入操作，返回false
      */
-    public boolean addPurchaseRecord(PurchaseRecord purchaseRecord){
+    public boolean addPurchaseRecord(PurchaseRecord purchaseRecord) {
         // 减少对应商品库存
         GD.reduceGood(purchaseRecord.getGoodId(), purchaseRecord.getNums());
 

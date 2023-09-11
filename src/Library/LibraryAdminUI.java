@@ -8,167 +8,26 @@ import view.message.RegisterReqMessage;
 import view.message.SearchBookNameMessage;
 import view.message.UniqueMessage;
 
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import javax.imageio.ImageIO;
-
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
-
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JTable;
-
-import javax.swing.table.JTableHeader;
 
 
 public class LibraryAdminUI extends JFrame {
-    private int changeBtnRow;
-
-    class DeleteBookTableCellRendererButton implements TableCellRenderer {
-
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
-            JButton button = new JButton("删除");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            button.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
-            button.setBackground(customColor);
-            return button;
-        }
-
-    }
-
-    class DeleteBookTableCellEditorButton extends DefaultCellEditor {
-
-        private JButton btn;
-        private int clickedRow;
-
-        public DeleteBookTableCellEditorButton() {
-            super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
-            this.setClickCountToStart(1);
-            btn = new JButton("删除");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            btn.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
-            btn.setBackground(customColor);
-            btn.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //System.out.println("按钮事件触发----");
-                    JButton clickedButton = (JButton) e.getSource();
-
-                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                    System.out.println("点击的行索引：" + clickedRow);
-
-                    try {
-                        deleteBtnClicked(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                }
-            });
-
-
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            clickedRow = row;
-            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-            return btn;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-
-
-    }
-
-    class ChangeBookTableCellRendererButton implements TableCellRenderer {
-
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
-            JButton button = new JButton("修改");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            button.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
-            button.setBackground(customColor);
-            return button;
-        }
-
-    }
-
-    class ChangeBookTableCellEditorButton extends DefaultCellEditor {
-
-        private JButton btn;
-
-        public ChangeBookTableCellEditorButton() {
-            super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
-
-            this.setClickCountToStart(1);
-            btn = new JButton("修改");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            btn.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
-            btn.setBackground(customColor);
-            btn.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //System.out.println("按钮事件触发----");
-                    JButton clickedButton = (JButton) e.getSource();
-
-                    changeBtnRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                    System.out.println("点击的行索引：" + changeBtnRow);
-
-                    ChangeBooksUI changeBooksUI = new ChangeBooksUI();
-                    changeBooksUI.setVisible(true);
-                }
-            });
-
-
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            changeBtnRow = row;
-            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-
-            return btn;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-
-
-    }
-
     /* 初始化内容*/
     SpringLayout springLayout;
     DefaultTableModel model;
     DefaultTableModel modelFind;
-
     JTable table;
-
     JTable tableFindStuBorrowed;
     //下面是表格初始化的两个String数组
     String[][] data = {//书籍列表，表格数据均传入该数组
@@ -188,7 +47,6 @@ public class LibraryAdminUI extends JFrame {
             {"1", "1", "1", "1", "1", "1", "1", "1"},
             {"1", "1", "1", "1", "1", "1", "1", "1"}
     };
-
     String[][] dataFindStuBorrowed = {//已借阅书籍列表
             {"1", "1", "1", "1", "1", "1"},
             {"1", "1", "1", "1", "1", "1"},
@@ -213,14 +71,11 @@ public class LibraryAdminUI extends JFrame {
     JPanel panel1;
     JPanel BooksPanel;
     JPanel ReportPanel;
-
     JPanel FindStuBorrowedPanel;
     JButton BooksBtn;
-
     JButton ReportBtn;
     JButton FindStuBorrowedTopBtn;
     JButton AddBooksBtn;
-
     JTextField FindBookTex;
     JButton FindBookBtn;
     JTextField FindStuBorrowedTex;
@@ -240,9 +95,36 @@ public class LibraryAdminUI extends JFrame {
     String BookNum;
     JLabel NumOfBookOut;
     JButton backBtn;
-
+    private int changeBtnRow;
     public LibraryAdminUI() throws IOException {
         initComponent();
+    }
+
+    public static void main(String[] args) throws IOException {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        try
+//        {
+//            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//        }
+//        catch(Exception e)
+//        {
+//
+//
+//        }
+
+        new LibraryAdminUI();
     }
 
     private void initComponent() throws IOException {
@@ -582,53 +464,6 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
-    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (isSelected) {
-                setForeground(Color.BLACK);
-            } else {
-                // 设置单元格背景颜色
-                if (row % 2 == 0) {
-                    Color customColor = new Color(255, 255, 224);
-                    cellComponent.setBackground(customColor);
-                } else {
-                    Color customColor2 = new Color(255, 250, 205);
-                    cellComponent.setBackground(customColor2);
-                }
-            }
-            return cellComponent;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        try {
-            // 设置外观为Windows外观
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        try
-//        {
-//            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-//        }
-//        catch(Exception e)
-//        {
-//
-//
-//        }
-
-        new LibraryAdminUI();
-    }
-
     private void deleteBtnClicked(ActionEvent e) throws IOException {
         //System.out.println("按钮事件触发----");
         JButton clickedButton = (JButton) e.getSource();
@@ -724,7 +559,7 @@ public class LibraryAdminUI extends JFrame {
     }
 
     private void ShowOprTable() throws IOException {
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
         BookOperationRecord[] bookArray;
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         bookArray = libraryClientAPI.getBookAllOperationRecord(uniqueMessage);
@@ -767,8 +602,8 @@ public class LibraryAdminUI extends JFrame {
         }
     }
 
-    private void ShowSearchOprTable(String searchText) throws IOException{
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+    private void ShowSearchOprTable(String searchText) throws IOException {
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(searchText);
         BookOperationRecord[] bookArray;
         bookArray = libraryClientAPI.getBookOprRecordByUid(registerReqMessage);
@@ -777,7 +612,7 @@ public class LibraryAdminUI extends JFrame {
         String[][] data;
         String[] columnNamesChosen;
         if (bookArray == null) {
-            JOptionPane.showMessageDialog(this,"搜索不到该学生记录！");
+            JOptionPane.showMessageDialog(this, "搜索不到该学生记录！");
             FindStuBorrowedTex.setText("");
             ShowOprTable();
         } else {
@@ -805,6 +640,157 @@ public class LibraryAdminUI extends JFrame {
             modelFind.setDataVector(data, columnNamesChosen);
             tableFindStuBorrowed.setModel(modelFind);
         }
+    }
+
+    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                setForeground(Color.BLACK);
+            } else {
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(255, 255, 224);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(255, 250, 205);
+                    cellComponent.setBackground(customColor2);
+                }
+            }
+            return cellComponent;
+        }
+    }
+
+    class DeleteBookTableCellRendererButton implements TableCellRenderer {
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("删除");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            Color customColor = new Color(255, 255, 192);
+            button.setBackground(customColor);
+            return button;
+        }
+
+    }
+
+    class DeleteBookTableCellEditorButton extends DefaultCellEditor {
+
+        private JButton btn;
+        private int clickedRow;
+
+        public DeleteBookTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("删除");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            Color customColor = new Color(255, 255, 192);
+            btn.setBackground(customColor);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+
+                    try {
+                        deleteBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }
+            });
+
+
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
+
+    class ChangeBookTableCellRendererButton implements TableCellRenderer {
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("修改");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            Color customColor = new Color(255, 255, 192);
+            button.setBackground(customColor);
+            return button;
+        }
+
+    }
+
+    class ChangeBookTableCellEditorButton extends DefaultCellEditor {
+
+        private JButton btn;
+
+        public ChangeBookTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+
+            this.setClickCountToStart(1);
+            btn = new JButton("修改");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            Color customColor = new Color(255, 255, 192);
+            btn.setBackground(customColor);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    changeBtnRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + changeBtnRow);
+
+                    ChangeBooksUI changeBooksUI = new ChangeBooksUI();
+                    changeBooksUI.setVisible(true);
+                }
+            });
+
+
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            changeBtnRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
     }
 
     class AddBooksUI extends JFrame {

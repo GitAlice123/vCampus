@@ -13,8 +13,8 @@ public class Good {
 
     /**
      * 无参构造函数
-     * */
-    public Good(){
+     */
+    public Good() {
 
     }
 

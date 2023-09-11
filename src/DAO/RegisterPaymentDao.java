@@ -1,6 +1,5 @@
 package view.DAO;
 
-import view.CourseSelection.CourseClass;
 import view.Hospital.Register;
 
 import java.sql.*;

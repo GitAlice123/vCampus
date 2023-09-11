@@ -1,11 +1,14 @@
 package view.connect;
 
-import view.Global.GlobalData;
-import view.message.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
+import view.message.BoolRespMessage;
+import view.message.LoginMessage;
+import view.message.RegisterReqMessage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class RegisterClientAPIImpl implements RegisterClientAPI {
@@ -25,6 +28,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             e.printStackTrace();
         }
     }
+
     @Override
     public boolean checkExistByUserId(RegisterReqMessage registerReqMessage) throws IOException {
         //以下发送用户id给服务器
@@ -35,7 +39,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(registerReqMessage);
             System.out.println(jsonData);
-            rwTool.ClientSendOutStream(outputStream,jsonData,101);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 101);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,9 +60,11 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
 
         } catch (Exception e) {
             e.printStackTrace();
-        };
+        }
+        ;
         return result;
     }
+
     @Override
     public Boolean createNewUser(LoginMessage loginMessage) throws IOException {
         //以下发送用户信息给服务器
@@ -68,9 +74,9 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(loginMessage);
-            System.out.println(jsonData+" Successfully send request!");
+            System.out.println(jsonData + " Successfully send request!");
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,102);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 102);
 
 
         } catch (Exception e) {

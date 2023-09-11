@@ -1,44 +1,36 @@
 package view.chat;
 
+import view.Global.SummaryUI;
+import view.connect.ChatClientAPI;
+import view.connect.ChatClientAPIImpl;
+import view.message.ChatQuesMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterException;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
-import view.Global.SummaryUI;
-import view.Login.logInUI;
-import view.connect.*;
-import view.message.*;
 
 
 public class ChatFrameUI extends JFrame {
-    private Timer waitTimer; // 定时器
-    private int dotCount; // 点号数量
     JPanel topPanel;
     JPanel centerPanel;
     JPanel bottomPanel;
-
     //底部
     JScrollPane bottompane;
     JTextArea textarea;
     JButton sendBtn;
     JButton backBtn;
-
     //中部
     JScrollPane centerpane;
     JTextArea chathistory;
-
     //顶部
     JLabel welcomeLabel;
-
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font centerFont = new Font("楷体", Font.PLAIN, 20);//设置中间组件的文字大小、字体
-
     String messageSent;
-
+    private Timer waitTimer; // 定时器
+    private int dotCount; // 点号数量
     private String messageReturn; // 保存服务器返回的消息
 
     public ChatFrameUI() {
@@ -51,7 +43,7 @@ public class ChatFrameUI extends JFrame {
         //底部
         textarea = new JTextArea();
         sendBtn = new JButton("发送");
-        backBtn =new JButton("退出");
+        backBtn = new JButton("退出");
 
         sendBtn.setFont(buttonFont);
         textarea.setFont(centerFont);
@@ -124,6 +116,10 @@ public class ChatFrameUI extends JFrame {
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        new ChatFrameUI();
+    }
+
     private void sendMessage() throws PrinterException {
         messageSent = textarea.getText();
         if (!messageSent.isEmpty()) {
@@ -174,10 +170,5 @@ public class ChatFrameUI extends JFrame {
             sb.append(".");
         }
         return sb.toString();
-    }
-
-
-    public static void main(String[] args) {
-        new ChatFrameUI();
     }
 }

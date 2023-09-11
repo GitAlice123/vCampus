@@ -1,6 +1,6 @@
 package view.message;
 
-import view.Bank.*;
+import view.Bank.bankBill;
 
 /**
  * BankBillMessage 类表示银行账单消息，包含一卡通号、账单信息和用户输入的密码。1002

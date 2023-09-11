@@ -1,4 +1,5 @@
 package view.chat;
+
 import java.io.Serializable;
 import java.util.List;
 

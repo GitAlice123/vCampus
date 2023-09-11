@@ -1,6 +1,5 @@
 package view.message;
 
-import view.Library.BookHold;
 import view.Library.BookOperationRecord;
 
 public class BookOPRListRespMessage {

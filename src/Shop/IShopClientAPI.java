@@ -1,8 +1,5 @@
 package view.Shop;
 
-import view.Bank.bankAccount;
-
-
 /**
  * 客户端接口：IShopClientSrv
  * 提供与商店相关的方法定义
@@ -105,13 +102,13 @@ public interface IShopClientAPI {
 
     /**
      * 在后端的购物车数组中删除商品
-     * */
+     */
     boolean removeSelectedGood(String goodName);
 
     /**
      * 新增购买记录信息
      *
-     * @param purchaseRecord  需要新增的购买记录的信息
+     * @param purchaseRecord 需要新增的购买记录的信息
      * @return 新增是否成功，如果数据库中原本就存在该购买记录，则不进行新增插入操作，返回false
      */
     boolean addPurchaseRecord(PurchaseRecord purchaseRecord);

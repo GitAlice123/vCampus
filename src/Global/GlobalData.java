@@ -1,43 +1,38 @@
 package view.Global;
 
-import view.Global.SummaryUI;
-import view.Login.logInUI;
-import view.Bank.BankTeacherStudentUI;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import javax.swing.*;
+
 /**
  * 全局数据类，用于存储用户登录信息。
  */
 public class GlobalData {
-    private static String uID="213213000";//用户一卡通号
+    private static String uID = "213213000";//用户一卡通号
     private static int uType;//用户类型，1表示学生，2表示教师，3表示管理员
 
-    private static String ipAddress="localhost";
-    private static String portName="8888";
+    private static String ipAddress = "localhost";
+    private static String portName = "8888";
 
     /**
-     *
      * @return 返回服务器ip地址
      */
     public static String getIpAddress() {
         return ipAddress;
     }
 
-    /** 设置服务器地址
+    /**
+     * 设置服务器地址
      *
-     * @param ipAddr 服务器IP地址
+     * @param ipAddr   服务器IP地址
      * @param portAddr 服务器端口号
      */
-    public static void setServerAddr(String ipAddr,String portAddr) {
+    public static void setServerAddr(String ipAddr, String portAddr) {
         ipAddress = ipAddr;
         portName = portAddr;
     }
 
     /**
      * *
+     *
      * @return 返回服务器端口号
      */
     public static String getPortName() {

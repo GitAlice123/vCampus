@@ -14,13 +14,13 @@ public class BankAccountMessage {
         this.bankA = bankA;
     }
 
-    // 设置 bankA 的方法
-    public void setBankA(bankAccount bankA) {
-        this.bankA = bankA;
-    }
-
     // 获取 bankA 的方法
     public bankAccount getBankA() {
         return bankA;
+    }
+
+    // 设置 bankA 的方法
+    public void setBankA(bankAccount bankA) {
+        this.bankA = bankA;
     }
 }

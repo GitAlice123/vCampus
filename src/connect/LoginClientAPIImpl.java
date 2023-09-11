@@ -5,7 +5,9 @@ import view.Global.GlobalData;
 import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class LoginClientAPIImpl implements LoginClientAPI {
@@ -13,7 +15,8 @@ public class LoginClientAPIImpl implements LoginClientAPI {
     private OutputStream outputStream;
     private InputStream inputStream;
     private RWTool rwTool = new RWTool();
-   //构造函数
+
+    //构造函数
     public LoginClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -36,7 +39,7 @@ public class LoginClientAPIImpl implements LoginClientAPI {
             String jsonData = objectMapper.writeValueAsString(loginMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,100);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 100);
 
         } catch (Exception e) {
             e.printStackTrace();

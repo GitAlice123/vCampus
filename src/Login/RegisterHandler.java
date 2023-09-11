@@ -1,5 +1,10 @@
 package view.Login;
 
+import view.connect.RegisterClientAPI;
+import view.connect.RegisterClientAPIImpl;
+import view.message.LoginMessage;
+import view.message.RegisterReqMessage;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,11 +12,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Random;
-
-import view.Bank.bankAccount;
-import view.connect.*;
-import view.message.LoginMessage;
-import view.message.RegisterReqMessage;
 
 public class RegisterHandler extends KeyAdapter implements ActionListener {
     private RegisterUI registerView;
@@ -28,15 +28,14 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
             JButton jButton = (JButton) e.getSource();
             String text2 = jButton.getText();
             // 执行按钮操作
-            if("返回".equals(text2)){
+            if ("返回".equals(text2)) {
                 registerView.dispose();
                 new logInUI();
-            }
-            else if (!radioButtonSelected) {
+            } else if (!radioButtonSelected) {
                 // 当单选按钮未被选择时，不执行后续的操作
                 JOptionPane.showMessageDialog(registerView, "请先选择单选按钮");
                 return;
-            }else if ("注册".equals(text2)) {
+            } else if ("注册".equals(text2)) {
                 try {
                     extracted();
                 } catch (IOException ex) {
@@ -48,52 +47,47 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
     }
 
     private void extracted() throws IOException {
-        String userId=registerView.getUserNameTxt().getText();
-        String password=registerView.getPwdField().getText();
-        String ensurepsd=registerView.getEnsurepwdField().getText();
-        if(userId.length()!=9){
-            JOptionPane.showMessageDialog(registerView,"请输入9位用户名！");
+        String userId = registerView.getUserNameTxt().getText();
+        String password = registerView.getPwdField().getText();
+        String ensurepsd = registerView.getEnsurepwdField().getText();
+        if (userId.length() != 9) {
+            JOptionPane.showMessageDialog(registerView, "请输入9位用户名！");
             registerView.getUserNameTxt().setText("");
             registerView.getPwdField().setText("");
             registerView.getEnsurepwdField().setText("");
-        }
-
-        else if(password.length()==0)
-        {
-            JOptionPane.showMessageDialog(registerView,"请输入密码！");
+        } else if (password.length() == 0) {
+            JOptionPane.showMessageDialog(registerView, "请输入密码！");
         }
         //判断两次密码输入是否一致
-        else if(!(password.equals(ensurepsd))){
-            JOptionPane.showMessageDialog(registerView,"两次密码输入不一致！");
-        }
-
-        else {
+        else if (!(password.equals(ensurepsd))) {
+            JOptionPane.showMessageDialog(registerView, "两次密码输入不一致！");
+        } else {
             // 创建 LoginClientAPI 的实例，可以是接口的任何实现类
             RegisterClientAPI registerClientAPI = new RegisterClientAPIImpl("localhost", 8888);
             RegisterReqMessage registerReqMessage = new RegisterReqMessage(userId);
 
             // 调用接口方法
             boolean resultByte = registerClientAPI.checkExistByUserId(registerReqMessage);
-            if(resultByte){
+            if (resultByte) {
                 JOptionPane.showMessageDialog(registerView, "该用户已存在！");
                 return;
-            }else{
-                  String role = null;
-                if(registerView.studentRadioButton.isSelected())
+            } else {
+                String role = null;
+                if (registerView.studentRadioButton.isSelected())
                     role = "ST";
-                else if(registerView.teacherRadioButton.isSelected())
+                else if (registerView.teacherRadioButton.isSelected())
                     role = "TC";
-                else if(registerView.adminRadioButton.isSelected())
+                else if (registerView.adminRadioButton.isSelected())
                     role = "AD";
 
                 // 创建 LoginClientAPI 的实例，可以是接口的任何实现类
-                LoginMessage login_message = new LoginMessage(userId,password,role);
+                LoginMessage login_message = new LoginMessage(userId, password, role);
                 RegisterClientAPI registerClientAPI_new = new RegisterClientAPIImpl("localhost", 8888);
                 // 调用接口方法
                 Boolean check = registerClientAPI_new.createNewUser(login_message);
 
 
-                if(check){
+                if (check) {
                     // String cardId, String name, String id, String paymentPwd,double balance, boolean isLoss) {
                     //
                     JOptionPane.showMessageDialog(registerView, "新用户注册成功！");
@@ -103,14 +97,14 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
             }
         }
 
-        char[] chars=registerView.getPwdField().getPassword();
-        String pwd=new String(chars);
-        System.out.println(userId+":"+pwd+":"+ensurepsd);
+        char[] chars = registerView.getPwdField().getPassword();
+        String pwd = new String(chars);
+        System.out.println(userId + ":" + pwd + ":" + ensurepsd);
     }
 
     public void keyPressed(KeyEvent e) {
         e.getKeyCode();
-        if(KeyEvent.VK_ENTER==e.getKeyCode()){
+        if (KeyEvent.VK_ENTER == e.getKeyCode()) {
             try {
                 extracted();
             } catch (IOException ex) {
@@ -121,7 +115,7 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
 
     /**
      * 随机生成LENGTH位数字的String类型数据
-     * */
+     */
     public String generateRandomString(int LENGTH) {
         Random random = new Random();
         String DIGITS = "0123456789";

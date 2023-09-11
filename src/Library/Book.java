@@ -1,10 +1,7 @@
 package view.Library;
+
 public class Book {
     String bookISBN;
-
-    public Book() {
-    }
-
     String bookName;
     String author;
     String bookType;
@@ -15,6 +12,8 @@ public class Book {
     int freeNum;
     String bookPos;
     int borrowNum;
+    public Book() {
+    }
 
     public Book(String bookISBN, String bookName, String author, String bookType, Double bookPrice, String publisher, String summary, int totalNum, int freeNum, String bookPos, int borrowNum) {
         this.bookISBN = bookISBN;

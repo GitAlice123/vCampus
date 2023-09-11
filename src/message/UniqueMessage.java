@@ -7,10 +7,12 @@ public class UniqueMessage {
     public UniqueMessage() {
         // 无参数构造函数
     }
+
     public UniqueMessage(String userId) {
         this.uniMessage = userId;
     }
-    public String getUniMessage(){
+
+    public String getUniMessage() {
         return uniMessage;
     }
 }

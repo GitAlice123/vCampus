@@ -1,6 +1,5 @@
 package view.message;
 
-import view.Library.Book;
 import view.Library.BookHold;
 
 public class BookHoldListRespMessage {

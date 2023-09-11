@@ -2,7 +2,7 @@ package view.message;
 
 /**
  * 该类可用于bank的changeLoss功能；1000
- * */
+ */
 public class BankIDMessage {
     private String id; // 一卡通号
     private String pwd;//密码
@@ -18,9 +18,9 @@ public class BankIDMessage {
      *
      * @param id 一卡通号
      */
-    public BankIDMessage(String id,String p) {
+    public BankIDMessage(String id, String p) {
         this.id = id;
-        this.pwd=p;
+        this.pwd = p;
     }
 
     /**
@@ -30,7 +30,7 @@ public class BankIDMessage {
      */
     public BankIDMessage(String id) {
         this.id = id;
-        this.pwd="";
+        this.pwd = "";
     }
 
     /**

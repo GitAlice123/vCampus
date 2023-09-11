@@ -3,12 +3,12 @@ package view.message;
 public class StringArrayRespMessage {
     private String[][] data;
 
-    public StringArrayRespMessage(){
+    public StringArrayRespMessage() {
 
     }
 
-    public StringArrayRespMessage(String[][] d){
-        this.data=d;
+    public StringArrayRespMessage(String[][] d) {
+        this.data = d;
     }
 
     public String[][] getData() {

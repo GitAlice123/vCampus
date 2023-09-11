@@ -16,8 +16,8 @@ public class bankBill {
 
     /**
      * 无参构造
-     * */
-    public bankBill(){
+     */
+    public bankBill() {
 
     }
 
@@ -31,11 +31,11 @@ public class bankBill {
      * @param type        交易类型
      * @param amount      交易金额
      */
-    public bankBill(String description, String nums, String cardId, String userId,Date time, boolean type, double amount) {
+    public bankBill(String description, String nums, String cardId, String userId, Date time, boolean type, double amount) {
         this.description = description;
         this.nums = nums;
         this.cardId = cardId;
-        this.userId=userId;
+        this.userId = userId;
         this.time = time;
         this.type = type;
         this.amount = amount;

@@ -13,7 +13,7 @@ public class PurchaseRecord {
     private String uId; // 购买人的Id
     private Date purchaseTime; // 购买时间
 
-    public PurchaseRecord(){
+    public PurchaseRecord() {
 
     }
 
@@ -41,6 +41,7 @@ public class PurchaseRecord {
 
     /**
      * 获取购买订单号
+     *
      * @return 购买订单号
      */
     public String getOrderId() {
@@ -49,6 +50,7 @@ public class PurchaseRecord {
 
     /**
      * 设置购买订单号
+     *
      * @param orderId 购买订单号
      */
     public void setOrderId(String orderId) {
@@ -57,6 +59,7 @@ public class PurchaseRecord {
 
     /**
      * 获取商品号
+     *
      * @return 商品号
      */
     public String getGoodId() {
@@ -65,6 +68,7 @@ public class PurchaseRecord {
 
     /**
      * 设置商品号
+     *
      * @param goodId 商品号
      */
     public void setGoodId(String goodId) {
@@ -73,6 +77,7 @@ public class PurchaseRecord {
 
     /**
      * 获取购买数量
+     *
      * @return 购买数量
      */
     public int getNums() {
@@ -81,6 +86,7 @@ public class PurchaseRecord {
 
     /**
      * 设置购买数量
+     *
      * @param nums 购买数量（大于等于1）
      */
     public void setNums(int nums) {
@@ -93,6 +99,7 @@ public class PurchaseRecord {
 
     /**
      * 获取购买人的Id
+     *
      * @return 购买人的Id
      */
     public String getUserId() {
@@ -101,6 +108,7 @@ public class PurchaseRecord {
 
     /**
      * 设置购买人的Id
+     *
      * @param userId 购买人的Id
      */
     public void setUserId(String userId) {
@@ -109,6 +117,7 @@ public class PurchaseRecord {
 
     /**
      * 获取购买时间
+     *
      * @return 购买时间
      */
     public Date getPurchaseTime() {
@@ -117,6 +126,7 @@ public class PurchaseRecord {
 
     /**
      * 设置购买时间
+     *
      * @param purchaseTime 购买时间（到秒）
      */
     public void setPurchaseTime(Date purchaseTime) {

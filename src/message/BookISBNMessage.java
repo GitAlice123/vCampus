@@ -7,11 +7,12 @@ public class BookISBNMessage {
     public BookISBNMessage() {
         // 无参数构造函数
     }
+
     public BookISBNMessage(String bookISBN) {
-        this.bookISBN=bookISBN;
+        this.bookISBN = bookISBN;
     }
 
-    public String getBookISBN(){
+    public String getBookISBN() {
         return bookISBN;
     }
 }

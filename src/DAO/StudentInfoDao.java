@@ -3,10 +3,11 @@ package view.DAO;
 import view.SchoolRolls.StudentInfo;
 
 import java.sql.*;
-import java.text.*;
+import java.text.SimpleDateFormat;
+
 public class StudentInfoDao {
 
-    public StudentInfo findStudentInfoById(String uId){
+    public StudentInfo findStudentInfoById(String uId) {
         /*
             通过一卡通号查询学籍信息
             传入参数为一卡通号uId
@@ -24,10 +25,10 @@ public class StudentInfoDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if(!res.next()){
+            if (!res.next()) {
                 return null;
             }//如果在数据库找不到该学生信息，则返回null
             res.beforeFirst();
@@ -51,16 +52,16 @@ public class StudentInfoDao {
         return studentInfo;
     }
 
-    public boolean AddStudentInfo(StudentInfo stuInfo){
+    public boolean AddStudentInfo(StudentInfo stuInfo) {
         /*
             增加学生学籍信息
             传入参数为想要添加的学生学籍信息
          */
 
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy/MM/dd");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
 
-        String sqlString = "insert into tblStudentInfo values('"+ stuInfo.getCardID() +"','" + stuInfo.getID() +"','" + stuInfo.getName()
-                +"','" + stuInfo.getSex() + "','" + ft.format(stuInfo.getBirth()) + "'," + stuInfo.getGrade() +",'" + stuInfo.getCollege() + "')";
+        String sqlString = "insert into tblStudentInfo values('" + stuInfo.getCardID() + "','" + stuInfo.getID() + "','" + stuInfo.getName()
+                + "','" + stuInfo.getSex() + "','" + ft.format(stuInfo.getBirth()) + "'," + stuInfo.getGrade() + ",'" + stuInfo.getCollege() + "')";
 
 
         try {
@@ -71,7 +72,7 @@ public class StudentInfoDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             sta.executeUpdate(sqlString);
 
             con.close();//关闭数据库连接
@@ -84,7 +85,7 @@ public class StudentInfoDao {
     }
 
 
-    public Boolean DeleteStudentInfoById(String uId){
+    public Boolean DeleteStudentInfoById(String uId) {
         /*
             根据一卡通号删除学生学籍信息
             传入参数为一卡通号uId
@@ -98,9 +99,9 @@ public class StudentInfoDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            int count=sta.executeUpdate(sqlString); //返回删除数据条数
-            if(count==0)return false;
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            int count = sta.executeUpdate(sqlString); //返回删除数据条数
+            if (count == 0) return false;
 
             con.close();//关闭数据库连接
 
@@ -111,7 +112,7 @@ public class StudentInfoDao {
         return true;
     }
 
-    public StudentInfo[] showAllStudentInfo(){
+    public StudentInfo[] showAllStudentInfo() {
         /*
             查询所以学生学籍信息
          */

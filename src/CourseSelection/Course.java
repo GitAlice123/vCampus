@@ -2,18 +2,12 @@ package view.CourseSelection;
 
 public class Course {//学生视角的课程
 
-    // 定义一个内部枚举类型表示课程类型
-    public enum CourseType {
-        Compulsory, Optional, Limitative
-    }
-
     private String CourseID;     // 课程代码
     private String CourseName;    // 课程名称
     private CourseType CourseType; // 课程类型
     private double CourseTime;    // 课程学时
     private double Credit;        // 学分
     private double Grades;        // 成绩
-
     // 构造器
     public Course(String courseID, String courseName, CourseType courseType, double courseTime, double credit, double grades) {
         this.CourseID = courseID;
@@ -61,18 +55,6 @@ public class Course {//学生视角的课程
         return CourseType;
     }
 
-    public String getCourseType(String s){
-        switch (this.CourseType) {
-            case Compulsory:
-                return  "Compulsory";
-            case Optional:
-                return "Optional";
-            case Limitative:
-                return "Limitative";
-        }
-        return null;
-    }
-
     public void setCourseType(CourseType courseType) {
         this.CourseType = courseType;
     }
@@ -89,6 +71,18 @@ public class Course {//学生视角的课程
                 this.CourseType = CourseType.Limitative;
                 break;
         }
+    }
+
+    public String getCourseType(String s) {
+        switch (this.CourseType) {
+            case Compulsory:
+                return "Compulsory";
+            case Optional:
+                return "Optional";
+            case Limitative:
+                return "Limitative";
+        }
+        return null;
     }
 
     public double getCourseTime() {
@@ -125,5 +119,10 @@ public class Course {//学生视角的课程
         } else {
             throw new IllegalArgumentException("Grades must be in [0, 100]");
         }
+    }
+
+    // 定义一个内部枚举类型表示课程类型
+    public enum CourseType {
+        Compulsory, Optional, Limitative
     }
 }

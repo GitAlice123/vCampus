@@ -20,10 +20,10 @@ public class BankSearchBillsMessage {
     /**
      * 构造一个 BankSearchBillsMessage 对象。
      *
-     * @param id         一卡通号
-     * @param startTime  起始时间
-     * @param endTime    结束时间
-     * @param query      用于查询的关键字
+     * @param id        一卡通号
+     * @param startTime 起始时间
+     * @param endTime   结束时间
+     * @param query     用于查询的关键字
      */
     public BankSearchBillsMessage(String id, Date startTime, Date endTime, String query) {
         this.id = id;
