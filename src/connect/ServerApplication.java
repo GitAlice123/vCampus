@@ -162,6 +162,45 @@ class ClientHandler implements Runnable {
                     }
                     case 400:{
                         serverActionTool.Action400(jsonData,clientSocket);
+                    }
+                    case 500:{
+                        serverActionTool.Action500(jsonData,clientSocket);
+                        break;
+                    }
+                    case 501: {
+                        serverActionTool.Action501(jsonData,clientSocket);
+                        break;
+                    }
+                    case 502: {
+                        serverActionTool.Action502(jsonData,clientSocket);
+                        break;
+                    }
+                    case 503: {
+                        serverActionTool.Action503(jsonData,clientSocket);
+                        break;
+                    }
+                    case 504: {
+                        serverActionTool.Action504(jsonData,clientSocket);
+                        break;
+                    }
+                    case 505: {
+                        serverActionTool.Action505(jsonData,clientSocket);
+                        break;
+                    }
+                    case 506: {
+                        serverActionTool.Action506(jsonData,clientSocket);
+                        break;
+                    }
+                    case 507: {
+                        serverActionTool.Action507(jsonData,clientSocket);
+                        break;
+                    }
+                    case 508: {
+                        serverActionTool.Action508(jsonData,clientSocket);
+                        break;
+                    }
+                    case 509:{
+                        serverActionTool.Action509(jsonData,clientSocket);
                         break;
                     }
                     case 900: {

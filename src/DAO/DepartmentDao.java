@@ -8,21 +8,22 @@ public class DepartmentDao {
     public Department[] findDepaetmentByInfo(String Department_Type, String Doctor_Type) {
         Department[] dep = new Department[1];
         String sqlstring = null;
+
         switch (Doctor_Type) {
             case "专家" -> {
-                if (Department_Type.equals("*") || Department_Type.equals(" "))
+                if (Department_Type.equals(""))
                     sqlstring = "select * from tblDepartment where Doctor_Type = '" + true + "'";
                 else
                     sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "' and Doctor_Type = '" + true + "'";
             }
             case "普通" -> {
-                if (Department_Type.equals("*") || Department_Type.equals(" "))
+                if (Department_Type.equals(""))
                     sqlstring = "select * from tblDepartment where Doctor_Type = '" + false + "'";
                 else
                     sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "' and Doctor_Type = '" + false + "'";
             }
             default -> {
-                if (Department_Type.equals("*") || Department_Type.equals(" "))
+                if (Department_Type.equals(""))
                     sqlstring = "select * from tblDepartment";
                 else
                     sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "'";
