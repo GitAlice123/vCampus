@@ -960,7 +960,7 @@ public class ServerActionTool {
         }
     }
 
-    public void Action400(String jsonData, Socket clientSocket) throws JsonProcessingException {
+    public void Action400(String jsonData, Socket clientSocket) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
@@ -972,50 +972,57 @@ public class ServerActionTool {
         }
         System.out.println("Into object 400");
 
-
-
-
-        //将服务器作为中转服务器和GPT连接
+        // 将服务器作为中转服务器和GPT连接
         String content = uniqueMessage.getqueString();
-        // 创建 ObjectMapper 用于解析 JSON
-        objectMapper = new ObjectMapper();
-        Text text = new Text();
-        // 设置模型
-        text.setModel("gpt-3.5-turbo");
-        text.setTemperature(0.7);
-        text.setMessages(Collections.singletonList(new Text.MessagesBean("user", content)));
-        // 创建 OkHttpClient 实例
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        // 创建请求体，携带 JSON 参数
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                objectMapper.writeValueAsString(text));
-        // 创建请求
-        Request request =
-                new Request.Builder().url(URL).addHeader("Authorization", "Bearer ".concat(KEY)).post(requestBody).build();
-        // 发送请求并处理响应
-        JsonNode jsonNode = null;
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            // 解析json 获取结果
-            jsonNode = objectMapper.readTree(response.body().string());
-            System.out.println(jsonNode.get("choices").get(0).get("message").get("content").asText());
-        } catch (IOException e) {
-            e.printStackTrace();
+        String accessToken = getAccessToken();
+
+        String url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions" +
+                "?access_token=" + accessToken;
+
+        ChatRequest request = new ChatRequest();
+        ChatMessage message = new ChatMessage();
+        message.setRole("user");
+        message.setContent(content);
+        request.getMessages().add(message);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestJson = mapper.writeValueAsString(request);
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(requestJson.getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        int responseCode = connection.getResponseCode();
+        String response = null;
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Reading the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            response = reader.readLine();
+            reader.close();
+
+            System.out.println(response);
+        } else {
+            // Error handling
+            System.err.println("Failed to make chat completions. Response code: " + responseCode);
         }
 
-
-
-        //下面将response信息返回客户端
-        String answer = jsonNode.get("choices").get(0).get("message").get("content").asText();
+        ChatInnerResp chatInnerResp = new ChatInnerResp();
+        chatInnerResp = objectMapper.readValue(response, ChatInnerResp.class);
+        // 下面将response信息返回客户端
+        String answer = chatInnerResp.getResult();
         GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
 
         try {
             String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
             System.out.println(outputData);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            OutputStream outputStream2 = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream2, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
