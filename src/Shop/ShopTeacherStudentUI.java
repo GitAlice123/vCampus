@@ -408,7 +408,7 @@ public class ShopTeacherStudentUI extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     // 获取所在行的索引
                     JButton clickedButton = (JButton) e.getSource();
-                    int clickedRow;
+                    //int clickedRow;
                     clickedRow = (int) clickedButton.getClientProperty("row");
                     new addtocartwindow(clickedRow);
 
@@ -702,13 +702,13 @@ public class ShopTeacherStudentUI extends JFrame {
             confirmpurchaseBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    DefaultTableModel model4 = (DefaultTableModel) carttable.getModel();
+                    //DefaultTableModel model4 = (DefaultTableModel) carttable.getModel();
                     //int rowCount = model4.getRowCount();
                     int rowCount = purchaseCar.length;
                     ArrayList<Integer> selectedRows = new ArrayList<>();
                     //支付购物车里被选中的商品
                     for (int row = 0; row < rowCount; row++) {
-                        Boolean isSelected = (Boolean) model4.getValueAt(row, 3); // 获取第 3 列（操作列）的值，即 JCheckBox 是否选中
+                        Boolean isSelected = (Boolean) model3.getValueAt(row, 3); // 获取第 3 列（操作列）的值，即 JCheckBox 是否选中
                         System.out.println("(支付)第"+row+"行的名称是:"+(String)purchaseCar[row][0]);
                         System.out.println("(支付)内容为："+isSelected);
                         if (isSelected) {

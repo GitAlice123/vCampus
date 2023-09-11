@@ -5,8 +5,31 @@ import view.Hospital.Department;
 import java.sql.*;
 
 public class DepartmentDao {
-    public Department[] findDepaetmentByInfo(String Department_Type, boolean Doctor_Type) {
+    public Department[] findDepaetmentByInfo(String Department_Type, String Doctor_Type) {
         Department[] dep = new Department[1];
+        String sqlstring = null;
+
+        switch (Doctor_Type) {
+            case "专家" -> {
+                if (Department_Type.equals(""))
+                    sqlstring = "select * from tblDepartment where Doctor_Type = '" + true + "'";
+                else
+                    sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "' and Doctor_Type = '" + true + "'";
+            }
+            case "普通" -> {
+                if (Department_Type.equals(""))
+                    sqlstring = "select * from tblDepartment where Doctor_Type = '" + false + "'";
+                else
+                    sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "' and Doctor_Type = '" + false + "'";
+            }
+            default -> {
+                if (Department_Type.equals(""))
+                    sqlstring = "select * from tblDepartment";
+                else
+                    sqlstring = "select * from tblDepartment where Department_name = '" + Department_Type + "'";
+            }
+        }
+
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -17,7 +40,7 @@ public class DepartmentDao {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet res = sta.executeQuery("select * from tblDepartment where Department_name = '" + Department_Type + "' and Doctor_Type = '" + Doctor_Type + "'");
+            ResultSet res = sta.executeQuery(sqlstring);
 
             int count = 0;
             while (res.next()) {

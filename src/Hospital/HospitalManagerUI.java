@@ -1,6 +1,9 @@
 package view.Hospital;
 
+import view.Bank.bankAccount;
+import view.DAO.bankAccountDao;
 import view.Global.SummaryUI;
+import view.Shop.ShopTeacherStudentUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,15 +11,21 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HospitalManagerUI extends JFrame {
+    String[][] registers=null;//显示的购买记录
+    String[][] departments=null;//显示的医生信息
+
     //导航栏
     JButton informationBtn;
     JButton adddeleteBtn;
     JButton historyBtn;
     JButton backBtn;
-    //科室信息
+    //医生信息
     DefaultTableModel model;
     String[] informationheader;
     Object[][] informationdata;
@@ -27,7 +36,7 @@ public class HospitalManagerUI extends JFrame {
     DefaultTableModel model2;
     JLabel historyLabel;
     JTable historytable;
-    //增删科室
+    //医院编号
     JLabel addLabel;
     JLabel IDLabel;
     JLabel typeLabel;
@@ -67,8 +76,8 @@ public class HospitalManagerUI extends JFrame {
 //        Image image = new ImageIcon(resource).getImage();
 //        setIconImage(image);
 
-        informationBtn=new JButton("科室信息");
-        adddeleteBtn=new JButton("增删科室");
+        informationBtn=new JButton("医生信息");
+        adddeleteBtn=new JButton("增删医生");
         historyBtn=new JButton("挂号记录");
         backBtn=new JButton("退出");
 
@@ -89,19 +98,32 @@ public class HospitalManagerUI extends JFrame {
         informationBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "科室信息");
+                cardLayout.show(cardPanel, "医生信息");
+                try {
+                    getAllDepartments();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                ShowTableDataModel(departments);
             }
         });
         adddeleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "增删科室");
+                cardLayout.show(cardPanel, "增删医生");
+
             }
         });
         historyBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cardPanel, "挂号记录");
+                try {
+                    getAllRegisterRecord();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                ShowTableDataModel2(registers);
             }
         });
         backBtn.addActionListener(new ActionListener() {
@@ -112,9 +134,9 @@ public class HospitalManagerUI extends JFrame {
             }
         });
 
-        //科室信息
+        //医生信息
         model = new DefaultTableModel();
-        informationheader = new String[]{"科室编号","科室类型", "挂号医生", "科室电话", "科室地址","医生类型"};
+        informationheader = new String[]{"医生编号","科室类型", "挂号医生", "科室电话", "科室地址","医生类型"};
         informationdata = new Object[][]{
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
@@ -152,7 +174,18 @@ public class HospitalManagerUI extends JFrame {
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //根据文本框中输入的科室类型更新表格
+                //根据文本框中输入的科室ID查找科室
+                String dID=searchField.getText();
+                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+                try {
+                    Department[] departments1=new Department[1];
+                    departments1[0]=hospitalClientAPI.GetDepartmentByID(dID);
+                    departments=convertDepartmentToStringArray(departments1);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                ShowTableDataModel(departments);
+
             }
         });
 
@@ -164,7 +197,7 @@ public class HospitalManagerUI extends JFrame {
         historyLabel.setFont(titleFont);
         historytable.setFont(new Font("楷体",Font.PLAIN,20));
 
-        String[] historyheader = {"挂号编号","学生姓名","科室编号","挂号时间", "总金额" ,"状态"};
+        String[] historyheader = {"挂号编号","学生姓名","科室名称","挂号时间", "总金额" ,"状态"};
         Object[][] historydata = {
                 {null, null, null, null, null, null,null,null},
                 {null, null, null, null, null, null,null,null}
@@ -186,9 +219,9 @@ public class HospitalManagerUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH,historyscrollPane,40,SpringLayout.SOUTH,historyLabel);
         springLayout.putConstraint(SpringLayout.WEST,historyscrollPane,100,SpringLayout.WEST,cardPanel);
 
-        //增删科室
-        addLabel=new JLabel("添加科室");
-        IDLabel=new JLabel("科室编号");
+        //增删医生
+        addLabel=new JLabel("添加医生");
+        IDLabel=new JLabel("医生编号");
         typeLabel=new JLabel("科室类型");
         nameLabel=new JLabel("挂号医生");
         phonenumberLabel=new JLabel("科室电话");
@@ -201,8 +234,8 @@ public class HospitalManagerUI extends JFrame {
         phonenumberField=new JTextField();
         addressField=new JTextField();
         confirmaddBtn=new JButton("确认添加");
-        deleteLabel=new JLabel("删除科室");
-        IDLabel2=new JLabel("科室编号");
+        deleteLabel=new JLabel("删除医生");
+        IDLabel2=new JLabel("医生编号");
         IDField2=new JTextField();
         confirmdeleteBtn=new JButton("确认删除");
 
@@ -225,7 +258,7 @@ public class HospitalManagerUI extends JFrame {
         IDField2.setFont(centerFont);
         confirmdeleteBtn.setFont(buttonFont);
 
-        doctortype.addItem("");
+        //doctortype.addItem("");
         doctortype.addItem("专家");
         doctortype.addItem("普通");
 
@@ -296,21 +329,60 @@ public class HospitalManagerUI extends JFrame {
         confirmaddBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //添加科室
+                //添加医生
+                String ID=IDField.getText();
+                String type=typeField.getText();
+                String DorName=nameField.getText();
+                String phoneNumber=phonenumberField.getText();
+                String address=addressField.getText();
+                boolean DorType=false;
+                String selectedValue = (String) doctortype.getSelectedItem();
+                if(selectedValue.equals("专家")){
+                    DorType=true;
+                }else{
+                    DorType=false;
+                }
+
+                Department d=new Department(type,ID,DorName,DorType,phoneNumber,address);
+                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+
+                try {
+                    if(hospitalClientAPI.AddDepartmentByInfo(d)){
+                        JOptionPane.showMessageDialog(adddeletePanel, "添加成功！");
+                    }else{
+                        JOptionPane.showMessageDialog(adddeletePanel, "添加失败！");
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                refreshpage();
             }
         });
         confirmdeleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //删除科室
+                //删除医生
+                HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+                String uID=IDField2.getText();
+                //修改后端数据
+                try {
+                    if(hospitalClientAPI.DeleteDepartmentByID(uID)){
+                        JOptionPane.showMessageDialog(adddeletePanel, "成功删除！");
+                    }else{
+                        JOptionPane.showMessageDialog(adddeletePanel, "删除失败！");
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                refreshpage();
             }
         });
 
 
         cardPanel.add(blankPanel);
-        cardPanel.add(informationPanel, "科室信息");
+        cardPanel.add(informationPanel, "医生信息");
         cardPanel.add(registerhistoryPanel, "挂号记录");
-        cardPanel.add(adddeletePanel,"增删科室");
+        cardPanel.add(adddeletePanel,"增删医生");
 
         Container contentPane = getContentPane();//获取控制面板
         contentPane.add(cardPanel, BorderLayout.CENTER);
@@ -321,6 +393,144 @@ public class HospitalManagerUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
+    }
+
+    //前端获取所有的医生信息
+    public void getAllDepartments() throws IOException {
+        HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+        departments=convertDepartmentToStringArray(hospitalClientAPI.GetAllDepartments());
+    }
+
+
+    //前端获取所有的挂号记录
+    public void getAllRegisterRecord() throws IOException {
+        HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
+        registers=convertRegisterToStringArray(hospitalClientAPI.GetAllRegisters());
+    }
+
+
+    /**
+     * 将Department[]类数据转换为String[][]。
+     *
+     * @param departments Department对象数组
+     * @return 转换后的String二维数组
+     */
+    public String[][] convertDepartmentToStringArray(Department[] departments) {
+        if(departments==null){
+            return null;
+        }
+        String[][] departmentStringArray = new String[departments.length][6];
+
+        for (int i = 0; i < departments.length; i++) {
+            Department department = departments[i];
+            departmentStringArray[i][0] = department.Department_ID;//医院编号
+            departmentStringArray[i][1] = department.Department_name;//科室名称
+            departmentStringArray[i][2] = department.Department_dir;//挂号医生
+            departmentStringArray[i][3] = department.Department_phone;//科室电话
+            departmentStringArray[i][4] = department.Department_addr;//科室地址
+            departmentStringArray[i][5] = department.Department_level?"专家":"普通";
+        }
+
+        return departmentStringArray;
+    }
+
+    /**
+     * 将Register对象数组转换为String二维数组。
+     *
+     * @param registers Register对象数组
+     * @return 转换后的String二维数组
+     */
+    public String[][] convertRegisterToStringArray(Register[] registers) {
+        if(registers==null)
+        {
+            return null;
+        }
+        String[][] registerStringArray = new String[registers.length][6];
+        bankAccountDao bA=new bankAccountDao();
+        for (int i = 0; i < registers.length; i++) {
+            Register register = registers[i];
+            bankAccount bankA=bA.findBankAccountById(register.Patient_ID);
+
+            registerStringArray[i][0] = register.getRegister_ID();//挂号编号
+            registerStringArray[i][1] = bankA.getName();//学生姓名
+            registerStringArray[i][2] = register.getRegister_depart();//挂号科室
+            registerStringArray[i][3] = formatDate(register.getRegister_date());//挂号时间
+            registerStringArray[i][4] = String.valueOf(register.getRegister_amount());//总金额
+            registerStringArray[i][5] = register.Register_Ifpaid?"已缴费":"未缴费";
+        }
+
+        return registerStringArray;
+    }
+
+    /**
+     * 格式化日期对象为"yyyy-MM-dd"的字符串表示形式。
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期字符串
+     */
+    private String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
+
+    /**
+    * 显示医生信息的表格信息
+    * */
+    private void ShowTableDataModel(String[][] data) {
+        //若查询结果为空
+        if (data == null) {
+
+            System.out.println("查询结果为空************");
+            model.setRowCount(0);
+            return;
+        }
+
+        // 清空表格原有的数据
+        model.setRowCount(0);
+
+        // 将新数据添加到表格模型
+        for (String[] row : data) {
+            model.addRow(row);
+        }
+        // 通知表格模型数据发生变化，刷新表格显示
+        model.fireTableDataChanged();
+    }
+
+    /**
+     * 显示挂号记录的表格信息
+     * */
+    private void ShowTableDataModel2(String[][] data) {
+        //若查询结果为空
+        if(data==null){
+            System.out.println("查询结果为空");
+            model2.setRowCount(0);
+            return;
+        }
+
+        // 清空表格原有的数据
+        model2.setRowCount(0);
+
+        // 将新数据添加到表格模型
+        for (String[] row : data) {
+            model2.addRow(row);
+        }
+        // 通知表格模型数据发生变化，刷新表格显示
+        model2.fireTableDataChanged();
+    }
+
+
+    /**
+     * 清空文字框
+     */
+    public void refreshpage(){
+        searchField.setText("");
+        IDField.setText("");
+        typeField.setText("");
+        nameField.setText("");
+        phonenumberField.setText("");
+        addressField.setText("");
+        IDField2.setText("");
     }
 
 
