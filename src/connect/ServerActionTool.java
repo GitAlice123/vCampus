@@ -831,7 +831,7 @@ public class ServerActionTool {
 //        boolean level=Boolean.parseBoolean(Slevel);
         DepartmentDao departmentDao=new DepartmentDao();
 //        String lev=level?"专家":"普通";
-        Department[] result=departmentDao.findDepaetmentByInfo(type,"专家");
+        Department[] result=departmentDao.findDepaetmentByInfo(type,Slevel);
         if(result==null) {
             System.out.println("dep的result为空++++++");
         }else {
@@ -960,7 +960,7 @@ public class ServerActionTool {
         }
     }
 
-    public void Action400(String jsonData, Socket clientSocket) throws IOException {
+    public void Action2000(String jsonData, Socket clientSocket) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象

@@ -1,6 +1,7 @@
 package view.Library;
 
 import view.Global.GlobalData;
+import view.Global.SummaryUI;
 import view.connect.*;
 import view.message.*;
 
@@ -110,9 +111,8 @@ public class LibraryUI extends JFrame {
                     clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
                     System.out.println("点击的行索引：" + clickedRow);
                     /* 下面重新显示用户借书表格 */
-                    LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost",8888);
-                    String uID = "213213000";
-                    // TODO：全局用户ID还未设置
+                    LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+                    String uID = GlobalData.getUID();
                     RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
                     BookHold[] AllHoldBooks= new BookHold[0];
@@ -302,15 +302,15 @@ public class LibraryUI extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost",8888);
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String a = "yes";
         UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
         Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
         ShowTableData(AllBooks);
 
-        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost",8888);
-        String uID = "213213000";
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+        String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
         BookHold[] AllHoldBooks=libraryClientAPI_3.getBorrowedBooks(registerReqMessage);
@@ -538,7 +538,7 @@ public class LibraryUI extends JFrame {
         System.out.println("Search Pressed");
         String searchText = FindBookTex.getText(); // 获取文本框内容作为搜索文本
 
-        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         SearchBookNameMessage searchBookNameMessage = new SearchBookNameMessage(searchText);
         Book[] bookArray;
         try {
@@ -567,7 +567,7 @@ public class LibraryUI extends JFrame {
 
 
         // 点击显示在馆数量
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBNchosen);
         Book bookGet = libraryClientAPI.getBookByISBN(bookISBNMessage);
         NumOfBook.setText("在馆数量：" + Integer.toString(bookGet.freeNum)); // 使用 Integer.toString
@@ -575,15 +575,14 @@ public class LibraryUI extends JFrame {
         Date currentDate = new Date();
         // 实施借书操作
 
-        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         String nextOPRid = libraryClientAPI_4.getNextOPRId(uniqueMessage);
 
 
-        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
-        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
                 ISBNchosen,currentDate,"BOR",null);
-        // TODO:全局用户ID还未设置，现在是假的
         Boolean flag = libraryClientAPI_1.BorrowBook(bookOperationRecord);
         if (flag) {
             JOptionPane.showMessageDialog(this,"借阅成功！");
@@ -592,9 +591,8 @@ public class LibraryUI extends JFrame {
             JOptionPane.showMessageDialog(this,"无法借阅！");
             return;
         }
-        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl("localhost",8888);
-        String uID = "213213000";
-        // TODO：全局用户ID还未设置
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+        String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
         BookHold[] AllHoldBooks= new BookHold[0];
@@ -610,7 +608,7 @@ public class LibraryUI extends JFrame {
             throw new RuntimeException(ex);
         }
         // 点击显示在馆数量
-        LibraryClientAPI libraryClientAPI5 = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         BookISBNMessage bookISBNMessage2 = new BookISBNMessage(ISBNchosen);
         Book bookGet3 = libraryClientAPI5.getBookByISBN(bookISBNMessage2);
         NumOfBook.setText("在馆数量：" + Integer.toString(bookGet3.freeNum)); // 使用 Integer.toString
@@ -618,7 +616,8 @@ public class LibraryUI extends JFrame {
     }
 
     private void BackBtnClicked(ActionEvent e) throws IOException {
-        System.exit(0);
+        this.dispose();
+        new SummaryUI();
     }
 
     private void ReturnBtnClicked(ActionEvent e) throws IOException {
@@ -634,14 +633,13 @@ public class LibraryUI extends JFrame {
 
         Date currentDate = new Date();
         // 实施借书操作
-        // TODO:全局用户ID还未设置，现在是假的
 
-        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         String nextOPRid = libraryClientAPI_3.getNextOPRId(uniqueMessage);
 
-        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
-        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
                 ISBNchosen,currentDate,"RET",null);
         Boolean flag = libraryClientAPI_2.ReturnBook(bookOperationRecord);
 
@@ -649,9 +647,8 @@ public class LibraryUI extends JFrame {
             System.out.println("Return Successfully");
         }
 
-        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost",8888);
-        String uID = "213213000";
-        // TODO：全局用户ID还未设置
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+        String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
         BookHold[] AllHoldBooks= new BookHold[0];
@@ -670,7 +667,7 @@ public class LibraryUI extends JFrame {
 
     private String GetBookNameByISBN(String ISBN)
             throws IOException{
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBN);
 
         Book book = libraryClientAPI.getBookByISBN(bookISBNMessage);
@@ -679,7 +676,7 @@ public class LibraryUI extends JFrame {
 
     private void ReturnToAllBookBtnClicked(ActionEvent e)
             throws IOException{
-        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost",8888);
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String a = "yes";
         UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
@@ -702,23 +699,21 @@ public class LibraryUI extends JFrame {
 
         Date currentDate = new Date();
         // 实施续借操作
-        // TODO:全局用户ID还未设置，现在是假的
-        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl("localhost", 8888);
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
         String nextOPRid = libraryClientAPI_4.getNextOPRId(uniqueMessage);
 
 
-        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl("localhost", 8888);
-        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, "213213000",
+        LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
                 ISBNchosen,currentDate,"REN",null);
         Boolean flag = libraryClientAPI_1.renewBook(bookOperationRecord);
         if (flag) {
             System.out.println("Renew Successfully");
         }
 
-        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl("localhost",8888);
-        String uID = "213213000";
-        // TODO：全局用户ID还未设置
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+        String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
         BookHold[] AllHoldBooks= new BookHold[0];

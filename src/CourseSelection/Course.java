@@ -7,7 +7,7 @@ public class Course {//学生视角的课程
         Compulsory, Optional, Limitative
     }
 
-    private String CourseNum;     // 课程代码
+    private String CourseID;     // 课程代码
     private String CourseName;    // 课程名称
     private CourseType CourseType; // 课程类型
     private double CourseTime;    // 课程学时
@@ -15,8 +15,8 @@ public class Course {//学生视角的课程
     private double Grades;        // 成绩
 
     // 构造器
-    public Course(String courseNum, String courseName, CourseType courseType, double courseTime, double credit, double grades) {
-        this.CourseNum = courseNum;
+    public Course(String courseID, String courseName, CourseType courseType, double courseTime, double credit, double grades) {
+        this.CourseID = courseID;
         this.CourseName = courseName;
         this.CourseType = courseType;
         this.CourseTime = courseTime;
@@ -24,8 +24,8 @@ public class Course {//学生视角的课程
         setGrades(grades); // 使用setter方法来确保值的范围
     }
 
-    public Course(String courseNum, String courseName, String courseType, double courseTime, double credit) {
-        CourseNum = courseNum;
+    public Course(String courseID, String courseName, String courseType, double courseTime, double credit) {
+        CourseID = courseID;
         CourseName = courseName;
         setCourseType(courseType);
         CourseTime = courseTime;
@@ -37,12 +37,12 @@ public class Course {//学生视角的课程
     }//空构造
 
     // getters 和 setters
-    public String getCourseNum() {
-        return CourseNum;
+    public String getCourseID() {
+        return CourseID;
     }
 
-    public void setCourseNum(String courseNum) {
-        this.CourseNum = courseNum;
+    public void setCourseID(String courseID) {
+        this.CourseID = courseID;
     }
 
     public String getCourseName() {

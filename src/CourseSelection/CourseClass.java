@@ -1,18 +1,18 @@
 package view.CourseSelection;
 
 public class CourseClass {
-    private String classID;        // 课程班编号
-    private String courseNum;      // 课程编号
-    private String classTeacher;   // 任课教师ID
-    private String classPlace;     // 上课地点
-    private int classMax;          // 最大人数
-    private int classTemp;         // 当前人数
-    private String classTime;      // 上课时间
-    private String[] classStudent; // 选本班级的学生ID
+        private String classID;        // 课程班编号
+        private String courseID;      // 课程编号
+        private String classTeacher;   // 任课教师ID
+        private String classPlace;     // 上课地点
+        private int classMax;          // 最大人数
+        private int classTemp;         // 当前人数
+        private String classTime;      // 上课时间
+        private String[] classStudent; // 选本班级的学生ID
 
     public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime, String[] classStudent) {
         this.classID = classID;
-        this.courseNum = courseNum;
+        this.courseID = courseNum;
         this.classTeacher = classTeacher;
         this.classPlace = classPlace;
         this.classMax = classMax;
@@ -23,7 +23,7 @@ public class CourseClass {
 
     public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime) {
         this.classID = classID;
-        this.courseNum = courseNum;
+        this.courseID = courseNum;
         this.classTeacher = classTeacher;
         this.classPlace = classPlace;
         this.classMax = classMax;
@@ -42,12 +42,12 @@ public class CourseClass {
         this.classID = classID;
     }
 
-    public String getCourseNum() {
-        return courseNum;
+    public String getCourseID() {
+        return courseID;
     }
 
-    public void setCourseNum(String courseNum) {
-        this.courseNum = courseNum;
+    public void setCourseID(String courseID) {
+        this.courseID = courseID;
     }
 
     public String getClassTeacher() {
@@ -97,4 +97,5 @@ public class CourseClass {
     public void setClassStudent(String[] classStudent) {
         this.classStudent = classStudent;
     }
+
 }

@@ -1,5 +1,6 @@
 package view.connect;
 
+import view.Global.GlobalData;
 import view.message.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
     public RegisterClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
         } catch (Exception e) {

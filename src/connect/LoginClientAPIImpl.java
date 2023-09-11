@@ -1,6 +1,7 @@
 package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
 import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 
@@ -16,7 +17,7 @@ public class LoginClientAPIImpl implements LoginClientAPI {
     public LoginClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
         } catch (Exception e) {

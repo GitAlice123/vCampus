@@ -39,7 +39,7 @@ public class IInfoClientSrv {
     public String[][] CoursetoString (Course[] courses){
         String[][] scourse=new String [courses.length][6];
         for(int i=0;i<courses.length;i++){
-            scourse[i][0]=courses[i].getCourseNum();
+            scourse[i][0]=courses[i].getCourseID();
             scourse[i][1]=courses[i].getCourseName();
             scourse[i][2]=courses[i].getCourseType().name();
             scourse[i][3]=Double.toString(courses[i].getCourseTime());

@@ -1,6 +1,7 @@
 package view.SchoolRolls;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentInfo {
     private String CardID;
 
@@ -101,20 +102,6 @@ public class StudentInfo {
     // 设置学院
     public void setCollege(String college) {
         this.College = college;
-    }
-
-    // toString方法，用于将学生信息转换为字符串
-    @Override
-    public String toString() {
-        return "Student{" +
-                "campusCardNumber='" + CardID + '\'' +
-                ", studentID='" + ID + '\'' +
-                ", gender='" + Sex + '\'' +
-                ", name='" + Name + '\'' +
-                ", dateOfBirth=" + Birth +
-                ", enrollmentYear=" + Grade +
-                ", college='" + College + '\'' +
-                '}';
     }
 }
 

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
 import view.Library.*;
 import view.message.*;
 
@@ -17,7 +18,7 @@ public class ChatClientAPIImpl implements ChatClientAPI{
     public ChatClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
         } catch (Exception e) {
@@ -35,7 +36,7 @@ public class ChatClientAPIImpl implements ChatClientAPI{
             String jsonData = objectMapper.writeValueAsString(chatQuesMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 400);
+            rwTool.ClientSendOutStream(outputStream, jsonData, 2000);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,10 +2,20 @@
 
 package view.Global;
 
+import view.Bank.BankManagerUI;
+import view.CourseSelection.CurriculumAdminUI;
+import view.CourseSelection.CurriculumStudentUI;
+import view.CourseSelection.CurriculumTeacherUI;
 import view.Global.SummaryUI;
+import view.Hospital.HospitalManagerUI;
+import view.Hospital.HospitalTeacherStudentUI;
+import view.Library.LibraryAdminUI;
 import view.Library.LibraryUI;
 import view.Login.logInUI;
 import view.Bank.BankTeacherStudentUI;
+import view.Shop.ShopManagerUI;
+import view.Shop.ShopTeacherStudentUI;
+import view.chat.ChatFrameUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,22 +38,115 @@ public class SummaryHandler extends KeyAdapter implements ActionListener
 
         //summaryview.dispose();
         switch (text){
-            case "学生学籍管理":System.out.println("学生学籍管理");break;
-            case "选课系统":System.out.println("选课系统");break;
-            case "图书馆":
+            case "学生学籍管理":
+            {
                 summaryview.dispose();
-                try {
-                    new LibraryUI();//跳转页面的判断逻辑待写
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                if (GlobalData.getUType() == 1) {
+                    try {
+                        new CurriculumStudentUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else if (GlobalData.getUType() == 2)
+                {
+                    try {
+                        new CurriculumTeacherUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
-                System.out.println("图书馆");break;
-            case "商店":System.out.println("商店");break;
-            case "医院":System.out.println("医院");break;
-            case "银行":
+                else {
+                    try {
+                        new CurriculumAdminUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                System.out.println("学生学籍管理");break;
+            }
+            case "选课系统":
+            {
                 summaryview.dispose();
-                new BankTeacherStudentUI();//跳转页面的判断逻辑待写
+                if (GlobalData.getUType() == 1) {
+                    try {
+                        new CurriculumStudentUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else if (GlobalData.getUType() == 2)
+                {
+                    try {
+                        new CurriculumTeacherUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                else {
+                    try {
+                        new CurriculumAdminUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                System.out.println("选课");
+                break;
+            }
+            case "图书馆":
+            {
+                summaryview.dispose();
+                if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
+                    try {
+                        new LibraryUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
+                        new LibraryAdminUI();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                System.out.println("图书馆");
+                break;
+            }
+            case "商店":
+            {
+                summaryview.dispose();
+                if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
+                        new ShopTeacherStudentUI();
+                } else {
+                        new ShopManagerUI();
+                }
+                System.out.println("商店");
+                break;
+            }
+            case "医院":
+            {
+                summaryview.dispose();
+                if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
+                    new HospitalTeacherStudentUI();
+                } else {
+                    new HospitalManagerUI();
+                }
+                System.out.println("医院");
+                break;
+            }
+            case "银行":
+            {
+                summaryview.dispose();
+                if (GlobalData.getUType() == 1 || GlobalData.getUType() == 2) {
+                        new BankTeacherStudentUI();//跳转页面的判断逻辑待写
+                } else {
+                        new BankManagerUI();
+                }
+
                 System.out.println("银行");break;
+            }
+            case "chat":
+                summaryview.dispose();
+                new ChatFrameUI();
+                break;
             case "登出":
                 GlobalData.logout();//登出时注销用户
                 summaryview.dispose();

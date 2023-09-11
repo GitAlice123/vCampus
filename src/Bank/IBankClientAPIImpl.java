@@ -392,6 +392,51 @@ public class IBankClientAPIImpl implements IBankClientAPI{
         //String[][] result = stringArrayRespMessage.getData();
         return result;
     }
+
+
+    //1007
+    public boolean addBankAccount(bankAccount bankaccount){
+        //以下发送用户id给服务器
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+            BankAccountMessage bankAccountMessage=new BankAccountMessage(bankaccount);
+
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(bankAccountMessage);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream,jsonData,1007);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //接收服务器响应
+        String receivedJsonData = null;
+        try {
+            receivedJsonData = rwTool.ClientReadStream(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        BoolRespMessage boolRespMessage = null;
+        try {
+            boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+//      处理结果
+        boolean result = boolRespMessage.getFlag();
+        return result;
+    }
 }
 
 

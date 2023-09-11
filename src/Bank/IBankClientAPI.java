@@ -74,4 +74,6 @@ public interface IBankClientAPI {
      * @return 包含所有银行账户的 bankAccount[] 数组，如果没有找到任何账户则返回 null。
      */
     String[][] findBankAccounts(String id);
+
+    boolean addBankAccount(bankAccount bankaccount);
 }

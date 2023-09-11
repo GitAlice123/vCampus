@@ -69,7 +69,7 @@ public class CourseClassDao {
             }
             sta.executeUpdate("insert into tblClass(classId,courseId,classTeacher,classTeacherId,classPlace,classMax,classTemp,classTime) values('"
                     + courseClass.getClassID() + "','"
-                    + courseClass.getCourseNum() + "','"
+                    + courseClass.getCourseID() + "','"
                     + "Null" + "','"
                     + courseClass.getClassTeacher() + "','"
                     + courseClass.getClassPlace() + "','"
@@ -258,7 +258,7 @@ public class CourseClassDao {
 
     public boolean ModifyClass(CourseClass courseClass) {
         String sqlString = "update tblClass " +
-                "set courseId = " + courseClass.getCourseNum() +
+                "set courseId = " + courseClass.getCourseID() +
                 "set classTeacher = " + "Null"+
                 "set classTeacherId = " + courseClass.getClassTeacher() +
                 "set classPlace = " + courseClass.getClassPlace() +

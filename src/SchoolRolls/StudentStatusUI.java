@@ -1,22 +1,30 @@
 package view.SchoolRolls;
 
+import view.connect.InfoClientAPI;
+import view.connect.InfoClientAPIImp;
+import view.CourseSelection.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class StudentStatusUI extends JFrame {
     public void setCard_id(String card_id) {
         this.card_id = card_id;
     }
-
     String card_id;
 
     public void setId(String id) {
         this.id = id;
     }
 
-    String id;
+    String id="213213000";
 
     @Override
     public void setName(String name) {
@@ -70,17 +78,6 @@ public class StudentStatusUI extends JFrame {
     JLabel BirthLabel=new JLabel("出身年月");
     JLabel GradeLabel=new JLabel("入学年份");
     JLabel CollegeLabel=new JLabel("学院");
-
-    //以下label中需要显示从数据库调出的信息
-    JLabel Card_idLabelOut=new JLabel("card_id");
-    JLabel IdLabelOut=new JLabel("id");
-    JLabel NameLabelOut=new JLabel("name");
-    JLabel SexLabelOut=new JLabel("sex");
-    JLabel BirthLabelOut=new JLabel("birth");
-    JLabel GradeLabelOut=new JLabel("grade");
-    JLabel CollegeLabelOut=new JLabel("college");
-
-
     JButton FindBtn=new JButton("查询");
 
     public JTextField getFindTex() {
@@ -93,11 +90,42 @@ public class StudentStatusUI extends JFrame {
     public void setSpringLayout(SpringLayout springLayout) {
         this.springLayout = springLayout;
     }
-
-    public StudentStatusUI(){
+    public String[][] coursestostring (Course[] courses){
+            String[][] scourse=new String[courses.length][6];
+        for(int i=0;i<courses.length;i++){
+            scourse[i][0]=courses[i].getCourseID();
+            scourse[i][1]=courses[i].getCourseName();
+            scourse[i][2]=courses[i].getCourseType().name();
+            scourse[i][3]=Double.toString(courses[i].getCourseTime());
+            scourse[i][4]=Double.toString(courses[i].getCredit());
+            scourse[i][5]=Double.toString(courses[i].getGrades());
+        }
+        return scourse;
+    }
+    public StudentStatusUI() throws IOException {
         super("学生学籍系统");
-
+        StudentInfo info=new StudentInfo("15177","54321","male","jacky",new Date(0),21,"CS");
+        InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost", 8888);
+        boolean result=infoClientAPI1.AddStuInfo(info);
+        InfoClientAPI infoClientAPI2=new InfoClientAPIImp("localhost", 8888);
+        StudentInfo tar=infoClientAPI2.SearchStuInfoByID("15177");
+        setCard_id(tar.getCardID());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String BirthString = sdf.format(tar.getBirth());
+        setBirth(BirthString);
+        setCollege(tar.getCollege());
+        setId(tar.getID());
+        setName(tar.getName());
+        setSex(tar.getSex());
+        setGrade(Integer.toString(tar.getGrade()));
         // 创建一个二维数组作为表格数据
+        JLabel Card_idLabelOut=new JLabel(card_id);
+        JLabel IdLabelOut=new JLabel(id);
+        JLabel NameLabelOut=new JLabel(name);
+        JLabel SexLabelOut=new JLabel(sex);
+        JLabel BirthLabelOut=new JLabel(birth);
+        JLabel GradeLabelOut=new JLabel(grade);
+        JLabel CollegeLabelOut=new JLabel(college);
         //从数据库中读出数据
         String[][] data = {
                 {"1","1","1","1","1","1"},
@@ -125,11 +153,16 @@ public class StudentStatusUI extends JFrame {
         String[] columnNames = {"课程代码", "课程名称", "课程类型","课程学时","学分","总成绩"};
 
         // 创建JTable对象并传入数据和列名
-        JTable table = new JTable(data, columnNames);
-
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        JTable table = new JTable(model);
+        table.setRowHeight(30);
+        JTableHeader tab_header = table.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
+        table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         // 创建一个JScrollPane来包装表格
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(550, 250)); // 设置滚动面板的大小
+        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
 
         //loginHandler=new logInHandler(this);
@@ -145,7 +178,8 @@ public class StudentStatusUI extends JFrame {
         panel1.add(InfoPanel,"InfoPanel");
         panel1.add(CoursePanel,"CoursePanel");
         //TopPanel.setLayout(FlowLayout);//流式布局
-        Font centerFont=new Font("楷体",Font.PLAIN,15);//设置中间组件的文字大小、字体
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        table.setFont(centerFont);
         Card_idLabel.setFont(centerFont);
         Card_idLabelOut.setFont(centerFont);
         IdLabel.setFont(centerFont);
@@ -160,10 +194,16 @@ public class StudentStatusUI extends JFrame {
         GradeLabelOut.setFont(centerFont);
         CollegeLabel.setFont(centerFont);
         CollegeLabelOut.setFont(centerFont);
+        InfoBtn.setFont(centerFont);
+        CourseBtn.setFont(centerFont);
+        backBtn.setFont(centerFont);
+        FindBtn.setFont(centerFont);
+        FindTex.setFont(centerFont);
 
-        InfoBtn.setPreferredSize(new Dimension(150,30));//设置按钮大小
-        CourseBtn.setPreferredSize(new Dimension(150,30));
-        backBtn.setPreferredSize(new Dimension(100,30));
+        InfoBtn.setPreferredSize(new Dimension(200,40));//设置按钮大小
+        CourseBtn.setPreferredSize(new Dimension(200,40));
+        backBtn.setPreferredSize(new Dimension(100,40));
+        FindBtn.setPreferredSize(new Dimension(100,40));
 //        Card_idLabel.setPreferredSize(new Dimension(150, Card_idLabel.getPreferredSize().height));
 //        Card_idLabelOut.setPreferredSize(new Dimension(150, Card_idLabel.getPreferredSize().height));
 //        IdLabel.setPreferredSize(new Dimension(150, Card_idLabel.getPreferredSize().height));
@@ -200,53 +240,53 @@ public class StudentStatusUI extends JFrame {
         CoursePanel.add(FindTex);
         CoursePanel.add(scrollPane); // 将滚动面板添加到面板中
 
-        FindTex.setPreferredSize(new Dimension(200,20));//设置输入框大小
+        FindTex.setPreferredSize(new Dimension(200,40));//设置输入框大小
         //springLayout.putConstraint(SpringLayout.EAST,backBtn,10,SpringLayout.EAST,BottomPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,FindBtn,10,SpringLayout.NORTH,CoursePanel);
-        springLayout.putConstraint(SpringLayout.WEST,FindTex,10,SpringLayout.WEST,CoursePanel);
-        springLayout.putConstraint(SpringLayout.NORTH,FindTex,10,SpringLayout.NORTH,CoursePanel);
+        springLayout.putConstraint(SpringLayout.NORTH,FindBtn,40,SpringLayout.NORTH,CoursePanel);
+        springLayout.putConstraint(SpringLayout.WEST,FindTex,100,SpringLayout.WEST,CoursePanel);
+        springLayout.putConstraint(SpringLayout.NORTH,FindTex,40,SpringLayout.NORTH,CoursePanel);
         springLayout.putConstraint(SpringLayout.WEST,FindBtn,10,SpringLayout.EAST,FindTex);
 //        Spring childWidth0=Spring.sum(Spring.width(CoursePanel),Spring.minus(Spring.width(scrollPane)));
 //        int offsetX0=childWidth0.getValue()/2;
-        springLayout.putConstraint(SpringLayout.NORTH,scrollPane,10,SpringLayout.SOUTH,FindTex);
-        springLayout.putConstraint(SpringLayout.WEST,scrollPane,25,SpringLayout.WEST,CoursePanel);
+        springLayout.putConstraint(SpringLayout.NORTH,scrollPane,30,SpringLayout.SOUTH,FindTex);
+        springLayout.putConstraint(SpringLayout.WEST,scrollPane,100,SpringLayout.WEST,CoursePanel);
 
         Spring childWidth=Spring.sum(Spring.sum(Spring.width(Card_idLabel),Spring.width(Card_idLabelOut)),
                 Spring.constant(0));
         int offsetX=childWidth.getValue()/2;
-        springLayout.putConstraint(SpringLayout.NORTH,Card_idLabel,20,SpringLayout.NORTH,InfoPanel);
-        springLayout.putConstraint(SpringLayout.NORTH,Card_idLabelOut,20,SpringLayout.NORTH,InfoPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,Card_idLabel,110,SpringLayout.NORTH,InfoPanel);
+        springLayout.putConstraint(SpringLayout.NORTH,Card_idLabelOut,110,SpringLayout.NORTH,InfoPanel);
         springLayout.putConstraint(SpringLayout.EAST,Card_idLabel,-offsetX+10,SpringLayout.HORIZONTAL_CENTER,InfoPanel);
         springLayout.putConstraint(SpringLayout.WEST,Card_idLabelOut,offsetX-10,SpringLayout.HORIZONTAL_CENTER,InfoPanel);
 
-        springLayout.putConstraint(SpringLayout.NORTH,IdLabel,20,SpringLayout.SOUTH,Card_idLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,IdLabel,30,SpringLayout.SOUTH,Card_idLabel);
         springLayout.putConstraint(SpringLayout.EAST,IdLabel,0,SpringLayout.EAST,Card_idLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,IdLabelOut,20,SpringLayout.SOUTH,Card_idLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,IdLabelOut,30,SpringLayout.SOUTH,Card_idLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,IdLabelOut,0,SpringLayout.WEST,Card_idLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,NameLabel,20,SpringLayout.SOUTH,IdLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,NameLabel,30,SpringLayout.SOUTH,IdLabel);
         springLayout.putConstraint(SpringLayout.EAST,NameLabel,0,SpringLayout.EAST,IdLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,NameLabelOut,20,SpringLayout.SOUTH,IdLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,NameLabelOut,30,SpringLayout.SOUTH,IdLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,NameLabelOut,0,SpringLayout.WEST,IdLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,SexLabel,20,SpringLayout.SOUTH,NameLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,SexLabel,30,SpringLayout.SOUTH,NameLabel);
         springLayout.putConstraint(SpringLayout.EAST,SexLabel,0,SpringLayout.EAST,NameLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,SexLabelOut,20,SpringLayout.SOUTH,NameLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,SexLabelOut,30,SpringLayout.SOUTH,NameLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,SexLabelOut,0,SpringLayout.WEST,NameLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,BirthLabel,20,SpringLayout.SOUTH,SexLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,BirthLabel,30,SpringLayout.SOUTH,SexLabel);
         springLayout.putConstraint(SpringLayout.EAST,BirthLabel,0,SpringLayout.EAST,SexLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,BirthLabelOut,20,SpringLayout.SOUTH,SexLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,BirthLabelOut,30,SpringLayout.SOUTH,SexLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,BirthLabelOut,0,SpringLayout.WEST,SexLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,GradeLabel,20,SpringLayout.SOUTH,BirthLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,GradeLabel,30,SpringLayout.SOUTH,BirthLabel);
         springLayout.putConstraint(SpringLayout.EAST,GradeLabel,0,SpringLayout.EAST,BirthLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,GradeLabelOut,20,SpringLayout.SOUTH,BirthLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,GradeLabelOut,30,SpringLayout.SOUTH,BirthLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,GradeLabelOut,0,SpringLayout.WEST,BirthLabelOut);
 
-        springLayout.putConstraint(SpringLayout.NORTH,CollegeLabel,20,SpringLayout.SOUTH,GradeLabel);
+        springLayout.putConstraint(SpringLayout.NORTH,CollegeLabel,30,SpringLayout.SOUTH,GradeLabel);
         springLayout.putConstraint(SpringLayout.EAST,CollegeLabel,0,SpringLayout.EAST,GradeLabel);
-        springLayout.putConstraint(SpringLayout.NORTH,CollegeLabelOut,20,SpringLayout.SOUTH,GradeLabelOut);
+        springLayout.putConstraint(SpringLayout.NORTH,CollegeLabelOut,30,SpringLayout.SOUTH,GradeLabelOut);
         springLayout.putConstraint(SpringLayout.WEST,CollegeLabelOut,0,SpringLayout.WEST,GradeLabelOut);
         InfoBtn.addActionListener(new ActionListener() {
             @Override
@@ -257,30 +297,89 @@ public class StudentStatusUI extends JFrame {
         CourseBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String ID="213213000";//全局变量，未测试
+                InfoClientAPI infoClientAPI3=new InfoClientAPIImp("localhost",8888);
+                Course[] courses=null;
+                try {
+                    courses=infoClientAPI3.SearchCourseByID(ID);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                //从数据库检索，未完成（ID检索Grade[]，Grade中的CourseID检索Course
+                //数据库连接
+                //courses[0]=new Course("123","123", Course.CourseType.Optional,3.0,4,99);
+                //courses[1]=new Course("123","123", Course.CourseType.Optional,3.0,4,99);
+                String[][] scourse={{" "},{" "},{" "},{" "},{" "}};
+                //if(courses!=null)
+                scourse=coursestostring(courses);
+                DefaultTableModel newModel = new DefaultTableModel(scourse, columnNames);
+                table.setModel(newModel);
+                //显示个人信息
                 cardLayout.show(panel1,"CoursePanel");
             }
         });
-
-
-
-
-
-
-
-
-
-
-        setSize(600,400);
+        FindBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String CourseID=FindTex.getText();
+                Course[] tarcourse=new Course[1];
+                InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
+                try {
+                    tarcourse[0]=infoClientAPI.SearchCourseByinfo(CourseID,"213213000");//未完成 “213213000”为globalID
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                String src[][];
+                if(tarcourse[0]==null){
+                    JOptionPane.showMessageDialog(CoursePanel,"该课程不存在");
+                }
+                //target[0]=infoClientAPI.SearchCourseByCourseID(CourseID);
+                //target[0]=new Course("123","123", Course.CourseType.Optional,3.0,4,100);
+                src=coursestostring(tarcourse);
+                DefaultTableModel newModel = new DefaultTableModel(src, columnNames);
+                table.setModel(newModel);
+            }
+        });
+        setSize(1200,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setVisible((true));
     }
+    private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                setForeground(Color.BLACK);
+            } else {
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(255, 255, 240);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(255, 250, 205);
+                    cellComponent.setBackground(customColor2);
+                }
+            }
+            return cellComponent;
+        }
+    }
+    public static void main(String[] args) throws IOException {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 218, 185)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 228, 181)); // 按钮
+            UIManager.put("control", new Color(255, 248, 220)); // 背景
 
 
 
-    public static void main(String[] args){
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new StudentStatusUI();
     }
 }

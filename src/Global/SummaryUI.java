@@ -17,6 +17,7 @@ public class SummaryUI extends JFrame
     JButton shopBtn=new JButton("商店");
     JButton hospitalBtn=new JButton("医院");
     JButton bankBtn=new JButton("银行");
+    JButton chatBtn=new JButton("chat");
     JButton logoutBtn=new JButton("登出");
     SummaryHandler summaryHandler;
     public SummaryUI()
@@ -37,6 +38,7 @@ public class SummaryUI extends JFrame
         shopBtn.setFont(buttonFont);
         hospitalBtn.setFont(buttonFont);
         bankBtn.setFont(buttonFont);
+        chatBtn.setFont(buttonFont);
         logoutBtn.setFont(buttonFont);
 
         //将按钮添加到面板上
@@ -46,6 +48,7 @@ public class SummaryUI extends JFrame
         centerPanel.add(shopBtn);
         centerPanel.add(hospitalBtn);
         centerPanel.add(bankBtn);
+        centerPanel.add(chatBtn);
         centerPanel.add(logoutBtn);
         studentstatusmanagementBtn.addActionListener(summaryHandler);
         courseselectionBtn.addActionListener(summaryHandler);
@@ -53,6 +56,7 @@ public class SummaryUI extends JFrame
         shopBtn.addActionListener(summaryHandler);
         hospitalBtn.addActionListener(summaryHandler);
         bankBtn.addActionListener(summaryHandler);
+        chatBtn.addActionListener(summaryHandler);
         logoutBtn.addActionListener(summaryHandler);
 
         //调整位置
@@ -75,6 +79,8 @@ public class SummaryUI extends JFrame
         int x5=(Spring.width(courseselectionBtn).getValue()-Spring.width(bankBtn).getValue())/2;
         springLayout.putConstraint(SpringLayout.WEST,bankBtn,x5,SpringLayout.WEST,courseselectionBtn);
         springLayout.putConstraint(SpringLayout.NORTH,bankBtn,-y,SpringLayout.SOUTH,shopBtn);
+        springLayout.putConstraint(SpringLayout.WEST,chatBtn,0,SpringLayout.WEST,courseselectionBtn);
+        springLayout.putConstraint(SpringLayout.NORTH,chatBtn,-y,SpringLayout.SOUTH,bankBtn);
         springLayout.putConstraint(SpringLayout.EAST,logoutBtn,-30,SpringLayout.EAST,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,logoutBtn,20,SpringLayout.NORTH,centerPanel);
         contentPane.add(centerPanel,BorderLayout.CENTER);
@@ -82,7 +88,7 @@ public class SummaryUI extends JFrame
         //设置学生学籍管理为默认按钮
         getRootPane().setDefaultButton(studentstatusmanagementBtn);
 
-        setSize(600,400);
+        setSize(600,600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);

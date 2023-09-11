@@ -293,4 +293,9 @@ public class bankFunction {
             return null;
         }
     }
+
+
+    public boolean addBankAccount(bankAccount bankaccount){
+        return bADao.addBankAccount(bankaccount);
+    }
 }

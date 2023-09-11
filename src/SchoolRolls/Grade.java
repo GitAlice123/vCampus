@@ -3,7 +3,6 @@ package view.SchoolRolls;
 public class Grade {
     private String CardID;
     private String courseID;
-
     private double Grade;
 
     public Grade(String cardID, String courseID, double grade) {
@@ -11,6 +10,10 @@ public class Grade {
         this.courseID = courseID;
         this.Grade = grade;
     }
+
+    public Grade() {
+    }
+
     public String getCardID() {
         return CardID;
     }

@@ -8,6 +8,8 @@ import java.awt.print.PrinterException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import view.Global.SummaryUI;
+import view.Login.logInUI;
 import view.connect.*;
 import view.message.*;
 
@@ -23,6 +25,7 @@ public class ChatFrameUI extends JFrame {
     JScrollPane bottompane;
     JTextArea textarea;
     JButton sendBtn;
+    JButton backBtn;
 
     //中部
     JScrollPane centerpane;
@@ -48,9 +51,11 @@ public class ChatFrameUI extends JFrame {
         //底部
         textarea = new JTextArea();
         sendBtn = new JButton("发送");
+        backBtn =new JButton("退出");
 
         sendBtn.setFont(buttonFont);
         textarea.setFont(centerFont);
+        backBtn.setFont(buttonFont);
 
         textarea.setLineWrap(true);
         textarea.setWrapStyleWord(true);
@@ -59,6 +64,7 @@ public class ChatFrameUI extends JFrame {
 
         bottomPanel.add(bottompane);
         bottomPanel.add(sendBtn);
+        bottomPanel.add(backBtn);
 
         //中部
         chathistory = new JTextArea();
@@ -92,6 +98,13 @@ public class ChatFrameUI extends JFrame {
                     throw new RuntimeException(ex);
                 }
                 receiveMessage();
+            }
+        });
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryUI();
             }
         });
 

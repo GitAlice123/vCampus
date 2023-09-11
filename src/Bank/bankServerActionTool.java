@@ -273,4 +273,39 @@ public class bankServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 对应新建bankAccount
+     * */
+    public void Action1007(String jsonData, Socket clientSocket){
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        BankAccountMessage bankAccountMessage = null;
+        try {
+            bankAccountMessage = objectMapper.readValue(jsonData, BankAccountMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 1007");
+
+
+        //执行对应操作，这里是消费，直接调用bankFunction里的方法即可
+        Boolean flag = false;
+        bankAccount bankA=bankAccountMessage.getBankA();
+        flag=funcs.addBankAccount(bankA);
+
+
+        //下面将response信息返回客户端
+        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        try {
+            // 将 bankMoneyMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

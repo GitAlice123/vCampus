@@ -1,4 +1,6 @@
 package view.Login;
+import view.Global.GlobalData;
+
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
@@ -56,6 +58,9 @@ public class logInUI extends JFrame{
 
     public logInUI(){
         super("虚拟校园系统");
+
+        GlobalData.setServerAddr("localhost","8888");
+
         //JFrame jFrame=new JFrame();
         loginHandler=new logInHandler(this);
 

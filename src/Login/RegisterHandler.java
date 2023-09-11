@@ -6,7 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Random;
 
+import view.Bank.bankAccount;
 import view.connect.*;
 import view.message.LoginMessage;
 import view.message.RegisterReqMessage;
@@ -90,8 +92,13 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
                 // 调用接口方法
                 Boolean check = registerClientAPI_new.createNewUser(login_message);
 
+
                 if(check){
+                    // String cardId, String name, String id, String paymentPwd,double balance, boolean isLoss) {
+                    //
                     JOptionPane.showMessageDialog(registerView, "新用户注册成功！");
+//                    bankAccount bankA=new bankAccount(generateRandomString(6),userId,u)
+
                 }
             }
         }
@@ -110,5 +117,22 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
                 throw new RuntimeException(ex);
             }
         }
+    }
+
+    /**
+     * 随机生成LENGTH位数字的String类型数据
+     * */
+    public String generateRandomString(int LENGTH) {
+        Random random = new Random();
+        String DIGITS = "0123456789";
+        StringBuilder stringBuilder = new StringBuilder(LENGTH);
+
+        for (int i = 0; i < LENGTH; i++) {
+            int randomIndex = random.nextInt(DIGITS.length());
+            char randomChar = DIGITS.charAt(randomIndex);
+            stringBuilder.append(randomChar);
+        }
+
+        return stringBuilder.toString();
     }
 }

@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.Socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
 import view.Library.*;
 import view.message.*;
 
@@ -16,7 +17,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
     public LibraryClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
-            socket = new Socket(serverAddress, serverPort);
+            socket = new Socket(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
             outputStream = socket.getOutputStream();
             inputStream = socket.getInputStream();
         } catch (Exception e) {

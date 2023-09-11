@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import view.Bank.BankTeacherStudentUI;
+import view.Global.GlobalData;
+import view.Global.SummaryUI;
 import view.connect.*;
 import view.message.*;
 
@@ -79,13 +82,20 @@ public class logInHandler extends KeyAdapter implements ActionListener {
         boolean flag = false;
 
         String role = "";
-        if (loginView.studentRadioButton.isSelected())
+        int typeNum = 0;
+        if (loginView.studentRadioButton.isSelected()){
             role = "ST";
-        else if (loginView.teacherRadioButton.isSelected())
+            typeNum = 1;
+        }
+        else if (loginView.teacherRadioButton.isSelected()){
             role = "TC";
+            typeNum = 2;
+        }
         else if (loginView.adminRadioButton.isSelected())
+        {
             role = "AD";
-
+            typeNum = 3;
+        }
         // 创建 LoginClientAPI 的实例，可以是接口的任何实现类
         LoginClientAPI loginClientAPI = new LoginClientAPIImpl("localhost", 8888);
         LoginMessage login_message = new LoginMessage(userId, password, role);
@@ -99,6 +109,10 @@ public class logInHandler extends KeyAdapter implements ActionListener {
         /*与后端连接部分修改结束*/
         if (flag) {
             JOptionPane.showMessageDialog(loginView, "登录成功！");
+            GlobalData.setUser(userId,typeNum);
+            loginView.dispose();
+            new SummaryUI();//跳转页面的判断逻辑待写
+            System.out.println("总界面");
         } else {
             JOptionPane.showMessageDialog(loginView, "用户名或密码或用户类型错误！");
         }

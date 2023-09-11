@@ -160,8 +160,9 @@ class ClientHandler implements Runnable {
                         serverActionTool.Action215(jsonData,clientSocket);
                         break;
                     }
-                    case 400:{
-                        serverActionTool.Action400(jsonData,clientSocket);
+                    case 2000:{
+                        serverActionTool.Action2000(jsonData,clientSocket);
+                        break;
                     }
                     case 500:{
                         serverActionTool.Action500(jsonData,clientSocket);
@@ -304,6 +305,11 @@ class ClientHandler implements Runnable {
                     case 1006:{
                         //管理员查看所有account
                         bankServerActionTool.Action1006(jsonData, clientSocket);
+                        break;
+                    }
+                    case 1007:{
+                        //注册用户时新建bankAccount
+                        bankServerActionTool.Action1007(jsonData, clientSocket);
                         break;
                     }
                     default: {
