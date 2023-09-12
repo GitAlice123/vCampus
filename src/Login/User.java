@@ -35,4 +35,12 @@ public class User {
         return "User [uId=" + uId + ", uPwd=" + uPwd + ", uRole=" + uRole + "]";
     }
 
+    public User(String uId, String uPwd, String uRole) {
+        this.uId = uId;
+        this.uPwd = uPwd;
+        this.uRole = uRole;
+    }
+
+    public User() {
+    }
 }
