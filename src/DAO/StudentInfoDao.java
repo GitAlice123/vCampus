@@ -5,15 +5,18 @@ import view.SchoolRolls.StudentInfo;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * 学生学籍DAO
+ * @author shuangmu555
+ */
 public class StudentInfoDao {
 
+    /**
+     * 通过一卡通号查询学籍信息
+     * @param uId 一卡通号
+     * @return 该uId对应的一个 StudentInfo类的学籍信息数据
+     */
     public StudentInfo findStudentInfoById(String uId) {
-        /*
-            通过一卡通号查询学籍信息
-            传入参数为一卡通号uId
-            返回值为该uId对应的一个 StudentInfo类的学籍信息数据
-         */
-
         String sqlString = "select * from tblStudentInfo where uId = '" + uId + "'";
         StudentInfo studentInfo = new StudentInfo();
 
@@ -52,17 +55,16 @@ public class StudentInfoDao {
         return studentInfo;
     }
 
+    /**
+     * 增加学生学籍信息
+     * @param stuInfo 想要添加的学生学籍信息
+     * @return 是否成功
+     */
     public boolean AddStudentInfo(StudentInfo stuInfo) {
-        /*
-            增加学生学籍信息
-            传入参数为想要添加的学生学籍信息
-         */
-
         SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");
 
         String sqlString = "insert into tblStudentInfo values('" + stuInfo.getCardID() + "','" + stuInfo.getID() + "','" + stuInfo.getName()
                 + "','" + stuInfo.getSex() + "','" + ft.format(stuInfo.getBirth()) + "'," + stuInfo.getGrade() + ",'" + stuInfo.getCollege() + "')";
-
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -80,16 +82,16 @@ public class StudentInfoDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return true;
     }
 
 
+    /**
+     * 根据一卡通号删除学生学籍信息
+     * @param uId 一卡通号
+     * @return 是否成功删除
+     */
     public Boolean DeleteStudentInfoById(String uId) {
-        /*
-            根据一卡通号删除学生学籍信息
-            传入参数为一卡通号uId
-         */
         String sqlString = "delete from tblStudentInfo where uId ='" + uId + "'";
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件

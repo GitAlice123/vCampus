@@ -2,7 +2,15 @@ package view.DAO;
 
 import java.sql.*;
 
+/**
+ * 功能选择界面公告栏内容读取修改DAO
+ * @author SunYanlin
+ */
 public class noticeDao {
+    /**
+     * 读取数据库中的公告内容
+     * @return 字符串类型的公告内容
+     */
     public String getNotice() {
         String ret = null;
         try {
@@ -28,6 +36,11 @@ public class noticeDao {
     }
 
 
+    /**
+     * 将公告内容修改为传入的字符串
+     * @param text 公告内容
+     * @return 是否成功修改
+     */
     public boolean editNotice(String text) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
