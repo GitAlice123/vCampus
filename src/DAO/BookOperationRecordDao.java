@@ -5,6 +5,9 @@ import view.Library.BookOperationRecord;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * 图书馆模块 操作记录DAO
+ */
 public class BookOperationRecordDao {
 
     /**

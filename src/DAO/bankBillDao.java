@@ -7,11 +7,13 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 银行模块　账单DAO
+ */
 public class bankBillDao {
 
     /**
      * 查找并返回数据库中tblbankBill表中的所有账单信息 (管理员界面使用，现在不一定用得上)
-     *
      * @return bankBill类数组allbills，代表数据库中所有的账单
      */
     public bankBill[] findAllBills() {

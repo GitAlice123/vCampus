@@ -937,7 +937,7 @@ public class ServerActionTool {
 //        boolean level=Boolean.parseBoolean(Slevel);
         DepartmentDao departmentDao = new DepartmentDao();
 //        String lev=level?"专家":"普通";
-        Department[] result = departmentDao.findDepaetmentByInfo(type, Slevel);
+        Department[] result = departmentDao.findDepartmentByInfo(type, Slevel);
         if (result == null) {
             System.out.println("dep的result为空++++++");
         } else {
@@ -977,7 +977,7 @@ public class ServerActionTool {
         System.out.println("Into object 506");
         String ID = idReqMessage.getID();
         DepartmentDao departmentDao = new DepartmentDao();
-        Department result = departmentDao.findDepaetmentById(ID);
+        Department result = departmentDao.findDepartmentById(ID);
         DepartmentsMessage respMessage = new DepartmentsMessage(result);
         //下面将response信息返回客户端
         try {

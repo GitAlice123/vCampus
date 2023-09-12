@@ -4,10 +4,17 @@ import view.Bank.bankAccount;
 
 import java.sql.*;
 
+/**
+ * 银行模块账户DAO
+ */
 public class bankAccountDao {
 
 
-    // 是否挂失，true表示正常，false表示挂失
+    /**
+     * 判断是否挂失，true表示正常，false表示挂失
+     * @param id 账户ID
+     * @return 是否挂失
+     */
     public boolean isLoss(String id) {
         String sqlString = "select * from tblBankAccount where account_id = '" + id + "'";
         try {
@@ -36,13 +43,11 @@ public class bankAccountDao {
 
     }
 
-    /*
-        通过一卡通号查询银行账户信息
-        传入参数为一卡通号uId
-        返回值为该uId对应的一个 bankAccount类的银行账户数据
-
-        突然发现一个问题，好像写了这个就没必要写什么查看挂失状态、判断密码的方法了
-        直接通过id查询bankAccount类的返回对象查它的属性就行了 T T
+    /**
+     * 通过一卡通号查询银行账户信息
+     * 突然发现一个问题，好像写了这个就没必要写什么查看挂失状态、判断密码的方法了，直接通过id查询bankAccount类的返回对象查它的属性就行了 T T
+     * @param id 一卡通号uId
+     * @return 该uId对应的一个 bankAccount类的银行账户数据
      */
     public bankAccount findBankAccountById(String id) {
 
@@ -83,9 +88,12 @@ public class bankAccountDao {
         return bankaccount;
     }
 
-    /*
-        通过传入的一卡通号id和用户输入的支付密码Pwd，从数据库中查找相应用户并判断密码是否正确
-    */
+    /**
+     * 通过传入的一卡通号id和用户输入的支付密码Pwd，从数据库中查找相应用户并判断密码是否正确
+     * @param id 一卡通号id
+     * @param Pwd 支付密码Pwd
+     * @return 密码是否正确
+     */
     public boolean checkPwd(String id, String Pwd) {
 
         String sqlString = "select * from tblBankAccount where account_id = '" + id + "'";
@@ -119,10 +127,13 @@ public class bankAccountDao {
         return true;
     }
 
-    /*
-        通过传入的一卡通号id和用户输入的原支付密码oldPwd、新密码newPwd，
-        从数据库中查找相应用户判断密码是否正确，并更改密码
-    */
+    /**
+     * 通过传入的和用户输入的原支付密码oldPwd、新密码newPwd，从数据库中查找相应用户判断密码是否正确，并更改密码
+     * @param id 一卡通号id
+     * @param oldPwd 原支付密码oldPwd
+     * @param newPwd 新密码newPwd
+     * @return 是否修改成功
+     */
     public boolean changePwd(String id, String oldPwd, String newPwd) {
 
 
@@ -176,10 +187,12 @@ public class bankAccountDao {
         return true;
     }
 
-    /*
-        通过传入的一卡通号id,从数据库中查找相应用户并更改其挂失状态
-        原本挂失则变为正常，原本正常则变为挂失
-    */
+    /**
+     * 通过传入的一卡通号id,从数据库中查找相应用户并更改其挂失状态
+     * 原本挂失则变为正常，原本正常则变为挂失
+     * @param id 一卡通号id
+     * @return 操作是否成功
+     */
     public boolean changeLoss(String id) {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + id + "'";
         //获取原挂失状态
@@ -233,10 +246,12 @@ public class bankAccountDao {
         return true;
     }
 
-    /*
-        通过一卡通号查询银行账户，并进行充值操作
-        传入参数为一卡通号id，和充值金额money
-    */
+    /**
+     * 通过一卡通号查询银行账户，并进行充值操作
+     * @param id 一卡通号id
+     * @param money 充值金额money
+     * @return 是否充值成功
+     */
     public boolean recharge(String id, double money) {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + id + "'";
         //查询原有余额
@@ -292,11 +307,12 @@ public class bankAccountDao {
         return true;
     }
 
-    /*
-        通过一卡通号查询银行账户，并进行消费操作
-        传入参数为一卡通号id，和消费金额money
-        若消费金额大于账户余额，则不进行消费操作，并返回false
-    */
+    /**
+     * 通过一卡通号查询银行账户，并进行消费操作
+     * @param id 一卡通号id
+     * @param money 消费金额money
+     * @return 若消费金额大于账户余额，则不进行消费操作，并返回false
+     */
     public boolean bankConsume(String id, double money) {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + id + "'";
         //查询原有余额
@@ -407,6 +423,11 @@ public class bankAccountDao {
         return allAccounts;
     }
 
+    /**
+     * 创建银行账户
+     * @param bankaccount 用户输入的信息
+     * @return 是否创建成功
+     */
     public boolean addBankAccount(bankAccount bankaccount) {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + bankaccount.getId() + "'";
         //查找数据库中原本是否存在该用户的银行卡信息

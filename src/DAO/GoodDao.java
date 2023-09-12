@@ -4,6 +4,9 @@ import view.Shop.Good;
 
 import java.sql.*;
 
+/**
+ * 超市商品DAO
+ */
 public class GoodDao {
 
     /**

@@ -4,7 +4,15 @@ import view.CourseSelection.Course;
 
 import java.sql.*;
 
+/**
+ * 选课／学籍 课程DAO
+ */
 public class CourseDao {
+    /**
+     * 通过课程编号查找课程
+     * @param courseNum 课程编号
+     * @return 查找到的课程Course
+     */
     public Course findCourseByNum(String courseNum) {
 
         Course course = new Course();
@@ -43,6 +51,10 @@ public class CourseDao {
         return course;
     }
 
+    /**
+     * 显示所有的课程
+     * @return 所有的课程Course[]
+     */
     public Course[] showAllCourse() {
         Course[] course = new Course[1];
 
@@ -82,6 +94,11 @@ public class CourseDao {
         return course;
     }
 
+    /**
+     * 添加课程
+     * @param course 用户输入的信息
+     * @return 是否添加成功
+     */
     public boolean createCoures(Course course) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -113,6 +130,11 @@ public class CourseDao {
         return true;
     }
 
+    /**
+     * 删除课程
+     * @param courseId 要删除的课程的编号
+     * @return 是否删除成功
+     */
     public boolean deleteCouresById(String courseId) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
