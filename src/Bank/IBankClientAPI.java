@@ -12,7 +12,7 @@ public interface IBankClientAPI {
      * @param pwd   用户输入的密码
      * @return 充值结果，true表示充值成功，false表示充值失败
      */
-    boolean recharge(String id, double money, String pwd);
+    double recharge(String id, double money, String pwd);
 
     /**
      * 修改密码
@@ -23,7 +23,7 @@ public interface IBankClientAPI {
      * @param newNewPwd 确认新密码
      * @return 修改密码结果，true表示修改成功，false表示修改失败
      */
-    boolean changePwd(String id, String oldPwd, String newPwd, String newNewPwd)
+    int changePwd(String id, String oldPwd, String newPwd, String newNewPwd)
             throws NullPointerException;
 //
 //    /**
@@ -52,7 +52,7 @@ public interface IBankClientAPI {
      * @param pwd 用户输入的密码
      * @return 挂失/解挂结果，true表示挂失/解挂成功，false表示挂失/解挂失败
      */
-    boolean changeLoss(String id, String pwd) throws NullPointerException;
+    int changeLoss(String id, String pwd) throws NullPointerException;
 
     /**
      * 消费
@@ -62,7 +62,7 @@ public interface IBankClientAPI {
      * @param pwd  用户输入的密码
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    boolean bankConsume(String id, bankBill bill, String pwd) throws IOException;
+    double bankConsume(String id, bankBill bill, String pwd) throws IOException;
 
     /**
      * 通过一卡通号查找account

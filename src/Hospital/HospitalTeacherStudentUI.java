@@ -55,6 +55,7 @@ public class HospitalTeacherStudentUI extends JFrame {
     JTable purchasetable;
     JLabel purchaseLabel;
     JButton purchaseBtn;
+    JButton OKBtn;
     JLabel totalamountLabel;
     JLabel totalamount;
     JScrollPane purchasepane;
@@ -282,6 +283,7 @@ public class HospitalTeacherStudentUI extends JFrame {
         purchasetable = new JTable();
         purchaseLabel = new JLabel("缴费");
         purchaseBtn = new JButton("支付");
+        OKBtn = new JButton("选好了");
         totalamountLabel = new JLabel("总金额");
         totalamount = new JLabel("￥0.00");
 
@@ -304,6 +306,7 @@ public class HospitalTeacherStudentUI extends JFrame {
         tab_header3.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
         purchaseLabel.setFont(titleFont);
         purchaseBtn.setFont(buttonFont);
+        OKBtn.setFont(buttonFont);
         totalamountLabel.setFont(centerFont);
         totalamount.setFont(centerFont);
 
@@ -312,13 +315,16 @@ public class HospitalTeacherStudentUI extends JFrame {
         payPanel.add(totalamountLabel);
         payPanel.add(totalamount);
         payPanel.add(purchasepane);
+        payPanel.add(OKBtn);
 
         springLayout.putConstraint(SpringLayout.NORTH, purchaseLabel, 40, SpringLayout.NORTH, cardPanel);
         springLayout.putConstraint(SpringLayout.WEST, purchaseLabel, 540, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, purchasepane, 40, SpringLayout.SOUTH, purchaseLabel);
         springLayout.putConstraint(SpringLayout.WEST, purchasepane, 100, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.NORTH, OKBtn, 0, SpringLayout.NORTH, purchaseBtn);
+        springLayout.putConstraint(SpringLayout.WEST, OKBtn, 100, SpringLayout.EAST, purchaseBtn);
         springLayout.putConstraint(SpringLayout.NORTH, purchaseBtn, 80, SpringLayout.SOUTH, purchasepane);
-        springLayout.putConstraint(SpringLayout.WEST, purchaseBtn, 550, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, purchaseBtn, 450, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, totalamountLabel, 40, SpringLayout.SOUTH, purchasepane);
         springLayout.putConstraint(SpringLayout.WEST, totalamountLabel, 800, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, totalamount, 0, SpringLayout.NORTH, totalamountLabel);
@@ -379,10 +385,6 @@ public class HospitalTeacherStudentUI extends JFrame {
         }
 
         return newArray;
-    }
-
-    public static void main(String[] args) {
-        new HospitalTeacherStudentUI();
     }
 
     //前端获取所有的科室信息
@@ -943,7 +945,7 @@ public class HospitalTeacherStudentUI extends JFrame {
                             System.out.println("(支付)选中了行数：" + row);
                         }
                     }
-                    boolean flag = false;
+                    double flag = -4.00;
                     //HospitalClientAPI hospitalClientAPI=new HospitalClientAPIImp("localhost", 8888);
                     IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
                     if (selectedRows.size() > 0) {
@@ -962,8 +964,15 @@ public class HospitalTeacherStudentUI extends JFrame {
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
-
-                        if (flag) {
+                        if (flag == -4.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "系统出错！");
+                        } else if (flag == -3.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "密码错误，请重新输入");
+                        } else if (flag == -2.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "卡已挂失");
+                        } else if (flag == -1.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "余额不足！请充值");
+                        } else {
                             //从未支付表格里删除已支付的挂号记录
 
                             for (Integer rowIndex : selectedRows) {
@@ -982,13 +991,10 @@ public class HospitalTeacherStudentUI extends JFrame {
                                 }
                                 ShowTableDataModel3(unpaidreg);
                                 totalamount.setText("￥0.00");
-                                JOptionPane.showMessageDialog(cardpaymentPanel, "支付成功！");
+                                JOptionPane.showMessageDialog(cardpaymentPanel, "充值成功，余额￥" + Double.toString(flag));
                             }
-
-                        } else {
-                            //TODO 这里弹窗设计要更复杂 后续做
-                            JOptionPane.showMessageDialog(cardpaymentPanel, "支付失败！");
                         }
+
                     }
 
 
@@ -1011,4 +1017,9 @@ public class HospitalTeacherStudentUI extends JFrame {
             setVisible(true);
         }
     }
+
+
+//    public static void main(String[] args) {
+//        new HospitalTeacherStudentUI();
+//    }
 }

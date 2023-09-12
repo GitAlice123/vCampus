@@ -6,7 +6,7 @@ import java.util.Date;
  * 银行账单类
  */
 public class bankBill {
-    private String description; // 商品说明 医院/商店/银行充值
+    private String description; // 商品说明 医院/商店/银行充值/水电费
     private String nums; // 订单号
     private String cardId; // 对应卡账号，6位数字
     private String userId;//一卡通号

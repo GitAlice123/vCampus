@@ -477,7 +477,6 @@ public class ShopManagerUI extends JFrame {
     /**
      * 刷新页面
      */
-    //TODO
     public void refreshPage() {
         searchgoodField.setText("");
         goodIDField.setText("");

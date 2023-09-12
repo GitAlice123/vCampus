@@ -96,35 +96,15 @@ public class LibraryAdminUI extends JFrame {
     JLabel NumOfBookOut;
     JButton backBtn;
     private int changeBtnRow;
-    public LibraryAdminUI() throws IOException {
+    public LibraryAdminUI() throws IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        // 设置外观为Windows外观
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+        UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+        UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+        UIManager.put("control", new Color(248, 248, 230)); // 背景
         initComponent();
-    }
-
-    public static void main(String[] args) throws IOException {
-        try {
-            // 设置外观为Windows外观
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        try
-//        {
-//            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-//        }
-//        catch(Exception e)
-//        {
-//
-//
-//        }
-
-        new LibraryAdminUI();
     }
 
     private void initComponent() throws IOException {
@@ -327,7 +307,7 @@ public class LibraryAdminUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, NumOfAllBooksLabel, 60, SpringLayout.NORTH, ReportPanel);
         springLayout.putConstraint(SpringLayout.NORTH, NumOfAllBooksLabelOut, 60, SpringLayout.NORTH, ReportPanel);
         springLayout.putConstraint(SpringLayout.EAST, NumOfAllBooksLabel, -offsetX + 40, SpringLayout.HORIZONTAL_CENTER, ReportPanel);
-        springLayout.putConstraint(SpringLayout.WEST, NumOfAllBooksLabelOut, 60, SpringLayout.HORIZONTAL_CENTER, ReportPanel);
+        springLayout.putConstraint(SpringLayout.WEST, NumOfAllBooksLabelOut, 200, SpringLayout.HORIZONTAL_CENTER, ReportPanel);
 
         springLayout.putConstraint(SpringLayout.NORTH, NumOfBookInTheLibraryLabel, 60, SpringLayout.SOUTH, NumOfAllBooksLabel);
         springLayout.putConstraint(SpringLayout.EAST, NumOfBookInTheLibraryLabel, 0, SpringLayout.EAST, NumOfAllBooksLabel);
@@ -447,8 +427,6 @@ public class LibraryAdminUI extends JFrame {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                //TODO:添加点击查找以后，表格中显示所查学生借的书
-
             }
         });
         backBtn.addActionListener(new ActionListener() {
@@ -601,6 +579,18 @@ public class LibraryAdminUI extends JFrame {
             tableFindStuBorrowed.setModel(modelFind);
         }
     }
+
+//    public static void main(String[] args) throws IOException {
+//        try {
+//
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        new LibraryAdminUI();
+//    }
 
     private void ShowSearchOprTable(String searchText) throws IOException {
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost", 8888);

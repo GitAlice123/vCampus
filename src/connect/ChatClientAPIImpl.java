@@ -2,7 +2,9 @@ package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Global.GlobalData;
+import view.client.ClientRWTool;
 import view.message.ChatQuesMessage;
+import view.message.ChatWithUserMessage;
 import view.message.GPTAnsRepMessage;
 
 import java.io.IOException;
@@ -14,7 +16,7 @@ public class ChatClientAPIImpl implements ChatClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     public ChatClientAPIImpl(String serverAddress, int serverPort) {
         try {
@@ -29,7 +31,6 @@ public class ChatClientAPIImpl implements ChatClientAPI {
 
     @Override
     public String getGPTAnswer(ChatQuesMessage chatQuesMessage) throws IOException {
-        //以下发送无数据的请求消息给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
@@ -38,13 +39,13 @@ public class ChatClientAPIImpl implements ChatClientAPI {
             String jsonData = objectMapper.writeValueAsString(chatQuesMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 2000);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 2000);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -58,5 +59,22 @@ public class ChatClientAPIImpl implements ChatClientAPI {
         String gptAnswer = gptAnsRepMessage.getGPTanswer();
 
         return gptAnswer;
+    }
+
+    @Override
+    public void sendUserMessage(ChatWithUserMessage chatWithUserMessage) throws IOException {
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 将 Message 对象转换为 JSON 字符串
+            String jsonData = objectMapper.writeValueAsString(chatWithUserMessage);
+            System.out.println(jsonData);
+
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 2001);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

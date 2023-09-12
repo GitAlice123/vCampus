@@ -21,9 +21,9 @@ public class CourseClass {
         this.classStudent = classStudent;
     }
 
-    public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime) {
+    public CourseClass(String classID, String courseID, String classTeacher, String classPlace, int classMax, int classTemp, String classTime) {
         this.classID = classID;
-        this.courseID = courseNum;
+        this.courseID = courseID;
         this.classTeacher = classTeacher;
         this.classPlace = classPlace;
         this.classMax = classMax;

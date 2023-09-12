@@ -48,6 +48,7 @@ public class ShopTeacherStudentUI extends JFrame {
     JLabel shoppingcartLabel = new JLabel("购物车");
     JButton purchaseBtn = new JButton("支付");
     JButton deleteBtn = new JButton("删除");
+    JButton OKBtn = new JButton("选好了");
     JLabel totalamountLabel = new JLabel("总金额");
     JLabel totalamount = new JLabel("￥0.00");
 
@@ -273,11 +274,13 @@ public class ShopTeacherStudentUI extends JFrame {
         purchaseBtn.setFont(buttonFont);
         totalamountLabel.setFont(centerFont);
         totalamount.setFont(centerFont);
+        OKBtn.setFont(buttonFont);
 
         shoppingcartPanel.add(shoppingcartLabel);
         shoppingcartPanel.add(cartpane);
         shoppingcartPanel.add(deleteBtn);
         shoppingcartPanel.add(purchaseBtn);
+        shoppingcartPanel.add(OKBtn);
         shoppingcartPanel.add(totalamountLabel);
         shoppingcartPanel.add(totalamount);
 
@@ -286,9 +289,11 @@ public class ShopTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, cartpane, 40, SpringLayout.SOUTH, shoppingcartLabel);
         springLayout.putConstraint(SpringLayout.WEST, cartpane, 100, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, deleteBtn, 80, SpringLayout.SOUTH, cartpane);
-        springLayout.putConstraint(SpringLayout.WEST, deleteBtn, 460, SpringLayout.WEST, cardPanel);
+        springLayout.putConstraint(SpringLayout.WEST, deleteBtn, 550, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, purchaseBtn, 0, SpringLayout.NORTH, deleteBtn);
         springLayout.putConstraint(SpringLayout.WEST, purchaseBtn, 100, SpringLayout.EAST, deleteBtn);
+        springLayout.putConstraint(SpringLayout.NORTH, OKBtn, 0, SpringLayout.NORTH, deleteBtn);
+        springLayout.putConstraint(SpringLayout.EAST, OKBtn, -100, SpringLayout.WEST, deleteBtn);
         springLayout.putConstraint(SpringLayout.NORTH, totalamountLabel, 40, SpringLayout.SOUTH, cartpane);
         springLayout.putConstraint(SpringLayout.WEST, totalamountLabel, 800, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, totalamount, 0, SpringLayout.NORTH, totalamountLabel);
@@ -327,7 +332,7 @@ public class ShopTeacherStudentUI extends JFrame {
 //                        purchaseCarAmount=purchaseCarAmount+Double.parseDouble((String)purchaseCar[rowIndex][2]);
 //                        String formattedAmount = String.format("%.2f", purchaseCarAmount);
 //                        totalamount.setText("￥"+formattedAmount);
-                        updatePurchaseCarAmount();
+                        updatePurchaseCarAmount(rowIndex);
                         purchaseCar = deleteRow(purchaseCar, rowIndex);
                         ShowTableDataModel3(purchaseCar);
 
@@ -487,15 +492,21 @@ public class ShopTeacherStudentUI extends JFrame {
     /**
      * 更新购物车界面选中商品的总金额
      */
-    private void updatePurchaseCarAmount() {
-        DefaultTableModel model4 = (DefaultTableModel) carttable.getModel();
-        int rowCount = model4.getRowCount();
+    private void updatePurchaseCarAmount(int selectedRow) {
+//        DefaultTableModel model4 = (DefaultTableModel) carttable.getModel();
+//        int rowCount = model4.getRowCount();
+        int rowCount = model3.getRowCount();
         ArrayList<Integer> selectedRows = new ArrayList<>();
         purchaseCarAmount = 0.0;
         //删除购物车里被选中的商品
         for (int row = 0; row < rowCount; row++) {
-            Boolean isSelected = (Boolean) model4.getValueAt(row, 3); // 获取第 3 列（操作列）的值，即 JCheckBox 是否选中
-
+            Boolean isSelected = (Boolean) model3.getValueAt(row, 3); // 获取第 3 列（操作列）的值，即 JCheckBox 是否选中
+            if (row == selectedRow) {
+                if (isSelected == true)
+                    isSelected = false;
+                else
+                    isSelected = true;
+            }
             System.out.println("内容为2222：" + isSelected);
             if (isSelected) {
                 selectedRows.add(row); // 记录选中的行索引
@@ -646,6 +657,7 @@ public class ShopTeacherStudentUI extends JFrame {
     // 购物车页面勾选框的类定义
     class CheckBoxRenderer extends DefaultTableCellRenderer {
         private JCheckBox checkBox = new JCheckBox();
+        private int counter = 0;
 
         public CheckBoxRenderer() {
             checkBox.setHorizontalAlignment(JCheckBox.CENTER);
@@ -667,6 +679,7 @@ public class ShopTeacherStudentUI extends JFrame {
     class CheckBoxEditor extends DefaultCellEditor {
         private JCheckBox checkBox = new JCheckBox();
         //private int amountColumnIndex; // 商品金额所在列的索引
+        private int counter = 0;
 
 
         public CheckBoxEditor() {
@@ -681,13 +694,13 @@ public class ShopTeacherStudentUI extends JFrame {
                         // 选中状态改变为已选中
                         int selectedRow = carttable.getSelectedRow();
                         if (selectedRow != -1) {
-                            updatePurchaseCarAmount();
+                            updatePurchaseCarAmount(selectedRow);
                         }
                     } else {
                         // 选中状态改变为未选中
                         int selectedRow = carttable.getSelectedRow();
                         if (selectedRow != -1) {
-                            updatePurchaseCarAmount();
+                            updatePurchaseCarAmount(selectedRow);
                         }
                     }
                 }
@@ -907,7 +920,7 @@ public class ShopTeacherStudentUI extends JFrame {
                             System.out.println("(支付)选中了行数：" + row);
                         }
                     }
-                    boolean flag = false;
+                    double flag = -4.00;
                     IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
                     if (selectedRows.size() > 0) {
                         //若有行被选中
@@ -926,26 +939,34 @@ public class ShopTeacherStudentUI extends JFrame {
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
+                        if (flag == -4.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "系统出错！");
+                        } else if (flag == -3.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "密码错误，请重新输入");
+                        } else if (flag == -2.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "卡已挂失");
+                        } else if (flag == -1.00) {
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "余额不足！请充值");
+                        } else {
+                            //后端依次增加消费记录
+                            for (Integer rowIndex : selectedRows) {
+                                IShopClientAPI iShopClientAPI = new IShopClientAPIImpl("localhost", 8888);
+                                String[][] good = iShopClientAPI.findGoodST((String) purchaseCar[rowIndex][0]);
+                                System.out.println("(String)purchaseCar[rowIndex][1]:" + purchaseCar[rowIndex][1]);
+                                Class<?> objClass = purchaseCar[rowIndex][1].getClass();
+                                PurchaseRecord record;
+                                if (objClass.getSimpleName().equals("String")) {
+                                    record = new PurchaseRecord(generateRandomString(20), good[0][0], Integer.parseInt((String) purchaseCar[rowIndex][1]), GlobalData.getUID(), new Date());
+                                } else {
+                                    //PurchaseRecord record=new PurchaseRecord(generateRandomString(20),good[0][0],Integer.parseInt((String)purchaseCar[rowIndex][1]),GlobalData.getUID(),new Date());
+                                    record = new PurchaseRecord(generateRandomString(20), good[0][0], (int) purchaseCar[rowIndex][1], GlobalData.getUID(), new Date());
+                                }
+                                iShopClientAPI = new IShopClientAPIImpl("localhost", 8888);
+                                iShopClientAPI.addPurchaseRecord(record);
 
-                        //后端依次增加消费记录
-                        for (Integer rowIndex : selectedRows) {
-                            IShopClientAPI iShopClientAPI = new IShopClientAPIImpl("localhost", 8888);
-                            String[][] good = iShopClientAPI.findGoodST((String) purchaseCar[rowIndex][0]);
-                            System.out.println("(String)purchaseCar[rowIndex][1]:" + purchaseCar[rowIndex][1]);
-                            Class<?> objClass = purchaseCar[rowIndex][1].getClass();
-                            PurchaseRecord record;
-                            if (objClass.getSimpleName().equals("String")) {
-                                record = new PurchaseRecord(generateRandomString(20), good[0][0], Integer.parseInt((String) purchaseCar[rowIndex][1]), GlobalData.getUID(), new Date());
-                            } else {
-                                //PurchaseRecord record=new PurchaseRecord(generateRandomString(20),good[0][0],Integer.parseInt((String)purchaseCar[rowIndex][1]),GlobalData.getUID(),new Date());
-                                record = new PurchaseRecord(generateRandomString(20), good[0][0], (int) purchaseCar[rowIndex][1], GlobalData.getUID(), new Date());
                             }
-                            iShopClientAPI = new IShopClientAPIImpl("localhost", 8888);
-                            iShopClientAPI.addPurchaseRecord(record);
 
-                        }
 
-                        if (flag) {
                             //从购物车里删除已支付的商品
                             for (Integer rowIndex : selectedRows) {
                                 //System.out.println(rowIndex);
@@ -956,24 +977,16 @@ public class ShopTeacherStudentUI extends JFrame {
                             }
 
                             for (Integer rowIndex : selectedRows) {
-                                //前端依次删除
-//                        purchaseCarAmount=purchaseCarAmount+Double.parseDouble((String)purchaseCar[rowIndex][2]);
-//                        String formattedAmount = String.format("%.2f", purchaseCarAmount);
-//                        totalamount.setText("￥"+formattedAmount);
-                                //updatePurchaseCarAmount();
+
                                 purchaseCar = deleteRow(purchaseCar, rowIndex);
                                 ShowTableDataModel3(purchaseCar);
 
                             }
                             totalamount.setText("￥0.00");
+                            JOptionPane.showMessageDialog(cardpaymentPanel, "充值成功，余额￥" + Double.toString(flag));
                         }
 
                     }
-
-                    //判断密码是否正确（跳弹窗提示密码错误）
-                    //判断余额，确认支付（跳弹窗提示余额不足）
-                    //账户减去支付的金额
-                    //JOptionPane.showMessageDialog(cardpaymentPanel, "支付成功！");
                     dispose();
 
                 }

@@ -3,6 +3,7 @@ package view.connect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.CourseSelection.Course;
 import view.CourseSelection.CourseClass;
+import view.client.ClientRWTool;
 import view.message.*;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     public CourseSelectClientAPIImp(String serverAddress, int serverPort) {
         try {
@@ -38,14 +39,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 400);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 400);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -70,14 +71,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 401);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 401);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -102,14 +103,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 402);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 402);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -134,14 +135,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(message);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 403);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 403);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -166,14 +167,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(message);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 404);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 404);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -198,14 +199,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 405);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 405);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -214,7 +215,7 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
 
 //      将 JSON 数据转换为对象
         IntMessage RespMessage = objectMapper.readValue(mess, IntMessage.class);
-        int result = RespMessage.getInt();
+        int result = RespMessage.getNum();
 //      处理结果
         return result;
     }
@@ -229,14 +230,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 406);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 406);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -260,14 +261,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 407);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 407);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -290,14 +291,14 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI {
             String jsonData = objectMapper.writeValueAsString(courseClass);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 408);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 408);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 

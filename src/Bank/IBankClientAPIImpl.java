@@ -2,7 +2,7 @@ package view.Bank;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.connect.RWTool;
+import view.client.ClientRWTool;
 import view.message.*;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     //构造函数
     public IBankClientAPIImpl(String serverAddress, int serverPort) {
@@ -38,7 +38,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
      * @return 充值结果，true表示充值成功，false表示充值失败
      */
     @Override
-    public boolean recharge(String id, double money, String pwd) {
+    public double recharge(String id, double money, String pwd) {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
@@ -49,7 +49,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankMoneyMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1001);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1001);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,15 +69,15 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         ObjectMapper objectMapper = new ObjectMapper();
 
 //      将 JSON 数据转换为对象
-        BoolRespMessage boolRespMessage = null;
+        DoubleMesage DoubleMesage = null;
         try {
-            boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+            DoubleMesage = objectMapper.readValue(mess, DoubleMesage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
 //      处理结果
-        boolean result = boolRespMessage.getFlag();
+        double result = DoubleMesage.getaDouble();
         return result;
     }
 
@@ -92,7 +92,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
      * @return 修改密码结果，true表示修改成功，false表示修改失败
      */
     @Override
-    public boolean changePwd(String id, String oldPwd, String newPwd, String newNewPwd)
+    public int changePwd(String id, String oldPwd, String newPwd, String newNewPwd)
             throws NullPointerException {
         //以下发送用户id给服务器
         try {
@@ -104,7 +104,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankChangePwdMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1003);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1003);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,7 +113,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -124,15 +124,15 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         ObjectMapper objectMapper = new ObjectMapper();
 
 //      将 JSON 数据转换为对象
-        BoolRespMessage boolRespMessage = null;
+        IntMessage intMessage = null;
         try {
-            boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+            intMessage = objectMapper.readValue(mess, IntMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
 //      处理结果
-        boolean result = boolRespMessage.getFlag();
+        int result = intMessage.getNum();
         return result;
     }
 
@@ -158,7 +158,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1004);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1004);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,7 +167,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -205,7 +205,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
      * @return 挂失/解挂结果，true表示挂失/解挂成功，false表示挂失/解挂失败
      */
     @Override
-    public boolean changeLoss(String id, String pwd) throws NullPointerException {
+    public int changeLoss(String id, String pwd) throws NullPointerException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
@@ -216,7 +216,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1000);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1000);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,7 +225,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -236,15 +236,15 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         ObjectMapper objectMapper = new ObjectMapper();
 
 //      将 JSON 数据转换为对象
-        BoolRespMessage boolRespMessage = null;
+        IntMessage intMessage = null;
         try {
-            boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+            intMessage = objectMapper.readValue(mess, IntMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
 //      处理结果
-        boolean result = boolRespMessage.getFlag();
+        int result = intMessage.getNum();
         return result;
     }
 
@@ -257,7 +257,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
      * @param pwd  用户输入的密码
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    public boolean bankConsume(String id, bankBill bill, String pwd) throws IOException {
+    public double bankConsume(String id, bankBill bill, String pwd) throws IOException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
@@ -268,7 +268,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankBillMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1002);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1002);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -277,7 +277,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -288,15 +288,15 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         ObjectMapper objectMapper = new ObjectMapper();
 
 //      将 JSON 数据转换为对象
-        BoolRespMessage boolRespMessage = null;
+        DoubleMesage doubleMesage = null;
         try {
-            boolRespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
+            doubleMesage = objectMapper.readValue(mess, DoubleMesage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
 //      处理结果
-        boolean result = boolRespMessage.getFlag();
+        double result = doubleMesage.getaDouble();
         return result;
     }
 
@@ -318,7 +318,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1005);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1005);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -327,7 +327,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -366,7 +366,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankIDMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1006);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1006);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -375,7 +375,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -410,7 +410,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
             String jsonData = objectMapper.writeValueAsString(bankAccountMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 1007);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 1007);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,7 +419,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

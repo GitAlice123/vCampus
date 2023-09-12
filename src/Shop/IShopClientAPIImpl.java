@@ -2,7 +2,7 @@ package view.Shop;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.connect.RWTool;
+import view.client.ClientRWTool;
 import view.message.*;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     //构造函数
     public IShopClientAPIImpl(String serverAddress, int serverPort) {
@@ -46,7 +46,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 900);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 900);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -93,7 +93,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 901);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 901);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,7 +102,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -141,7 +141,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 910);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 910);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -188,7 +188,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             String jsonData = objectMapper.writeValueAsString(stringIntMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 902);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 902);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +197,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -238,7 +238,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 903);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 903);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,7 +247,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -285,7 +285,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 904);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 904);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -294,7 +294,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -332,7 +332,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 905);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 905);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -341,7 +341,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -379,7 +379,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             String jsonData = objectMapper.writeValueAsString(goodMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 906);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 906);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -388,7 +388,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -430,7 +430,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             String jsonData = objectMapper.writeValueAsString(stringIntMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 907);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 907);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -439,7 +439,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -480,7 +480,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 908);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 908);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -489,7 +489,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -527,7 +527,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 909);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 909);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -536,7 +536,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -572,7 +572,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 911);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 911);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -581,7 +581,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -623,7 +623,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
             System.out.println(jsonData);
 
             //发给服务端
-            rwTool.ClientSendOutStream(outputStream, jsonData, 912);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 912);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -632,7 +632,7 @@ public class IShopClientAPIImpl implements IShopClientAPI {
         //接收服务器响应
         String receivedJsonData = null;
         try {
-            receivedJsonData = rwTool.ClientReadStream(inputStream);
+            receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

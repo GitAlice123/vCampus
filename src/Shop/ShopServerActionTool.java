@@ -2,8 +2,8 @@ package view.Shop;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.connect.RWTool;
 import view.message.*;
+import view.server.ServerRWTool;
 
 import java.io.OutputStream;
 import java.net.Socket;
@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class ShopServerActionTool {
     private ShopFunction funcs = new ShopFunction();
-    private RWTool rwTool = new RWTool();
+    private ServerRWTool ServerRWTool = new ServerRWTool();
 
     public ShopServerActionTool() {
 
@@ -45,7 +45,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +79,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,7 +114,7 @@ public class ShopServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,7 +148,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,7 +189,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,7 +224,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,7 +258,7 @@ public class ShopServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -294,7 +294,7 @@ public class ShopServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -329,7 +329,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -363,7 +363,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -397,7 +397,7 @@ public class ShopServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -432,7 +432,7 @@ public class ShopServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -467,7 +467,7 @@ public class ShopServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }

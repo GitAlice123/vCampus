@@ -180,16 +180,7 @@ public class ShopFunction {
      * @return 商店中所有商品的String[][]形式
      */
     public String[][] getAllGoodsST() {
-//        // 输出Good[]类型的数据
-//        for (Good good : GD.findAllGoods()) {
-//            System.out.println("商品序号: " + good.getGoodId());
-//            System.out.println("商品名称: " + good.getGoodName());
-//            System.out.println("商品价格: " + good.getGoodPrice());
-//            System.out.println("商品类别: " + good.getCategory());
-//            System.out.println("供应商: " + good.getProvider());
-//            System.out.println("商品库存数: " + good.getGoodStock());
-//            System.out.println();
-//        }
+
         return convertGoodsToStringST(GD.findAllGoods());
     }
 

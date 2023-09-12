@@ -2,8 +2,8 @@ package view.Bank;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.connect.RWTool;
 import view.message.*;
+import view.server.ServerRWTool;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class bankServerActionTool {
     private bankFunction funcs = new bankFunction();
-    private RWTool rwTool = new RWTool();
+    private ServerRWTool ServerRWTool = new ServerRWTool();
 
     public bankServerActionTool() {
 
@@ -34,19 +34,19 @@ public class bankServerActionTool {
         }
         System.out.println("Into object 1000");
 
-        Boolean flag = false;
+        int flag = -1;
         //执行对应的操作，这里是解挂/挂失，调用bankFunction里面的函数即可
         String id = bankIDMessage.getId();
         String pwd = bankIDMessage.getPwd();
         flag = funcs.changeLoss(id, pwd);
 
         //下面将response信息返回客户端
-        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        IntMessage respMessage = new IntMessage(flag);
         try {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,19 +70,19 @@ public class bankServerActionTool {
 
 
         //执行对应操作，这里是充值，直接调用bankFunction里的方法即可
-        Boolean flag = false;
+        double flag = -3.00;
         String userId = bankMoneyMessage.getId();
         double userMoney = bankMoneyMessage.getMoney();
         String userPwd = bankMoneyMessage.getPwd();
         flag = funcs.recharge(userId, userMoney, userPwd);
 
         //下面将response信息返回客户端
-        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        DoubleMesage respMessage = new DoubleMesage(flag);
         try {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,7 +106,7 @@ public class bankServerActionTool {
 
 
         //执行对应操作，这里是消费，直接调用bankFunction里的方法即可
-        Boolean flag = false;
+        double flag = -4.00;
         String userId = bankBillMessage.getId();
         bankBill userBill = bankBillMessage.getBill();
         String userPwd = bankBillMessage.getPwd();
@@ -117,12 +117,12 @@ public class bankServerActionTool {
         }
 
         //下面将response信息返回客户端
-        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        DoubleMesage respMessage = new DoubleMesage(flag);
         try {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,7 +146,7 @@ public class bankServerActionTool {
 
 
         //执行对应操作，这里是消费，直接调用bankFunction里的方法即可
-        Boolean flag = false;
+        int flag = -1;
         String userId = bankChangePwdMessage.getId();
         String userOldPwd = bankChangePwdMessage.getOldPwd();
         String userNewPwd = bankChangePwdMessage.getNewPwd();
@@ -154,12 +154,12 @@ public class bankServerActionTool {
         flag = funcs.changePwd(userId, userOldPwd, userNewPwd, usernewNewPwd);
 
         //下面将response信息返回客户端
-        BoolRespMessage respMessage = new BoolRespMessage(flag);
+        IntMessage respMessage = new IntMessage(flag);
         try {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -196,7 +196,7 @@ public class bankServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,7 +231,7 @@ public class bankServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,7 +265,7 @@ public class bankServerActionTool {
             // 将 respMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -300,7 +300,7 @@ public class bankServerActionTool {
             // 将 bankMoneyMessage 对象转换为 JSON 字符串
             String outputData = objectMapper.writeValueAsString(respMessage);
             OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
+            ServerRWTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }

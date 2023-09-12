@@ -1,4 +1,4 @@
-package view.connect;
+package view.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +9,7 @@ import view.Library.Book;
 import view.Library.BookHold;
 import view.Library.BookOperationRecord;
 import view.Login.User;
+import view.connect.Pair;
 import view.message.*;
 
 import java.io.BufferedReader;
@@ -24,10 +25,18 @@ public class ServerActionTool {
     private static final String URL = "https://api.openai.com/v1/chat/completions";
     private static final String HOST = "localhost";
     private static final int PORT = 8888;
-    private RWTool rwTool = new RWTool();
+    private ServerRWTool rwTool = new ServerRWTool();
+    private String userID;
+
     public ServerActionTool() {
     }
 
+    /**
+     * 功能函数 返回语言模型的API AccessToken
+     *
+     * @return 返回语言模型的API AccessToken
+     * @throws IOException
+     */
     private static String getAccessToken() throws IOException {
         String apiKey = "lNiXykCWosvV8mWOt1VGAFFQ";
         String secretKey = "28VenBQWggxqSGhHlYSn4dCOCx8NpILm";
@@ -62,7 +71,21 @@ public class ServerActionTool {
         }
     }
 
-    public void Action100(String jsonData, Socket clientSocket) {
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    /**
+     * 处理登录请求，并保留成功登录的用户ID用于唯一标识线程
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
+    public String Action100(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -74,12 +97,20 @@ public class ServerActionTool {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 100");
+
+        /*
+            处理登录请求，看是否允许登录
+         */
         UserDao userdao = new UserDao();
         view.Login.User user = userdao.findUserByuId(loginMessage.getUserId());
         boolean flag = false;
         if (user != null && user.getuPwd().equals(loginMessage.getPassword())
                 && user.getuRole().equals(loginMessage.getRole())) {
             flag = true;
+            /*
+            保存用户ID
+             */
+            setUserID(user.getuId());
         }
         // 下面将response信息返回客户端
         BoolRespMessage respMessage = new BoolRespMessage(flag);
@@ -92,6 +123,7 @@ public class ServerActionTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return loginMessage.getUserId();
     }
 
     public void Action101(String jsonData, Socket clientSocket) {
@@ -445,8 +477,13 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 用ISBN找书
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action208(String jsonData, Socket clientSocket) {
-        // 用ISBN找书
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -474,8 +511,13 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 取回所有操作记录
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action209(String jsonData, Socket clientSocket) {
-        // 取回所有操作记录
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -534,6 +576,12 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * TODO:忘了是啥了。。
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action211(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -562,6 +610,12 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 返回所有图书，包括图书名字、编号等
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action212(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -590,6 +644,12 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 续借图书
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action213(String jsonData, Socket clientSocket) {
         // 续借书籍
         // 创建 ObjectMapper 对象
@@ -609,7 +669,6 @@ public class ServerActionTool {
         /* 以下是和数据库交互部分续借图书 */
 
         BookOperationRecordDao bookOperationRecordDao = new BookOperationRecordDao();
-        // TODO:借书操作，需要传入用户id
         flag_2 = bookOperationRecordDao.AddBookOperationRecord(bookOperationRecord);
 
         BookHoldDao bookHoldDao = new BookHoldDao();
@@ -629,6 +688,12 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 展示馆藏图书数据信息
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action214(String jsonData, Socket clientSocket) {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -656,6 +721,12 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 得到所有图书操作记录
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action215(String jsonData, Socket clientSocket) {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -684,7 +755,12 @@ public class ServerActionTool {
         }
     }
 
-    //获得所有department
+    /**
+     * 获得所有department
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action500(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -801,7 +877,12 @@ public class ServerActionTool {
         }
     }
 
-    //504 支付所选择挂号
+    /**
+     * 支付所选择挂号
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action504(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -831,7 +912,12 @@ public class ServerActionTool {
         }
     }
 
-    //505 支付所选择挂号
+    /**
+     * 支付所选择挂号
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action505(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -871,7 +957,12 @@ public class ServerActionTool {
         }
     }
 
-    //506 根据科室ID查找科室
+    /**
+     * 根据科室ID查找科室
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action506(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -899,7 +990,12 @@ public class ServerActionTool {
         }
     }
 
-    //507 返回所有挂号信息
+    /**
+     * 返回所有挂号信息
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action507(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -926,7 +1022,12 @@ public class ServerActionTool {
         }
     }
 
-    //508 根据信息新建科室
+    /**
+     * 根据信息新建科室
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action508(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -953,7 +1054,12 @@ public class ServerActionTool {
         }
     }
 
-    //509 根据科室ID删除科室
+    /**
+     * 根据科室ID删除科室
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action509(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -981,6 +1087,13 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 调用语言模型API
+     *
+     * @param jsonData
+     * @param clientSocket
+     * @throws IOException
+     */
     public void Action2000(String jsonData, Socket clientSocket) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -1039,6 +1152,45 @@ public class ServerActionTool {
         String answer = chatInnerResp.getResult();
         GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
 
+        try {
+            String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
+            System.out.println(outputData);
+            OutputStream outputStream2 = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream2, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 和其他客户端发消息的chat
+     *
+     * @param jsonData
+     * @param clientSocket
+     * @throws IOException
+     */
+    public Pair<String, String> Action2001(String jsonData, Socket clientSocket) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        ChatWithUserMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, ChatWithUserMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 2001");
+
+        // 寻找待接收的用户
+        String userToGet = uniqueMessage.getToUserID();
+        String message = uniqueMessage.getMessageToSent();
+        Pair<String, String> pair = new Pair<>(userToGet, message);
+        return pair;
+    }
+
+    public void Action0(String answer, Socket clientSocket) {
+        GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
             System.out.println(outputData);

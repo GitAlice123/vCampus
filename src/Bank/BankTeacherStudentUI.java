@@ -35,7 +35,7 @@ public class BankTeacherStudentUI extends JFrame {
     JLabel amountLabel = new JLabel("充值金额");
     JTextField amountField = new JTextField();//用户输入的充值金额
     JLabel rechargepwdLabel = new JLabel("密码");
-    JTextField rechargepwdField = new JTextField();//用户输入的密码
+    JPasswordField rechargepwdField = new JPasswordField();//用户输入的密码
     JButton confirmrechargeBtn = new JButton("确认充值");//用户点击确认充值按钮
 
 
@@ -46,9 +46,9 @@ public class BankTeacherStudentUI extends JFrame {
     JLabel oldpwdLabel = new JLabel("原密码");
     JLabel newpwdLabel = new JLabel("新密码");
     JLabel ensurepwdLabel = new JLabel("确认新密码");
-    JTextField oldpwdField = new JTextField();
-    JTextField newpwdField = new JTextField();
-    JTextField ensurepwdField = new JTextField();
+    JPasswordField oldpwdField = new JPasswordField();
+    JPasswordField newpwdField = new JPasswordField();
+    JPasswordField ensurepwdField = new JPasswordField();
     JButton confirmchangepwdBtn = new JButton("确认修改");
     //账单
     JButton searchBtn = new JButton("查询");
@@ -106,7 +106,7 @@ public class BankTeacherStudentUI extends JFrame {
     JLabel cardstatusLabel = new JLabel("卡片状态");
     JLabel cardstatus = new JLabel(thisAccount.isLoss() ? "正常" : "已挂失");
     JLabel cardpwdLabel = new JLabel("卡片密码");
-    JTextField cardpwdField = new JTextField();
+    JPasswordField cardpwdField = new JPasswordField();
     //JButton confirmfreezeBtn=new JButton(thisAccount.isLoss()?"确认挂失":"确认解挂");
     JButton confirmfreezeBtn = new JButton("确认挂失");
 
@@ -554,8 +554,16 @@ public class BankTeacherStudentUI extends JFrame {
         double dInputAmount = Double.parseDouble(inputAmount);
         String inputPwd = rechargepwdField.getText();
         IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
-        iBankClientAPI.recharge(thisAccount.getId(), dInputAmount, inputPwd);
-
+        double result = iBankClientAPI.recharge(thisAccount.getId(), dInputAmount, inputPwd);
+        if (result == -3.00) {
+            JOptionPane.showMessageDialog(cardPanel, "充值失败");
+        } else if (result == -2.00) {
+            JOptionPane.showMessageDialog(cardPanel, "密码错误，请重新输入");
+        } else if (result == -1.00) {
+            JOptionPane.showMessageDialog(cardPanel, "卡已挂失");
+        } else {
+            JOptionPane.showMessageDialog(cardPanel, "充值成功，余额￥" + Double.toString(result));
+        }
     }
 
     /**
@@ -566,7 +574,16 @@ public class BankTeacherStudentUI extends JFrame {
         String newPwd = newpwdField.getText();
         String newNewPwd = ensurepwdField.getText();
         IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
-        iBankClientAPI.changePwd(thisAccount.getId(), oldPwd, newPwd, newNewPwd);
+        int result = iBankClientAPI.changePwd(thisAccount.getId(), oldPwd, newPwd, newNewPwd);
+        if (result == -1) {
+            JOptionPane.showMessageDialog(changepwd, "系统错误！");
+        } else if (result == 0) {
+            JOptionPane.showMessageDialog(changepwd, "新密码两次输入不同");
+        } else if (result == 1) {
+            JOptionPane.showMessageDialog(changepwd, "修改成功");
+        } else if (result == 2) {
+            JOptionPane.showMessageDialog(changepwd, "原密码输入错误");
+        }
     }
 
     /**
@@ -577,49 +594,7 @@ public class BankTeacherStudentUI extends JFrame {
         String selectedYear = (String) year.getSelectedItem();
         String query = searchField.getText();
         String[][] bills = null;
-//        if(!selectedMonth.equals("")&&(!selectedYear.equals(""))){//如果选择了年月
-//            System.out.println("输入的年:"+selectedYear+",输入的月："+selectedMonth);
-//            IBankClientAPI iBankClientAPI=new IBankClientAPIImpl("localhost", 8888);
-//
-//            // 构建日期字符串
-//            String dateString = selectedYear + "-" + selectedMonth + "-01";
-//
-//            // 定义日期格式
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            Date firstSecondOfMonth=new Date();
-//            Date lastSecondOfMonth=new Date();
-//            try {
-//                // 解析日期字符串为日期对象
-//                Date date = dateFormat.parse(dateString);
-//
-//                // 获取日历实例
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(date);
-//
-//                // 设置为当月的第一天
-//                calendar.set(Calendar.DAY_OF_MONTH, 1);
-//                calendar.set(Calendar.HOUR_OF_DAY, 0);
-//                calendar.set(Calendar.MINUTE, 0);
-//                calendar.set(Calendar.SECOND, 0);
-//
-//                // 获取当月的第一秒
-//                firstSecondOfMonth = calendar.getTime();
-//                System.out.println("第一秒：" + firstSecondOfMonth);
-//
-//                // 设置为下个月的第一天
-//                calendar.add(Calendar.MONTH, 1);
-//                calendar.set(Calendar.DAY_OF_MONTH, 1);
-//                calendar.add(Calendar.SECOND, -1);
-//
-//                // 获取当月的最后一秒
-//                lastSecondOfMonth = calendar.getTime();
-//                System.out.println("最后一秒：" + lastSecondOfMonth);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            iBankClientAPI.billForSometime(thisAccount.getId(), firstSecondOfMonth, lastSecondOfMonth,query);
-//            // TODO 这里用时间查询总查不对，后续研究怎么根据输入的年月来定义起始和终止时间,等xpl
-//        }
+
 
         if (!selectedMonth.equals("") && !selectedYear.equals("")) {
             System.out.println("输入的年：" + selectedYear + "，输入的月：" + selectedMonth);
@@ -667,10 +642,19 @@ public class BankTeacherStudentUI extends JFrame {
      */
     private void confirmfreeze() {
         String Pwd = cardpwdField.getText();
-        // TODO
         System.out.println("改变挂失输入的密码为：" + Pwd);
         IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
-        iBankClientAPI.changeLoss(thisAccount.getId(), Pwd);
+        int result = iBankClientAPI.changeLoss(thisAccount.getId(), Pwd);
+        if (result == -1) {
+            JOptionPane.showMessageDialog(reportloss, "操作失败");
+        } else if (result == 0) {
+            JOptionPane.showMessageDialog(reportloss, "密码输入错误");
+        } else if (result == 1) {
+            JOptionPane.showMessageDialog(reportloss, "成功挂失");
+        } else if (result == 2) {
+            JOptionPane.showMessageDialog(reportloss, "成功解挂");
+        }
+
     }
 
     /**

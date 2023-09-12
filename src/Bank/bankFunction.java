@@ -21,7 +21,8 @@ public class bankFunction {
      * @param pwd
      * @return 充值结果，true表示充值成功，false表示充值失败
      */
-    public boolean recharge(String id, double money, String pwd) {
+    public double recharge(String id, double money, String pwd) {
+        double result = 0;
         bankAccount thisAccount = bADao.findBankAccountById(id);
         //若卡正常，则可以消费
         try {
@@ -32,22 +33,21 @@ public class bankFunction {
 
                 //重新获取数据库最新数据然后显示余额弹窗
                 thisAccount = bADao.findBankAccountById(GlobalData.getUID());
-                System.out.println("充值成功，余额￥" + Double.toString(thisAccount.getBalance()));
-                //JOptionPane.showMessageDialog(bankTeacherStudentView, "充值成功，余额￥"+Double.toString(thisAccount.getBalance()));
-                // TODO 修改弹窗问题
-                //JOptionPane.showMessageDialog(null, "充值成功，余额￥"+Double.toString(thisAccount.getBalance()), "result", JOptionPane.INFORMATION_MESSAGE);
+                result = thisAccount.getBalance();//若成功，返回余额
+
             } else if (!bADao.isLoss(id)) {
+                result = -1.00;//卡已挂失返回-1
                 System.out.println("卡已挂失");
-                //JOptionPane.showMessageDialog(bankTeacherStudentView, "卡已挂失");
+
             } else if (!paymentPwdJudge(id, pwd)) {
+                result = -2.00;//密码错误，请重新输入
                 System.out.println("密码错误，请重新输入");
-                //JOptionPane.showMessageDialog(bankTeacherStudentView, "密码错误，请重新输入");
             }
-            return true;
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return -3;
     }
 
     /**
@@ -59,38 +59,30 @@ public class bankFunction {
      * @param newNewPwd 确认新密码
      * @return 修改密码结果，true表示修改成功，false表示修改失败
      */
-    public boolean changePwd(String id, String oldPwd, String newPwd, String newNewPwd) throws NullPointerException {
+    public int changePwd(String id, String oldPwd, String newPwd, String newNewPwd) throws NullPointerException {
         try {
             bankAccount thisAccount = bADao.findBankAccountById(id);
             if (!newPwd.equals(newNewPwd)) {
                 System.out.println("新密码两次输入不同");
                 //JOptionPane.showMessageDialog(bankTeacherStudentView, "新密码两次输入不同");
-                return false;
+                return 0;
             }
             if (thisAccount.getPaymentPwd().equals(oldPwd)) {
                 bADao.changePwd(id, oldPwd, newPwd);
                 System.out.println("修改成功");
                 //JOptionPane.showMessageDialog(bankTeacherStudentView, "修改成功");
-                return true;
+                return 1;
             } else {
                 System.out.println("原密码输入错误");
+                return 2;
                 //JOptionPane.showMessageDialog(bankTeacherStudentView, "原密码输入错误");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
-//    /**
-//     * 查询账单
-//     * @param query 查询关键字
-//     * @return 匹配查询关键字的账单对象，若用户自己查找，关键字为订单号或商品说明；若管理员查找,关键字为订单号或师生一卡通ID
-//     */
-//    public String[][] billSearch(String query,String ID){
-//        bankBill[] bills=bBDao.findBillsByQuery(query,ID);
-//        return convertBillsToStrings(bills);
-//    }
 
     /**
      * 查找并返回数据库中一卡通号为id、账单描述（类型）为query、且时间在startTime和endTime之间的所有账单信息
@@ -128,7 +120,8 @@ public class bankFunction {
      *
      * @return 挂失/解挂结果，true表示挂失/解挂成功，false表示挂失/解挂失败
      */
-    public boolean changeLoss(String id, String pwd) throws NullPointerException {
+    public int changeLoss(String id, String pwd) throws NullPointerException {
+        int result = -1;
         if (pwd == null) {
             bADao.changeLoss(id);
             System.out.println("管理员改变挂失状态成功");
@@ -136,27 +129,28 @@ public class bankFunction {
         try {
             bankAccount thisAccount = bADao.findBankAccountById(id);
             if (!thisAccount.getPaymentPwd().equals(pwd)) {
-                System.out.println("密码错误");
-                ////JOptionPane.showMessageDialog(bankTeacherStudentView, "密码错误");
-                // TODO 执行弹窗的时候会卡死
-                return false;
+                return 0;//密码输入错误
+
+
             }
             if (bADao.isLoss(id)) {//若正常
-                System.out.println("正常，现在在挂失");
+
+                //System.out.println("正常，现在在挂失");
                 bADao.changeLoss(id);
-                System.out.println("挂失成功");
-                ////JOptionPane.showMessageDialog(bankTeacherStudentView, "成功挂失");
-                return true;
+                return 1;//成功挂失
+
+
             } else {//若已挂失
+
                 bADao.changeLoss(id);
                 System.out.println("解挂成功");
-                ////JOptionPane.showMessageDialog(bankTeacherStudentView, "成功解挂");
-                return true;
+                return 2;//成功解挂
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -167,7 +161,8 @@ public class bankFunction {
      * @param pwd  密码
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    public boolean bankConsume(String id, bankBill bill, String pwd) throws IOException {
+    public double bankConsume(String id, bankBill bill, String pwd) throws IOException {
+        double result = -4.00;
         bankAccount thisAccount = bADao.findBankAccountById(id);
         //若卡正常，则可以消费
         try {
@@ -180,23 +175,27 @@ public class bankFunction {
 
                     //向数据库添加订单信息
                     AddBankBill(bill);
-                    //JOptionPane.showMessageDialog(bankTeacherStudentView, "支付成功，余额￥"+Double.toString(thisAccount.getBalance()));
+                    thisAccount = bADao.findBankAccountById(id);
+                    result = thisAccount.getBalance();
                 } else {
                     System.out.println("余额不足！请充值");
-                    //JOptionPane.showMessageDialog(bankTeacherStudentView, "余额不足！请充值");
+                    result = -1.00;
+
                 }
             } else if (!bADao.isLoss(id)) {
                 System.out.println("卡已挂失");
-                //JOptionPane.showMessageDialog(bankTeacherStudentView, "卡已挂失");
+                result = -2.00;
+
             } else if (!paymentPwdJudge(id, pwd)) {
                 System.out.println("密码错误，请重新输入");
-                //JOptionPane.showMessageDialog(bankTeacherStudentView, "密码错误，请重新输入");
+                result = -3.00;
+
             }
-            return true;
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return -4.00;
     }
 
     /**

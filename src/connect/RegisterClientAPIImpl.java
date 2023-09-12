@@ -2,6 +2,7 @@ package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Global.GlobalData;
+import view.client.ClientRWTool;
 import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 import view.message.RegisterReqMessage;
@@ -15,7 +16,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     /* 构造函数 */
     public RegisterClientAPIImpl(String serverAddress, int serverPort) {
@@ -39,14 +40,14 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(registerReqMessage);
             System.out.println(jsonData);
-            rwTool.ClientSendOutStream(outputStream, jsonData, 101);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 101);
         } catch (Exception e) {
             e.printStackTrace();
         }
         //以下收取服务器响应
         boolean result = false;
         try {
-            String receivedJsonData = rwTool.ClientReadStream(inputStream);
+            String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
             String mess = receivedJsonData.toString();
 
             //  创建 ObjectMapper 对象
@@ -76,7 +77,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
             String jsonData = objectMapper.writeValueAsString(loginMessage);
             System.out.println(jsonData + " Successfully send request!");
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 102);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 102);
 
 
         } catch (Exception e) {
@@ -84,7 +85,7 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 

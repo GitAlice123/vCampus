@@ -1,4 +1,8 @@
-package view.connect;
+package view.server;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import view.message.IDSendMessage;
+import view.message.serverGetMessage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,14 +10,8 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-
-public class RWTool {
-    // 读写流的工具函数
-
-    /**
-     * 无参构造函数。
-     */
-    public RWTool() {
+public class ServerRWTool {
+    public ServerRWTool() {
     }
 
     /**
@@ -23,7 +21,7 @@ public class RWTool {
      * @return 消息内容和消息编号的配对
      * @throws IOException 如果读取过程中发生 I/O 错误
      */
-    public Pair<String, Integer> ServerReadStream(InputStream inputStream) throws IOException {
+    public serverGetMessage ServerReadStream(InputStream inputStream) throws IOException {
         String jsonData;
         int messageNumber;
         byte[] lengthBytes = new byte[4];
@@ -34,6 +32,22 @@ public class RWTool {
             throw new RuntimeException(e);
         }
         int messageLength = ByteBuffer.wrap(lengthBytes, 0, 4).getInt();
+        if (messageLength == 0)// 说明是clientReceiver上线
+        {
+            // 消息长度、学号信息
+            byte[] length = new byte[4];
+            inputStream.read(length);
+            int mLength = ByteBuffer.wrap(length, 0, 4).getInt();
+            byte[] jsonDataBytes = new byte[mLength];
+            inputStream.read(jsonDataBytes);  // 读取学号
+            jsonData = new String(jsonDataBytes, StandardCharsets.UTF_8);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            IDSendMessage boolRespMessage = objectMapper.readValue(jsonData, IDSendMessage.class);
+            serverGetMessage m = new serverGetMessage(0, mLength, boolRespMessage.getUserID());
+            return m;
+        }
+
         inputStream.read(indexBytes);
         messageNumber = ByteBuffer.wrap(indexBytes, 0, 4).getInt();
 
@@ -47,7 +61,8 @@ public class RWTool {
         System.out.println("message number: " + messageNumber);
         System.out.println(jsonData);
 
-        return new Pair<>(jsonData, messageNumber);
+        // 长度、消息编码、信息
+        return new serverGetMessage(messageLength, messageNumber, jsonData);
     }
 
     /**
@@ -70,6 +85,4 @@ public class RWTool {
         outputStream.write(responseServer);  // 写入消息内容
         outputStream.flush();
     }
-
-
 }

@@ -1,7 +1,7 @@
 package view.Hospital;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.connect.RWTool;
+import view.client.ClientRWTool;
 import view.message.*;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     public HospitalClientAPIImp(String serverAddress, int serverPort) {
         try {
@@ -37,14 +37,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 500);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 500);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -69,14 +69,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 501);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 501);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -101,14 +101,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 502);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 502);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -138,14 +138,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(register);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 503);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 503);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -170,14 +170,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 504);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 504);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -202,14 +202,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(registerMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 505);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 505);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -234,14 +234,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 506);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 506);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -266,14 +266,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 507);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 507);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -297,14 +297,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(department);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 508);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 508);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -330,14 +330,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 509);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 509);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 

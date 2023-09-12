@@ -56,8 +56,15 @@ public class logInUI extends JFrame {
         }
     };
 
-    public logInUI() {
+    public logInUI() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         super("虚拟校园系统");
+        // 设置外观为Windows外观
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+        UIManager.put("nimbusBase", new Color(46, 139, 87)); // 边框
+        UIManager.put("nimbusBlueGrey", new Color(46, 139, 87)); // 按钮
+        UIManager.put("control", new Color(240, 255, 240)); // 背景
 
         GlobalData.setServerAddr("localhost", "8888");
 
@@ -173,24 +180,6 @@ public class logInUI extends JFrame {
         setContentPane(backgroundPanel);
         setResizable(false);
         setVisible((true));
-    }
-
-    public static void main(String[] args) {
-        try {
-            // 设置外观为Windows外观
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(46, 139, 87)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(46, 139, 87)); // 按钮
-            UIManager.put("control", new Color(240, 255, 240)); // 背景
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        new logInUI();
     }
 
     public JTextField getUserNameTxt() {

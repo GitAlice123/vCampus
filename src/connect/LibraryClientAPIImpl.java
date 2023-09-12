@@ -5,6 +5,7 @@ import view.Global.GlobalData;
 import view.Library.Book;
 import view.Library.BookHold;
 import view.Library.BookOperationRecord;
+import view.client.ClientRWTool;
 import view.message.*;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     public LibraryClientAPIImpl(String serverAddress, int serverPort) {
         try {
@@ -41,13 +42,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(noDataReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 200);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 200);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -75,13 +76,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(registerReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 201);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 201);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -109,13 +110,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(searchBookNameMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 202);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 202);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -143,13 +144,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookISBNMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 203);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 203);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -177,13 +178,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 204);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 204);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -211,13 +212,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 205);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 205);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -244,13 +245,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 206);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 206);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -277,13 +278,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 207);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 207);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -310,13 +311,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookISBNMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 208);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 208);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -341,13 +342,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(registerReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 201);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 201);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -374,13 +375,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 209);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 209);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -417,13 +418,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 210);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 210);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -454,13 +455,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 211);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 211);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -490,13 +491,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 212);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 212);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -526,13 +527,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(bookOperationRecord);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 213);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 213);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -559,13 +560,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 214);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 214);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -593,13 +594,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(uniqueMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 209);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 209);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -626,13 +627,13 @@ public class LibraryClientAPIImpl implements LibraryClientAPI {
             String jsonData = objectMapper.writeValueAsString(registerReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 215);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 215);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 

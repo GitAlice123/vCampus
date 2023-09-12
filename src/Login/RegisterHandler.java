@@ -30,7 +30,17 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
             // 执行按钮操作
             if ("返回".equals(text2)) {
                 registerView.dispose();
-                new logInUI();
+                try {
+                    new logInUI();
+                } catch (UnsupportedLookAndFeelException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InstantiationException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IllegalAccessException ex) {
+                    throw new RuntimeException(ex);
+                }
             } else if (!radioButtonSelected) {
                 // 当单选按钮未被选择时，不执行后续的操作
                 JOptionPane.showMessageDialog(registerView, "请先选择单选按钮");

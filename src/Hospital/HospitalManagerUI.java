@@ -394,21 +394,19 @@ public class HospitalManagerUI extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new HospitalManagerUI();
-    }
-
     //前端获取所有的医生信息
     public void getAllDepartments() throws IOException {
         HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
         departments = convertDepartmentToStringArray(hospitalClientAPI.GetAllDepartments());
     }
 
+
     //前端获取所有的挂号记录
     public void getAllRegisterRecord() throws IOException {
         HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
         registers = convertRegisterToStringArray(hospitalClientAPI.GetAllRegisters());
     }
+
 
     /**
      * 将Department[]类数据转换为String[][]。
@@ -473,6 +471,7 @@ public class HospitalManagerUI extends JFrame {
         return sdf.format(date);
     }
 
+
     /**
      * 显示医生信息的表格信息
      */
@@ -518,6 +517,7 @@ public class HospitalManagerUI extends JFrame {
         model2.fireTableDataChanged();
     }
 
+
     /**
      * 清空文字框
      */
@@ -530,4 +530,9 @@ public class HospitalManagerUI extends JFrame {
         addressField.setText("");
         IDField2.setText("");
     }
+
+
+//    public static void main(String[] args) {
+//        new HospitalManagerUI();
+//    }
 }

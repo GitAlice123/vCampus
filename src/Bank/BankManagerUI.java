@@ -152,16 +152,18 @@ public class BankManagerUI extends JFrame {
         clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
         System.out.println("点击的行索引：" + clickedRow);
         //修改后端数据库中的卡片挂失状态
-        iBankClientAPI.changeLoss(accounts[clickedRow][2], null);
+        int result = iBankClientAPI.changeLoss(accounts[clickedRow][2], null);
+        if (result == -1) {
+            JOptionPane.showMessageDialog(centerPanel, "操作失败");
+        } else if (result == 1) {
+            JOptionPane.showMessageDialog(centerPanel, "成功挂失");
+        } else if (result == 2) {
+            JOptionPane.showMessageDialog(centerPanel, "成功解挂");
+        }
+
         //修改当前显示的accounts的卡片挂失的状态的显示
         accounts[clickedRow][4] = (accounts[clickedRow][4].equals("正常") ? "已挂失" : "正常");
 
-        // 修改对应按钮单元格的值
-        //String buttonText = clickedButton.getText();
-        //String newButtonText = buttonText.equals("挂失") ? "解挂" : "挂失";
-
-        //model.setValueAt(newButtonText, clickedRow, 5); // 修改第 5 列的值
-        // TODO 这里按钮的值不变！！！
     }
 
     /**

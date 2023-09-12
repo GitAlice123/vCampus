@@ -2,6 +2,7 @@ package view.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Global.GlobalData;
+import view.client.ClientRWTool;
 import view.message.BoolRespMessage;
 import view.message.LoginMessage;
 
@@ -14,7 +15,7 @@ public class LoginClientAPIImpl implements LoginClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private RWTool rwTool = new RWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
 
     //构造函数
     public LoginClientAPIImpl(String serverAddress, int serverPort) {
@@ -39,14 +40,14 @@ public class LoginClientAPIImpl implements LoginClientAPI {
             String jsonData = objectMapper.writeValueAsString(loginMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream, jsonData, 100);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 100);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
