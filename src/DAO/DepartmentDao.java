@@ -4,8 +4,17 @@ import view.Hospital.Department;
 
 import java.sql.*;
 
+/**
+ * 医院医生/科室DAO
+ */
 public class DepartmentDao {
-    public Department[] findDepaetmentByInfo(String Department_Type, String Doctor_Type) {
+    /**
+     * 通过部门和医生类型查找
+     * @param Department_Type 部门（可以传空值）
+     * @param Doctor_Type 医生类型（可以传空值）
+     * @return 查找到的医生Department[]
+     */
+    public Department[] findDepartmentByInfo(String Department_Type, String Doctor_Type) {
         Department[] dep = new Department[1];
         String sqlstring = null;
 
@@ -74,6 +83,11 @@ public class DepartmentDao {
         return dep;
     }
 
+    /**
+     * 创建医生/科室条目
+     * @param dep 输入的信息
+     * @return 是否创建成功
+     */
     public boolean createDepartment(Department dep) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -102,6 +116,11 @@ public class DepartmentDao {
         return true;
     }
 
+    /**
+     * 通过医生ID删除对应条目
+     * @param Department_ID 要删除的条目ID
+     * @return 是否删除成功
+     */
     public boolean deleteDepartment(String Department_ID) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -121,7 +140,12 @@ public class DepartmentDao {
         return true;
     }
 
-    public Department findDepaetmentById(String Department_ID) {
+    /**
+     * 管理员通过医生ID查找对应条目
+     * @param Department_ID 要查找的条目ID
+     * @return 找到的条目Department
+     */
+    public Department findDepartmentById(String Department_ID) {
         Department dep = new Department();
 
         try {
@@ -159,6 +183,10 @@ public class DepartmentDao {
         return dep;
     }
 
+    /**
+     * 显示所有的医生
+     * @return 所有的医生Department[]
+     */
     public Department[] showAllDep() {
         Department[] dep = new Department[1];
 

@@ -4,9 +4,16 @@ import view.CourseSelection.CourseClass;
 
 import java.sql.*;
 
+/**
+ * 选课模块班级DAO
+ */
 public class CourseClassDao {
 
-
+    /**
+     * 通过老师ID查找他全部的班级
+     * @param TeacherId 老师ID
+     * @return 老师全部的班级
+     */
     public CourseClass[] findClassByTeacherId(String TeacherId) {
         CourseClass[] classes = new CourseClass[1];
         ClassNameListDao dao = new ClassNameListDao();
@@ -51,6 +58,11 @@ public class CourseClassDao {
         return classes;
     }
 
+    /**
+     * 创建班级
+     * @param courseClass 用户传入的班级类
+     * @return 是否创建成功
+     */
     public boolean createClass(CourseClass courseClass) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -85,6 +97,11 @@ public class CourseClassDao {
         return true;
     }
 
+    /**
+     * 展示一个课程的所有班级数量
+     * @param courseNum 课程ID
+     * @return 课程的所有班级数量
+     */
     public int getClassNumByCourseId(String courseNum) {
         int count = 0;
         try {
@@ -107,6 +124,11 @@ public class CourseClassDao {
         return count;
     }
 
+    /**
+     * 展示一个课程的所有班级
+     * @param courseNum 课程ID
+     * @return 课程的所有班级CourseClass[]
+     */
     public CourseClass[] findClassByCourseId(String courseNum) {
         CourseClass[] classes = new CourseClass[1];
         ClassNameListDao dao = new ClassNameListDao();
@@ -151,6 +173,11 @@ public class CourseClassDao {
         return classes;
     }
 
+    /**
+     * 通过班级ID查找班级
+     * @param classId 班级ID
+     * @return ID对应的班级
+     */
     public CourseClass findClassByClassId(String classId) {
         CourseClass classes = null;
         ClassNameListDao dao = new ClassNameListDao();
@@ -188,6 +215,11 @@ public class CourseClassDao {
         return classes;
     }
 
+    /**
+     * 通过班级ID删除班级
+     * @param classId 要删除的班级ID
+     * @return 是否删除成功
+     */
     public boolean deleteClassByClassId(String classId) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -209,6 +241,10 @@ public class CourseClassDao {
         return true;
     }
 
+    /**
+     * 获取所有班级
+     * @return 所有班级CourseClass[]
+     */
     public CourseClass[] showAllClass() {
         CourseClass[] classes = new CourseClass[1];
 
@@ -255,6 +291,11 @@ public class CourseClassDao {
         return classes;
     }
 
+    /**
+     * 修改班级信息
+     * @param courseClass 按照班级ID修改其他内容的信息
+     * @return 是否修改成功
+     */
     public boolean ModifyClass(CourseClass courseClass) {
         String sqlString = "update tblClass " +
                 "set courseId = " + courseClass.getCourseID() +

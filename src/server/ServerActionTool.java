@@ -902,8 +902,10 @@ public class ServerActionTool {
 //        boolean level=Boolean.parseBoolean(Slevel);
         DepartmentDao departmentDao=new DepartmentDao();
 //        String lev=level?"专家":"普通";
-        Department[] result=departmentDao.findDepaetmentByInfo(type,Slevel);
-        if(result==null) {
+
+        Department[] result = departmentDao.findDepartmentByInfo(type, Slevel);
+        if (result == null) {
+
             System.out.println("dep的result为空++++++");
         }else {
             System.out.println(result.length);
@@ -940,10 +942,12 @@ public class ServerActionTool {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 506");
-        String ID=idReqMessage.getID();
-        DepartmentDao departmentDao=new DepartmentDao();
-        Department result=departmentDao.findDepaetmentById(ID);
-        DepartmentsMessage respMessage=new DepartmentsMessage(result);
+
+        String ID = idReqMessage.getID();
+        DepartmentDao departmentDao = new DepartmentDao();
+        Department result = departmentDao.findDepartmentById(ID);
+        DepartmentsMessage respMessage = new DepartmentsMessage(result);
+
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
