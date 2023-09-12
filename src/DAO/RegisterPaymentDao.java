@@ -5,7 +5,16 @@ import view.Hospital.Register;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * 医院挂号缴费记录DAO
+ * @author SunYanlin
+ */
 public class RegisterPaymentDao {
+    /**
+     * 通过传入的挂号信息增加挂号记录
+     * @param reg 用户输入的挂号信息
+     * @return 是否成功添加
+     */
     public boolean createRegisterInfo(Register reg) {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         try {
@@ -38,6 +47,11 @@ public class RegisterPaymentDao {
         return true;
     }
 
+    /**
+     * 通过用户ID查找其对应的挂号记录
+     * @param ID 一卡通号
+     * @return 所有对应ID的挂号记录Register[]
+     */
     public Register[] findRegisterByUserID(String ID) {
         Register[] regs = new Register[1];
 
@@ -81,6 +95,11 @@ public class RegisterPaymentDao {
         return regs;
     }
 
+    /**
+     * 通过用户ID查找所有未缴费记录
+     * @param ID 一卡通号
+     * @return 所有对应ID的未缴费记录Register[]
+     */
     public Register[] findPaymentByUserID(String ID) {
         Register[] pays = new Register[1];
 
@@ -127,6 +146,11 @@ public class RegisterPaymentDao {
         return pays;
     }
 
+    /**
+     * 将对应ID的记录改为已交付
+     * @param Register_ID
+     * @return 是否修改成功
+     */
     public boolean payRegisterById(String Register_ID) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -146,6 +170,10 @@ public class RegisterPaymentDao {
         return true;
     }
 
+    /**
+     * 管理员功能，展示所有人的挂号记录
+     * @return 所有挂号记录Register[]
+     */
     public Register[] showAllRegister() {
         Register[] regs = new Register[1];
 

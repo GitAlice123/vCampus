@@ -5,6 +5,10 @@ import view.Shop.PurchaseRecord;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * 商店购买记录DAO
+ * @author shuangmu555
+ */
 public class PurchaseRecordDao {
 
     /**
@@ -101,8 +105,8 @@ public class PurchaseRecordDao {
     }
 
 
-    /*
-     *
+    /**
+     * 增加传入的购买记录
      * @param purchaseRecord  需要新增的购买记录的信息
      * @return 新增是否成功，如果数据库中原本就存在该购买记录，则不进行新增插入操作，返回false
      */
