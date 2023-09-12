@@ -3,6 +3,7 @@ package view.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Global.GlobalData;
+import view.message.ChatMessage;
 import view.message.GPTAnsRepMessage;
 import view.message.IDSendMessage;
 
@@ -49,7 +50,7 @@ public class ClientReceiver {
             try {
                 while (true) {
                     int messageLength = readMessageLength();
-                    String receivedMessage = readMessageContent(messageLength);
+                    ChatMessage receivedMessage = readMessageContent(messageLength);
                     // 处理接收到的消息
                     handleMessage(receivedMessage);
                 }
@@ -67,16 +68,16 @@ public class ClientReceiver {
         return ByteBuffer.wrap(lengthBytes).getInt();
     }
 
-    private String readMessageContent(int messageLength) throws IOException {
+    private ChatMessage readMessageContent(int messageLength) throws IOException {
         byte[] jsonDataBytes = new byte[messageLength];
         inputStream.read(jsonDataBytes);  // 读取消息内容
         ObjectMapper objectMapper = new ObjectMapper();
-        GPTAnsRepMessage gptAnsRepMessage = objectMapper.readValue(jsonDataBytes, GPTAnsRepMessage.class);
-        String gptAnswer = gptAnsRepMessage.getGPTanswer();
-        return gptAnswer;
+        ChatMessage gptAnsRepMessage = objectMapper.readValue(jsonDataBytes, ChatMessage.class);
+
+        return gptAnsRepMessage;
     }
 
-    private void handleMessage(String message) throws JsonProcessingException {
+    private void handleMessage(ChatMessage message) throws JsonProcessingException {
         // 在这里处理接收到的消息
         System.out.println("Thread Received message: " + message);
         // 可以根据具体需求进行相应的处理逻辑
@@ -87,6 +88,6 @@ public class ClientReceiver {
     }
 
     public interface MessageCallback {
-        void onMessageReceived(String message);
+        void onMessageReceived(ChatMessage message);
     }
 }
