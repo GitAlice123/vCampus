@@ -5,6 +5,7 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.IOException;
 
@@ -51,6 +52,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font centerFont = new Font("楷体", Font.PLAIN, 20);//设置中间组件的文字大小、字体
 
+    //颜色
+    Color bottomcolor=new Color(233,208,222);
+    Color topcolor=new Color(152,193,202);
     String messageSent;
 
     private String messageReturn; // 保存服务器返回的消息
@@ -74,8 +78,38 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         });
         startTimer();
         topPanel = new JPanel();
-        centerPanel = new JPanel(springLayout);
+        centerPanel = new JPanel(springLayout){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/chatbackground.gif");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        }
+        ;
         bottomPanel = new JPanel();
+
+        topPanel.setBackground(topcolor);
+        bottomPanel.setBackground(bottomcolor);
+
 
         //底部
         textarea = new JTextArea();
@@ -190,6 +224,14 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         welcomeLabel = new JLabel("欢迎来到聊天室！");
         welcomeLabel.setFont(new Font("楷体", Font.PLAIN, 50));
         topPanel.add(welcomeLabel);
+
+        chathistory.setOpaque(false);
+        centerpane.setOpaque(false);
+        centerpane.getViewport().setBackground(new Color(255,255,255,150));
+        online.setOpaque(false);
+        leftpane.setOpaque(false);
+        leftpane.getViewport().setBackground(new Color(255,255,255,150));
+
 
         Container pane = getContentPane();
         pane.add(topPanel, BorderLayout.NORTH);
