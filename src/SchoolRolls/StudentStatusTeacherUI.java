@@ -623,8 +623,12 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
                 classPlaces[i] = classes[i].getClassPlace();
                 classMaxs[i] = Integer.toString(classes[i].getClassMax());
                 classTimes[i] = classes[i].getClassTime();
-                classTemps[i] = Integer.toString(classes[i].getClassTemp());
                 classIDs[i] = classes[i].getClassID();
+                InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost",8888);
+                StudentInfo[] infos=infoClientAPI1.SearchStudentByClassID(classIDs[i]);
+                classTemps[i]="0";
+                if(infos!=null)
+                    classTemps[i] = Integer.toString(infos.length);
                 classNums[i] = classes[i].getCourseID();
                 classStudents[i] = classes[i].getClassStudent();
             }
