@@ -37,7 +37,7 @@ public class CurriculumTeacherUI extends JFrame {
         String[][] scourse=new String[classes.length][6];
         for(int i=0;i<classes.length;i++){
             scourse[i][0]=classes[i].getClassID();
-            scourse[i][1]=classes[i].getClassTeacher();
+            scourse[i][1]=classes[i].getCourseID();
             scourse[i][2]=classes[i].getClassPlace();
             scourse[i][3]=classes[i].getClassTime();
             scourse[i][4]=Integer.toString(classes[i].getClassTemp());
