@@ -181,25 +181,7 @@ public class CurriculumTeacherUI extends JFrame {
     };;
 
     DefaultTableModel model = new DefaultTableModel();
-    JTable tableOfClasses = new JTable(){ // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;//显示课程班的表格
+    JTable tableOfClasses = new JTable();//显示课程班的表格
     JLabel title=new JLabel("教学班");
     String[][] classdata = {};
     JButton backBtn=new JButton("退出");
@@ -375,25 +357,7 @@ public class CurriculumTeacherUI extends JFrame {
             }
         };;//老师查看班级学生的面板
         DefaultTableModel model = new DefaultTableModel();
-        JTable tableOfStudents = new JTable(){ // 设置jtable的单元格为透明的
-
-            public Component prepareRenderer(TableCellRenderer renderer,
-
-                                             int row, int column) {
-
-                Component c = super.prepareRenderer(renderer, row, column);
-
-                if (c instanceof JComponent) {
-
-                    ((JComponent) c).setOpaque(false);
-
-                }
-
-                return c;
-
-            }
-
-        };;//显示本班学生的表格
+        JTable tableOfStudents = new JTable();//显示本班学生的表格
         JLabel ClassLabel = new JLabel("本班学生");
 
         JButton backBtn = new JButton("退出");
@@ -480,10 +444,10 @@ public class CurriculumTeacherUI extends JFrame {
                 } else {
                     // 设置单元格背景颜色
                     if (row % 2 == 0) {
-                        Color customColor = new Color(240, 255, 255);
+                        Color customColor = new Color(230, 255, 255);
                         cellComponent.setBackground(customColor);
                     } else {
-                        Color customColor2 = new Color(224, 255, 255);
+                        Color customColor2 = new Color(240, 248, 255);
                         cellComponent.setBackground(customColor2);
                     }
                 }
@@ -500,10 +464,10 @@ public class CurriculumTeacherUI extends JFrame {
             } else {
                 // 设置单元格背景颜色
                 if (row % 2 == 0) {
-                    Color customColor = new Color(240, 255, 255);
+                    Color customColor = new Color(230, 255, 255);
                     cellComponent.setBackground(customColor);
                 } else {
-                    Color customColor2 = new Color(224, 255, 255);
+                    Color customColor2 = new Color(240, 248, 255);
                     cellComponent.setBackground(customColor2);
                 }
             }
@@ -517,9 +481,9 @@ public class CurriculumTeacherUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {

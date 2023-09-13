@@ -194,44 +194,8 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
         }
     };;//老师查看所教班级的面板
     DefaultTableModel model = new DefaultTableModel();
-    JTable coursetable = new JTable(){ // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;
-    JTable studentable = new JTable(){ // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;
+    JTable coursetable = new JTable();
+    JTable studentable = new JTable();
     JButton ClassBtn=new JButton("查看教学班");
 
     JButton backBtn=new JButton("退出");
@@ -725,10 +689,10 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
             } else {
                 // 设置单元格背景颜色
                 if (row % 2 == 0) {
-                    Color customColor = new Color(255, 255, 240);
+                    Color customColor = new Color(230, 255, 255);
                     cellComponent.setBackground(customColor);
                 } else {
-                    Color customColor2 = new Color(255, 250, 205);
+                    Color customColor2 = new Color(240, 248, 255);
                     cellComponent.setBackground(customColor2);
                 }
             }
@@ -742,10 +706,9 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 218, 185)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 228, 181)); // 按钮
-            UIManager.put("control", new Color(255, 248, 220)); // 背景
-
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {

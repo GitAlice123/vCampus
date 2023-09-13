@@ -253,9 +253,9 @@ public class LibraryUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {
@@ -268,44 +268,8 @@ public class LibraryUI extends JFrame {
         this.springLayout = new SpringLayout();
         this.model = new DefaultTableModel();
         this.modelChosen = new DefaultTableModel();
-        this.table = new JTable(){ // 设置jtable的单元格为透明的
-
-            public Component prepareRenderer(TableCellRenderer renderer,
-
-                                             int row, int column) {
-
-                Component c = super.prepareRenderer(renderer, row, column);
-
-                if (c instanceof JComponent) {
-
-                    ((JComponent) c).setOpaque(false);
-
-                }
-
-                return c;
-
-            }
-
-        };;
-        this.tableChosen = new JTable(){ // 设置jtable的单元格为透明的
-
-            public Component prepareRenderer(TableCellRenderer renderer,
-
-                                             int row, int column) {
-
-                Component c = super.prepareRenderer(renderer, row, column);
-
-                if (c instanceof JComponent) {
-
-                    ((JComponent) c).setOpaque(false);
-
-                }
-
-                return c;
-
-            }
-
-        };;
+        this.table = new JTable();;
+        this.tableChosen = new JTable();
         this.TopPanel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
@@ -879,9 +843,9 @@ public class LibraryUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {

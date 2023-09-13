@@ -37,25 +37,7 @@ public class StudentStatusAdminUI extends JFrame {
             return component;
         }
     };
-    JTable table=new JTable() { // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;
+    JTable table=new JTable() ;
     boolean add;
     // 创建一个JScrollPane来包装表格
     String selectid;
@@ -898,10 +880,9 @@ public class StudentStatusAdminUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 218, 185)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 228, 181)); // 按钮
-            UIManager.put("control", new Color(255, 248, 220)); // 背景
-
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {

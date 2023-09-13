@@ -62,9 +62,9 @@ public class logInUI extends JFrame {
         //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        UIManager.put("nimbusBase", new Color(46, 139, 87)); // 边框
-        UIManager.put("nimbusBlueGrey", new Color(46, 139, 87)); // 按钮
-        UIManager.put("control", new Color(240, 255, 240)); // 背景
+        UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+        UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+        UIManager.put("control", new Color(240, 248, 255)); // 背景
 
         GlobalData.setServerAddr("localhost", "8888");
 
