@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 //package view.Shop;
 //
 //import view.Bank.IBankClientAPI;
@@ -1028,7 +1027,6 @@
 //        }
 //    }
 //}
->>>>>>> Stashed changes
 
 package view.Shop;
 
