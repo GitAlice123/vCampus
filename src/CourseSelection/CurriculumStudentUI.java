@@ -455,6 +455,10 @@ public class CurriculumStudentUI extends JFrame {
 
     }
 
+    /**
+     * 选课系统学生界面
+     * @throws IOException
+     */
     public CurriculumStudentUI() throws IOException {
         super("选课系统");
 
@@ -620,6 +624,9 @@ public class CurriculumStudentUI extends JFrame {
         new CurriculumStudentUI();
     }
 
+    /**
+     * 显示教学班的界面
+     */
     class ShowClassUI extends JFrame{//显示教学班界面
         class ChooseClassTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
             @Override

@@ -2,6 +2,7 @@ package view.connect;
 
 import view.CourseSelection.Course;
 import view.CourseSelection.CourseClass;
+import view.Login.User;
 import view.SchoolRolls.Grade;
 import view.SchoolRolls.StudentInfo;
 
@@ -32,5 +33,7 @@ public interface InfoClientAPI {
     StudentInfo[] GetAllInfo()throws IOException;
 
     boolean ModifyInfo(StudentInfo info)throws IOException;
+
+    User[] GetAllCard()throws IOException;
 
 }

@@ -238,15 +238,27 @@ public class StudentStatusUI extends JFrame {
         boolean result=infoClientAPI1.AddStuInfo(info);
         InfoClientAPI infoClientAPI2=new InfoClientAPIImp("localhost", 8888);
         StudentInfo tar=infoClientAPI2.SearchStuInfoByID(GlobalData.getUID());
-        setCard_id(tar.getCardID());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String BirthString = sdf.format(tar.getBirth());
-        setBirth(BirthString);
-        setCollege(tar.getCollege());
-        setId(tar.getID());
-        setName(tar.getName());
-        setSex(tar.getSex());
-        setGrade(Integer.toString(tar.getGrade()));
+        if(tar!=null) {
+            setCard_id(tar.getCardID());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String BirthString = sdf.format(tar.getBirth());
+            setBirth(BirthString);
+            setCollege(tar.getCollege());
+            setId(tar.getID());
+            setName(tar.getName());
+            setSex(tar.getSex());
+            setGrade(Integer.toString(tar.getGrade()));
+        }
+        else {
+            setCard_id("未录入");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            setBirth("未录入");
+            setCollege("未录入");
+            setId("未录入");
+            setName("未录入");
+            setSex("未录入");
+            setGrade("未录入");
+        }
         // 创建一个二维数组作为表格数据
         JLabel Card_idLabelOut=new JLabel(card_id);
         JLabel IdLabelOut=new JLabel(id);
@@ -462,7 +474,7 @@ public class StudentStatusUI extends JFrame {
                 //courses[0]=new Course("123","123", Course.CourseType.Optional,3.0,4,99);
                 //courses[1]=new Course("123","123", Course.CourseType.Optional,3.0,4,99);
                 String[][] scourse={{" "},{" "},{" "},{" "},{" "}};
-                //if(courses!=null)
+                if(courses!=null)
                 scourse=coursestostring(courses);
                 DefaultTableModel newModel = new DefaultTableModel(scourse, columnNames);
                 table.setModel(newModel);

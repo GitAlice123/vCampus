@@ -1,6 +1,7 @@
 package view.SchoolRolls;
 
 import view.Global.*;
+import view.Login.User;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -168,11 +169,12 @@ public class StudentStatusAdminUI extends JFrame {
         StudentInfo[] studentInfos=infoClientAPI.GetAllInfo();
         data=new String[studentInfos.length][7];
         for(int i=0;i<studentInfos.length;i++){
+            SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd");
             data[i][0]=studentInfos[i].getCardID();
             data[i][1]=studentInfos[i].getID();
             data[i][2]=studentInfos[i].getName();
             data[i][3]=studentInfos[i].getSex();
-            data[i][4]= String.valueOf(studentInfos[i].getBirth());
+            data[i][4]= ft.format(studentInfos[i].getBirth());
             data[i][5]= String.valueOf(studentInfos[i].getGrade());
             data[i][6]= studentInfos[i].getCollege();
         }
@@ -259,11 +261,12 @@ public class StudentStatusAdminUI extends JFrame {
                     throw new RuntimeException(ex);
                 }
                 String[][] src=new String[1][7];
+                SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd");
                     src[0][0]=info.getCardID();
                     src[0][1]=info.getID();
                     src[0][2]=info.getName();
                     src[0][3]=info.getSex();
-                    src[0][4]= String.valueOf(info.getBirth());
+                    src[0][4]= ft.format(info.getBirth());
                     src[0][5]= String.valueOf(info.getGrade());
                     src[0][6]= info.getCollege();
                 // 创建JTable对象并传入数据和列名
@@ -282,7 +285,12 @@ public class StudentStatusAdminUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 add=true;
-                AddStudentUI addStudentUI=new AddStudentUI();
+                AddStudentUI addStudentUI= null;
+                try {
+                    addStudentUI = new AddStudentUI();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 addStudentUI.setVisible(true);
             }
         });
@@ -310,11 +318,12 @@ public class StudentStatusAdminUI extends JFrame {
         StudentInfo[] studentInfos=infoClientAPI.GetAllInfo();
         data=new String[studentInfos.length][7];
         for(int i=0;i<studentInfos.length;i++){
+            SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd");
             data[i][0]=studentInfos[i].getCardID();
             data[i][1]=studentInfos[i].getID();
             data[i][2]=studentInfos[i].getName();
             data[i][3]=studentInfos[i].getSex();
-            data[i][4]= String.valueOf(studentInfos[i].getBirth());
+            data[i][4]= ft.format(studentInfos[i].getBirth());
             data[i][5]= String.valueOf(studentInfos[i].getGrade());
             data[i][6]= studentInfos[i].getCollege();
         }
@@ -485,18 +494,19 @@ public class StudentStatusAdminUI extends JFrame {
                     String name = getNameTex().getText();
                     String sex = comboBox.getSelectedItem().toString();
                     //SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     // 使用 SimpleDateFormat 格式化 Date 对象为字符串
                     //String dateString = dateFormat.format(getBirthTex().getText());
-                    Date brith = null;
-                    try {
-                        brith = dateFormat.parse(getBirthTex().getText());
-                    } catch (ParseException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    //Date brith = null;
+                    //try {
+                    //    brith = dateFormat.parse(getBirthTex().getText());
+                    //} catch (ParseException ex) {
+                    //    throw new RuntimeException(ex);
+                    //}
+                    Date birth = new Date(getBirthTex().getText());
                     String collage = getCollegeTex().getText();
                     int grade = Integer.parseInt(getGradeTex().getText());
-                    StudentInfo info = new StudentInfo(cardid, id, sex, name, brith, grade, collage);
+                    StudentInfo info = new StudentInfo(cardid, id, sex, name, birth, grade, collage);
                     InfoClientAPI infoClientAPI = new InfoClientAPIImp("localhost", 8888);
                     try {
                             infoClientAPI.ModifyInfo(info);
@@ -536,11 +546,13 @@ public class StudentStatusAdminUI extends JFrame {
         JLabel GradeLabel=new JLabel("入学年份");
         JLabel CollegeLabel=new JLabel("学院");
 
-        public JTextField getCard_idTex() {
-            return Card_idTex;
+
+
+        public JComboBox<String> getCardIdcomboBox() {
+            return CardIdcomboBox;
         }
 
-        JTextField Card_idTex=new JTextField();
+        JComboBox<String>CardIdcomboBox = new JComboBox<>();
 
         public JTextField getIdTex() {
             return IdTex;
@@ -553,7 +565,7 @@ public class StudentStatusAdminUI extends JFrame {
         }
 
         JTextField NameTex=new JTextField();
-        String[] options = {"男", "女"};
+        String[] options = {"M", "F"};
 
         public JComboBox<String> getComboBox() {
             return comboBox;
@@ -582,10 +594,23 @@ public class StudentStatusAdminUI extends JFrame {
 
         JButton ExitBtn=new JButton("取消");
         JPanel panel=new JPanel(springLayout);
-        public AddStudentUI(){
+        public AddStudentUI() throws IOException {
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
-
+            InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
+            User[] users=infoClientAPI.GetAllCard();
+            String[] ids=new String[users.length];
+            for(int i=0;i<users.length;i++){
+                InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost",8888);
+                if(infoClientAPI1.SearchStuInfoByID(users[i].getuId())==null){
+                    ids[i]=users[i].getuId();
+                }
+            }
+            if(ids!=null)
+            for(int i=0;i<ids.length;i++){
+                if(ids[i]!=null)
+                    CardIdcomboBox.addItem(ids[i]);
+            }
             contentPane.add(panel,BorderLayout.CENTER);
             Font centerFont=new Font("楷体",Font.PLAIN,20);//设置中间组件的文字大小、字体
             Card_idLabel.setFont(centerFont);
@@ -606,14 +631,14 @@ public class StudentStatusAdminUI extends JFrame {
             panel.add(EnsureBtn);
             panel.add(ExitBtn);
 
-            Card_idTex.setPreferredSize(new Dimension(200,25));
+            CardIdcomboBox.setPreferredSize(new Dimension(200,25));
             IdTex.setPreferredSize(new Dimension(200,25));
             NameTex.setPreferredSize(new Dimension(200,25));
             comboBox.setPreferredSize(new Dimension(200,25));
             BirthTex.setPreferredSize(new Dimension(200,25));
             GradeTex.setPreferredSize(new Dimension(200,25));
             CollegeTex.setPreferredSize(new Dimension(200,25));
-            panel.add(Card_idTex);
+            panel.add(CardIdcomboBox);
             panel.add(IdTex);
             panel.add(NameTex);
             panel.add(comboBox);
@@ -628,18 +653,18 @@ public class StudentStatusAdminUI extends JFrame {
             panel.add(GradeLabel);
             panel.add(CollegeLabel);
 
-            Spring childWidth=Spring.sum(Spring.sum(Spring.width(Card_idLabel),Spring.width(Card_idTex)),
+            Spring childWidth=Spring.sum(Spring.sum(Spring.width(Card_idLabel),Spring.width(CardIdcomboBox)),
                     Spring.constant(0));
             int offsetX=childWidth.getValue()/2;
             springLayout.putConstraint(SpringLayout.NORTH,Card_idLabel,20,SpringLayout.NORTH,panel);
-            springLayout.putConstraint(SpringLayout.NORTH,Card_idTex,20,SpringLayout.NORTH,panel);
+            springLayout.putConstraint(SpringLayout.NORTH,CardIdcomboBox,20,SpringLayout.NORTH,panel);
             springLayout.putConstraint(SpringLayout.EAST,Card_idLabel,-offsetX+80,SpringLayout.HORIZONTAL_CENTER,panel);
-            springLayout.putConstraint(SpringLayout.WEST,Card_idTex,offsetX-120,SpringLayout.HORIZONTAL_CENTER,panel);
+            springLayout.putConstraint(SpringLayout.WEST,CardIdcomboBox,offsetX-120,SpringLayout.HORIZONTAL_CENTER,panel);
 
             springLayout.putConstraint(SpringLayout.NORTH,IdLabel,20,SpringLayout.SOUTH,Card_idLabel);
             springLayout.putConstraint(SpringLayout.EAST,IdLabel,0,SpringLayout.EAST,Card_idLabel);
-            springLayout.putConstraint(SpringLayout.NORTH,IdTex,20,SpringLayout.SOUTH,Card_idTex);
-            springLayout.putConstraint(SpringLayout.WEST,IdTex,0,SpringLayout.WEST,Card_idTex);
+            springLayout.putConstraint(SpringLayout.NORTH,IdTex,20,SpringLayout.SOUTH,CardIdcomboBox);
+            springLayout.putConstraint(SpringLayout.WEST,IdTex,0,SpringLayout.WEST,CardIdcomboBox);
 
             springLayout.putConstraint(SpringLayout.NORTH,NameLabel,20,SpringLayout.SOUTH,IdLabel);
             springLayout.putConstraint(SpringLayout.EAST,NameLabel,0,SpringLayout.EAST,IdLabel);
@@ -684,22 +709,25 @@ public class StudentStatusAdminUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String id = getIdTex().getText();
-                    String cardid = getCard_idTex().getText();
+                    String cardid = CardIdcomboBox.getSelectedItem().toString();
                     String name = getNameTex().getText();
                     String sex = comboBox.getSelectedItem().toString();
                     //SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     // 使用 SimpleDateFormat 格式化 Date 对象为字符串
                     //String dateString = dateFormat.format(getBirthTex().getText());
-                    Date brith = null;
-                    try {
-                        brith = dateFormat.parse(getBirthTex().getText());
-                    } catch (ParseException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    //Date brith = null;
+                    //try {
+                    //    brith = dateFormat.parse(getBirthTex().getText());
+                    //} catch (ParseException ex) {
+                    //    throw new RuntimeException(ex);
+                    //}
+
+                    Date birth = new Date(getBirthTex().getText());
+
                     String collage = getCollegeTex().getText();
                     int grade = Integer.parseInt(getGradeTex().getText());
-                    StudentInfo info = new StudentInfo(cardid, id, sex, name, brith, grade, collage);
+                    StudentInfo info = new StudentInfo(cardid, id, sex, name, birth, grade, collage);
                     InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
                     try {
                         infoClientAPI.AddStuInfo(info);

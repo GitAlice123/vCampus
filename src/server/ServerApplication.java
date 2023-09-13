@@ -215,6 +215,10 @@ public class ServerApplication {
                         serverActionTool.Action312(jsonData,clientSocket);
                         break;
                     }
+                    case 313:{
+                        serverActionTool.Action313(jsonData,clientSocket);
+                        break;
+                    }
                     case 400:{
                         serverActionTool.Action400(jsonData,clientSocket);
                         break;

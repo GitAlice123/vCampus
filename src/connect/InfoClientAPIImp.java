@@ -3,6 +3,7 @@ package view.connect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import view.CourseSelection.Course;
 import view.CourseSelection.CourseClass;
+import view.Login.User;
 import view.SchoolRolls.Grade;
 import view.SchoolRolls.StudentInfo;
 import view.message.*;
@@ -405,6 +406,37 @@ public class InfoClientAPIImp implements InfoClientAPI{
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
         boolean result=RespMessage.getFlag();
+//      处理结果
+        return result;
+    }
+
+    @Override
+    public User[] GetAllCard() throws IOException {
+        try {
+            // 创建 ObjectMapper 对象
+            ObjectMapper objectMapper = new ObjectMapper();
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            IDReqMessage message=null;
+            String jsonData = objectMapper.writeValueAsString(message);
+            System.out.println(jsonData);
+
+            rwTool.ClientSendOutStream(outputStream,jsonData,313);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //接收服务器响应
+        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+
+        String mess = receivedJsonData.toString();
+
+//      创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//      将 JSON 数据转换为对象
+        UserMessage RespMessage = objectMapper.readValue(mess, UserMessage.class);
+        User[] result=RespMessage.getUsers();
 //      处理结果
         return result;
     }

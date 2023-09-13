@@ -218,39 +218,8 @@ public class CurriculumAdminUI extends JFrame {
     };;
     JLabel title=new JLabel("课程班");
     String[][] studentdata = {
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"},
-            {"1", "1", "1", "1","1"}
     };
     String[][] classdata = {
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"},
-            {"1", "1", "1", "1", "1", "1", "1","1","1"}
-
     };
     /**
      * 更新课程班表格。
@@ -329,6 +298,7 @@ public class CurriculumAdminUI extends JFrame {
         //loginHandler=new logInHandler(this);
         CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost",8888);
         CourseClass[] courseClasses=clientAPI.GetAllClass();
+        if(courseClasses!=null)
         classdata=ClasstoString(courseClasses);
         DefaultTableModel model=new DefaultTableModel(classdata,columnNames);
         classtable.setModel(model);
@@ -883,11 +853,11 @@ public class CurriculumAdminUI extends JFrame {
         }
 
 
-        public JComboBox<String> getComboBox() {
-            return ClassIdcomboBox;
-        }
+//        public JComboBox<String> getComboBox() {
+//            return ClassIdcomboBox;
+//        }
 
-        JComboBox<String> ClassIdcomboBox = new JComboBox<>();
+        //JComboBox<String> ClassIdcomboBox = new JComboBox<>();
 
         JTextField CourseNameTex=new JTextField();
 
@@ -935,13 +905,12 @@ public class CurriculumAdminUI extends JFrame {
             }
             CourseSelectClientAPI courseSelectClientAPI1=new CourseSelectClientAPIImp("localhost",8888);
             CourseClass[] classes=courseSelectClientAPI1.GetAllClass();
-            for(int i=0;i<classes.length;i++){
-                ClassIdcomboBox.addItem(classes[i].getClassID());
-            }
-            CourseSelectClientAPI courseSelectClientAPI2=new CourseSelectClientAPIImp("localhost",8888);
-            Course[] courses=courseSelectClientAPI2.GetAllCourse();
-            for(int i=0;i<courses.length;i++){
-                CourseIdcomboBox.addItem(courses[i].getCourseID());
+            if(classes!=null) {
+                CourseSelectClientAPI courseSelectClientAPI2 = new CourseSelectClientAPIImp("localhost", 8888);
+                Course[] courses = courseSelectClientAPI2.GetAllCourse();
+                for (int i = 0; i < courses.length; i++) {
+                    CourseIdcomboBox.addItem(courses[i].getCourseID());
+                }
             }
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
@@ -966,7 +935,7 @@ public class CurriculumAdminUI extends JFrame {
             panel.add(EnsureBtn);
             panel.add(ExitBtn);
 
-            ClassIdcomboBox.setPreferredSize(new Dimension(200,25));
+            ClassIdTex.setPreferredSize(new Dimension(200,25));
             CourseNameTex.setPreferredSize(new Dimension(200,25));
             ClassPlaceTex.setPreferredSize(new Dimension(200,25));
             ClassMaxTex.setPreferredSize(new Dimension(200,25));
@@ -979,7 +948,7 @@ public class CurriculumAdminUI extends JFrame {
             panel.add(ClassMaxLabel);
             panel.add(ClassTimeLabel);
             panel.add(CourseIdLabel);
-            panel.add(ClassIdcomboBox);
+            panel.add(ClassIdTex);
             panel.add(CourseNameTex);
             panel.add(ClassPlaceTex);
             panel.add(ClassMaxTex);
@@ -988,13 +957,13 @@ public class CurriculumAdminUI extends JFrame {
             panel.add(TeacherIdLabel);
             panel.add(TeacherIdcomboBox);
 
-            Spring childWidth=Spring.sum(Spring.sum(Spring.width(ClassIdLabel),Spring.width(ClassIdcomboBox)),
+            Spring childWidth=Spring.sum(Spring.sum(Spring.width(ClassIdLabel),Spring.width(ClassIdTex)),
                     Spring.constant(0));
             int offsetX=childWidth.getValue()/2;
             springLayout.putConstraint(SpringLayout.NORTH,ClassIdLabel,20,SpringLayout.NORTH,panel);
-            springLayout.putConstraint(SpringLayout.NORTH,ClassIdcomboBox,20,SpringLayout.NORTH,panel);
+            springLayout.putConstraint(SpringLayout.NORTH,ClassIdTex,20,SpringLayout.NORTH,panel);
             springLayout.putConstraint(SpringLayout.EAST,ClassIdLabel,-offsetX+80,SpringLayout.HORIZONTAL_CENTER,panel);
-            springLayout.putConstraint(SpringLayout.WEST,ClassIdcomboBox,offsetX-120,SpringLayout.HORIZONTAL_CENTER,panel);
+            springLayout.putConstraint(SpringLayout.WEST,ClassIdTex,offsetX-120,SpringLayout.HORIZONTAL_CENTER,panel);
 
             springLayout.putConstraint(SpringLayout.NORTH,CourseNameLabel,20,SpringLayout.SOUTH,CourseIdLabel);
             springLayout.putConstraint(SpringLayout.EAST,CourseNameLabel,0,SpringLayout.EAST,CourseIdLabel);
@@ -1018,8 +987,8 @@ public class CurriculumAdminUI extends JFrame {
 
             springLayout.putConstraint(SpringLayout.NORTH,CourseIdLabel,20,SpringLayout.SOUTH,ClassIdLabel);
             springLayout.putConstraint(SpringLayout.EAST,CourseIdLabel,0,SpringLayout.EAST,ClassIdLabel);
-            springLayout.putConstraint(SpringLayout.NORTH,CourseIdcomboBox,20,SpringLayout.SOUTH,ClassIdcomboBox);
-            springLayout.putConstraint(SpringLayout.WEST,CourseIdcomboBox,0,SpringLayout.WEST,ClassIdcomboBox);
+            springLayout.putConstraint(SpringLayout.NORTH,CourseIdcomboBox,20,SpringLayout.SOUTH,ClassIdTex);
+            springLayout.putConstraint(SpringLayout.WEST,CourseIdcomboBox,0,SpringLayout.WEST,ClassIdTex);
 
             springLayout.putConstraint(SpringLayout.NORTH,TeacherIdLabel,20,SpringLayout.SOUTH,ClassTimeLabel);
             springLayout.putConstraint(SpringLayout.EAST,TeacherIdLabel,0,SpringLayout.EAST,ClassTimeLabel);
@@ -1044,7 +1013,7 @@ public class CurriculumAdminUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //classid courseid place max time teacher
-                    String classid=ClassIdcomboBox.getSelectedItem().toString();
+                    String classid=getClassIdTex().getText();
                     String courseid=CourseIdcomboBox.getSelectedItem().toString();
                     String place=getClassPlaceTex().getText();
                     int max=Integer.parseInt(getClassMaxTex().getText());

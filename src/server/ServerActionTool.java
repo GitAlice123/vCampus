@@ -258,14 +258,18 @@ public class ServerActionTool {
         GradeDao gradeDao=new GradeDao();
         CourseDao courseDao=new CourseDao();
         Grade[] grades=gradeDao.findGradesById(ID);//查成绩
-        String[] courseIDs=new String[grades.length];//成绩对应的课程ID
-        Course[] courses=new Course[grades.length];
-        for(int i=0;i<grades.length;i++){
-            courseIDs[i]=grades[i].getCourseID();
-            courses[i]=courseDao.findCourseByNum(grades[i].getCourseID());
-            courses[i].setGrades(grades[i].getGrade());
+        CoursesRespMessage respMessage=new CoursesRespMessage();
+        if(grades!=null) {
+            String[] courseIDs = new String[grades.length];//成绩对应的课程ID
+            Course[] courses = new Course[grades.length];
+            for (int i = 0; i < grades.length; i++) {
+                courseIDs[i] = grades[i].getCourseID();
+                courses[i] = courseDao.findCourseByNum(grades[i].getCourseID());
+                courses[i].setGrades(grades[i].getGrade());
+            }
+            respMessage = new CoursesRespMessage(courses);
         }
-        CoursesRespMessage respMessage=new CoursesRespMessage(courses);
+
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -406,6 +410,31 @@ public class ServerActionTool {
         StudentInfoDao studentInfoDao=new StudentInfoDao();
         boolean result=studentInfoDao.ModifyStudentInfo(info);
         BoolRespMessage respMessage=new BoolRespMessage(result);
+        //下面将response信息返回客户端
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void Action313(String jsonData, Socket clientSocket){
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        IDReqMessage pair = null;
+        try {
+            pair = objectMapper.readValue(jsonData, IDReqMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 313");
+        UserDao userDao=new UserDao();
+        User[] result=userDao.findAllStudents();
+        UserMessage respMessage=new UserMessage(result);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串

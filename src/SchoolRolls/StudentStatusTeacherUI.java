@@ -628,32 +628,34 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
         CourseClass[] classes = new CourseClass[2];
         classes[0] = new CourseClass("123", "123", "123", "Room101", 40, 32, "10:00AM-12:00PM", IDs);
         classes[1] = classes[0];*/
-        classNums =new String[classes.length];
-        classIDs=new String[classes.length];
-        classStudents=new String[classes.length][100];
-        classMaxs=new String[classes.length];
-        classPlaces=new String[classes.length];
-        classTemps=new String[classes.length];
-        classTeachers=new String[classes.length];
-        classTimes=new String[classes.length];
-        //
-        for(int i=0;i<classes.length;i++){
-            classTeachers[i]=classes[i].getClassTeacher();
-            classPlaces[i]=classes[i].getClassPlace();
-            classMaxs[i]=Integer.toString(classes[i].getClassMax());
-            classTimes[i]=classes[i].getClassTime();
-            classTemps[i]=Integer.toString(classes[i].getClassTemp());
-            classIDs[i]=classes[i].getClassID();
-            classNums[i]=classes[i].getCourseID();
-            classStudents[i]=classes[i].getClassStudent();
-        }
-        coursedata =new String[classes.length][5];
-        for (int i = 0; i < classes.length; i++) {
-            coursedata[i][0]=classNums[i];
-            coursedata[i][1]=classIDs[i];
-            coursedata[i][2]=classPlaces[i];
-            coursedata[i][3]=classTemps[i];
-            coursedata[i][4]=classTimes[i];
+        if(classes!=null) {
+            classNums = new String[classes.length];
+            classIDs = new String[classes.length];
+            classStudents = new String[classes.length][100];
+            classMaxs = new String[classes.length];
+            classPlaces = new String[classes.length];
+            classTemps = new String[classes.length];
+            classTeachers = new String[classes.length];
+            classTimes = new String[classes.length];
+            //
+            for (int i = 0; i < classes.length; i++) {
+                classTeachers[i] = classes[i].getClassTeacher();
+                classPlaces[i] = classes[i].getClassPlace();
+                classMaxs[i] = Integer.toString(classes[i].getClassMax());
+                classTimes[i] = classes[i].getClassTime();
+                classTemps[i] = Integer.toString(classes[i].getClassTemp());
+                classIDs[i] = classes[i].getClassID();
+                classNums[i] = classes[i].getCourseID();
+                classStudents[i] = classes[i].getClassStudent();
+            }
+            coursedata = new String[classes.length][5];
+            for (int i = 0; i < classes.length; i++) {
+                coursedata[i][0] = classNums[i];
+                coursedata[i][1] = classIDs[i];
+                coursedata[i][2] = classPlaces[i];
+                coursedata[i][3] = classTemps[i];
+                coursedata[i][4] = classTimes[i];
+            }
         }
         model.setDataVector(coursedata, columnNames);
         coursetable.setModel(model);
