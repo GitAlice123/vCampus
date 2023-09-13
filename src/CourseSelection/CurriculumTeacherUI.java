@@ -33,15 +33,18 @@ public class CurriculumTeacherUI extends JFrame {
      * @param classes CourseClass对象数组
      * @return 包含课程信息的二维字符串数组，每行包括课程ID、授课教师、上课地点、上课时间、当前选修人数和最大选修人数
      */
-    public String[][] classtostring(CourseClass[] classes){
-        String[][] scourse=new String[classes.length][6];
+    public String[][] classtostring(CourseClass[] classes) throws IOException {
+        String[][] scourse=new String[classes.length][5];
         for(int i=0;i<classes.length;i++){
             scourse[i][0]=classes[i].getClassID();
             scourse[i][1]=classes[i].getCourseID();
             scourse[i][2]=classes[i].getClassPlace();
-            scourse[i][3]=classes[i].getClassTime();
-            scourse[i][4]=Integer.toString(classes[i].getClassTemp());
-            scourse[i][5]=Integer.toString(classes[i].getClassMax());
+            InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost",8888);
+            StudentInfo[] infos=infoClientAPI1.SearchStudentByClassID(classes[i].getClassID());
+            scourse[i][3]="0";
+            if(infos!=null)
+                scourse[i][3] = Integer.toString(infos.length);
+            scourse[i][4]=classes[i].getClassTime();
         }
         return scourse;
     }
@@ -246,7 +249,7 @@ public class CurriculumTeacherUI extends JFrame {
         InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
         CourseClass[] classes=infoClientAPI.SearchCourseClassByTeacherID(id);
         if(classes!=null)
-        classdata =classtostring(classes);
+            classdata =classtostring(classes);
         model.setDataVector(classdata, columnNames);
 
         tableOfClasses.setOpaque(false);
