@@ -707,17 +707,6 @@ public class LibraryAdminUI extends JFrame {
 
             }
         });
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    BackBtnClicked(e);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
     }
 
     static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
