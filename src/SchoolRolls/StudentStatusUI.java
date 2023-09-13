@@ -241,9 +241,9 @@ public class StudentStatusUI extends JFrame {
                 new SummaryStudentTeacherUI();
             }
         });
-        StudentInfo info=new StudentInfo("15177","54321","male","jacky",new Date(0),21,"CS");
-        InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost", 8888);
-        boolean result=infoClientAPI1.AddStuInfo(info);
+//        StudentInfo info=new StudentInfo("15177","54321","male","jacky",new Date(0),21,"CS");
+//        InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost", 8888);
+//        boolean result=infoClientAPI1.AddStuInfo(info);
         InfoClientAPI infoClientAPI2=new InfoClientAPIImp("localhost", 8888);
         StudentInfo tar=infoClientAPI2.SearchStuInfoByID(GlobalData.getUID());
         if(tar!=null) {
