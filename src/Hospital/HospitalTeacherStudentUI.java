@@ -16,6 +16,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,15 +68,118 @@ public class HospitalTeacherStudentUI extends JFrame {
     SpringLayout springLayout = new SpringLayout();
     JPanel cardPanel = new JPanel(cardLayout);
     JPanel hospitalcard = new JPanel();
-    JPanel blankPanel = new JPanel();
-    JPanel registerPanel = new JPanel(springLayout);
-    JPanel registerhistoryPanel = new JPanel(springLayout);
-    JPanel payPanel = new JPanel(springLayout);
+    JPanel blankPanel = new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Hospital1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, (int)(getWidth()*0.5), (int) (getHeight()*0.6), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 300,100 , null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel registerPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Hospital2.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel registerhistoryPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Hospital2.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel payPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Hospital2.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
 
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
 
+    /**
+     * HospitalTeacherStudentUI构造函数
+     */
     public HospitalTeacherStudentUI() {
         super("医院");
 
@@ -174,6 +278,9 @@ public class HospitalTeacherStudentUI extends JFrame {
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));
 
+        doctorPane.setOpaque(false);
+        doctorPane.getViewport().setBackground(new Color(255,255,255,150));
+
         searchBtn.setFont(buttonFont);
         type.setFont(new Font("楷体", Font.PLAIN, 20));
         department.setFont(new Font("楷体", Font.PLAIN, 20));
@@ -270,6 +377,9 @@ public class HospitalTeacherStudentUI extends JFrame {
         tab_header2.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header2.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
 
+        historyscrollPane.setOpaque(false);
+        historyscrollPane.getViewport().setBackground(new Color(255,255,255,150));
+
         registerhistoryPanel.add(historyscrollPane);
         registerhistoryPanel.add(historyLabel);
 
@@ -304,6 +414,10 @@ public class HospitalTeacherStudentUI extends JFrame {
         JTableHeader tab_header3 = purchasetable.getTableHeader();                    //获取表头
         tab_header3.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header3.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
+
+        purchasepane.setOpaque(false);
+        purchasepane.getViewport().setBackground(new Color(255,255,255,150));
+
         purchaseLabel.setFont(titleFont);
         purchaseBtn.setFont(buttonFont);
         OKBtn.setFont(buttonFont);
@@ -387,18 +501,31 @@ public class HospitalTeacherStudentUI extends JFrame {
         return newArray;
     }
 
+    /**
+     * @throws IOException
+     * 前端获取所有的科室信息
+     */
     //前端获取所有的科室信息
     public void getAllDepartments() throws IOException {
         HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
         departments = convertDepartmentToStringArray(hospitalClientAPI.GetAllDepartments());
     }
 
+    /**
+     * @throws IOException
+     * 前端获取所有的挂号记录
+     */
     //前端获取所有的挂号记录
     public void getOwnRegisterRecord() throws IOException {
         HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
         registers = convertRegisterToStringArray(hospitalClientAPI.GetRegisterByID(GlobalData.getUID()));
     }
 
+    /**
+     * @return
+     * @throws IOException
+     * 获取所有未缴费的挂号记录
+     */
     //获取所有未缴费的挂号记录
     public Object[][] getAllUnpaidRegister() throws IOException {
         HospitalClientAPI hospitalClientAPI = new HospitalClientAPIImp("localhost", 8888);
