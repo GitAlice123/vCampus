@@ -703,7 +703,7 @@ public class ServerActionTool {
         }
         System.out.println("Into object 409");
         CourseClassDao courseClassDao=new CourseClassDao();
-        boolean result=courseClassDao.createClass(message);
+        boolean result=courseClassDao.ModifyClass(message);
         BoolRespMessage respMessage=new BoolRespMessage(result);
         //下面将response信息返回客户端
         try {
