@@ -12,13 +12,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * 用户注册客户端API实现，用于与服务器进行用户注册验证和创建新用户。
+ */
 public class RegisterClientAPIImpl implements RegisterClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private ClientRWTool ClientRWTool = new ClientRWTool();
 
-    /* 构造函数 */
+    /**
+     * 构造一个RegisterClientAPIImpl实例，并连接到服务器。
+     *
+     * @param serverAddress 服务器地址
+     * @param serverPort    服务器端口
+     */
     public RegisterClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -30,6 +38,13 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
         }
     }
 
+    /**
+     * 检查用户是否已经存在于服务器上。
+     *
+     * @param registerReqMessage 注册请求消息对象，包含用户ID
+     * @return 如果用户已存在返回true，否则返回false
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public boolean checkExistByUserId(RegisterReqMessage registerReqMessage) throws IOException {
         //以下发送用户id给服务器
@@ -66,6 +81,13 @@ public class RegisterClientAPIImpl implements RegisterClientAPI {
         return result;
     }
 
+    /**
+     * 创建新用户并将其注册到服务器。
+     *
+     * @param loginMessage 登录消息对象，包含用户ID和密码
+     * @return 如果注册成功返回true，否则返回false
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public Boolean createNewUser(LoginMessage loginMessage) throws IOException {
         //以下发送用户信息给服务器

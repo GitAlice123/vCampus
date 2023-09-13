@@ -14,12 +14,21 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 客户端消息接收器，负责接收服务器发送的消息并处理。
+ */
 public class ClientReceiver {
     private InputStream inputStream;
     private OutputStream outputStream;
     private Socket socket;
     private MessageCallback messageCallback;
 
+    /**
+     * 创建一个新的客户端消息接收器实例。
+     *
+     * @param callback 用于处理接收到的消息的回调接口。
+     * @throws IOException 如果发生输入/输出错误。
+     */
     public ClientReceiver(MessageCallback callback) throws IOException {
         socket = new Socket(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         inputStream = socket.getInputStream();
@@ -45,6 +54,9 @@ public class ClientReceiver {
         this.messageCallback = callback;
     }
 
+    /**
+     * 启动消息接收线程，持续接收服务器发送的消息。
+     */
     public void startReceiving() {
         Thread receivingThread = new Thread(() -> {
             try {
@@ -62,12 +74,25 @@ public class ClientReceiver {
         receivingThread.start();
     }
 
+    /**
+     * 从输入流中读取消息长度。
+     *
+     * @return 消息的长度。
+     * @throws IOException 如果发生输入/输出错误。
+     */
     private int readMessageLength() throws IOException {
         byte[] lengthBytes = new byte[4];
         inputStream.read(lengthBytes);  // 读取消息长度
         return ByteBuffer.wrap(lengthBytes).getInt();
     }
 
+    /**
+     * 从输入流中读取消息内容并解析为 ChatMessage 对象。
+     *
+     * @param messageLength 消息的长度。
+     * @return 解析后的 ChatMessage 对象。
+     * @throws IOException 如果发生输入/输出错误。
+     */
     private ChatMessage readMessageContent(int messageLength) throws IOException {
         byte[] jsonDataBytes = new byte[messageLength];
         inputStream.read(jsonDataBytes);  // 读取消息内容
@@ -77,6 +102,12 @@ public class ClientReceiver {
         return gptAnsRepMessage;
     }
 
+    /**
+     * 处理接收到的消息，通常将消息传递给 UI 进行显示。
+     *
+     * @param message 接收到的消息。
+     * @throws JsonProcessingException 如果无法处理消息内容。
+     */
     private void handleMessage(ChatMessage message) throws JsonProcessingException {
         // 在这里处理接收到的消息
         System.out.println("Thread Received message: " + message);
@@ -87,7 +118,15 @@ public class ClientReceiver {
         }
     }
 
+    /**
+     * 定义一个回调接口，用于处理接收到的消息。
+     */
     public interface MessageCallback {
+        /**
+         * 当接收到消息时调用此方法。
+         *
+         * @param message 接收到的消息。
+         */
         void onMessageReceived(ChatMessage message);
     }
 }
