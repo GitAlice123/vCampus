@@ -1,3 +1,4 @@
+
 package view.Shop;
 
 import view.Bank.IBankClientAPI;
@@ -15,16 +16,24 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
+import java.util.Set;
+import java.util.HashSet;
 
-public class ShopTeacherStudentUI extends JFrame {
+public class ShopTeacherStudentUI extends JFrame implements ItemListener {
     Object[][] purchaseCar = null;
 
+    Vector<Double> selectedGoods = new Vector<Double>();
+
+    Boolean selectedFlag;
+    Boolean deselectedFlag;
+    int lastSelectedRow;
+    int lastDeselectedRow;
+    Set<Integer> selectedRows = new HashSet<>();
     String[][] AllGoods = null;
 
     Double purchaseCarAmount = 0.0;//购物车内的总金额
@@ -168,13 +177,14 @@ public class ShopTeacherStudentUI extends JFrame {
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
-    Vector<Double> selectedGoods = new Vector<Double>();
 
     /**
      * ShopTeacherStudentUI的构造函数
      */
     public ShopTeacherStudentUI() {
         super("商店");
+        selectedFlag = false;
+        deselectedFlag = false;
 
 //        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
 //        Image image = new ImageIcon(resource).getImage();
@@ -388,9 +398,22 @@ public class ShopTeacherStudentUI extends JFrame {
         Object[][] good = {};
         String[] cartheader = {"商品名称", "商品数量", "金额", "操作"};
         model3.setDataVector(good, cartheader);
-        carttable.setModel(model3);
-        carttable.getColumnModel().getColumn(3).setCellRenderer(new CheckBoxRenderer());
-        carttable.getColumnModel().getColumn(3).setCellEditor(new CheckBoxEditor());
+        carttable = new JTable(model3) {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 3) { // 最后一列是复选框列
+                    return Boolean.class;
+                }
+                return super.getColumnClass(column);
+            }
+        };
+
+        // 设置复选框渲染器和编辑器
+        carttable.getColumnModel().getColumn(3).setCellRenderer(carttable.getDefaultRenderer(Boolean.class));
+        carttable.getColumnModel().getColumn(3).setCellEditor(carttable.getDefaultEditor(Boolean.class));
+        // 添加复选框状态变化监听器
+        JCheckBox checkBox = (JCheckBox) carttable.getDefaultEditor(Boolean.class).getTableCellEditorComponent(carttable, null, false, 0, 3);
+        checkBox.addItemListener(this);
 
 
         carttable.setRowHeight(30);
@@ -721,8 +744,9 @@ public class ShopTeacherStudentUI extends JFrame {
 
         // 通知表格模型数据发生变化，刷新表格显示
         model3.fireTableDataChanged();
-        carttable.getColumnModel().getColumn(3).setCellRenderer(new CheckBoxRenderer());
-        carttable.getColumnModel().getColumn(3).setCellEditor(new CheckBoxEditor());
+        // 设置复选框渲染器和编辑器
+        carttable.getColumnModel().getColumn(3).setCellRenderer(carttable.getDefaultRenderer(Boolean.class));
+        carttable.getColumnModel().getColumn(3).setCellEditor(carttable.getDefaultEditor(Boolean.class));
     }
 
     /**
@@ -733,6 +757,54 @@ public class ShopTeacherStudentUI extends JFrame {
         purchaseCar = iShopClientAPI.getSelectedGoods();
     }
 
+    /**
+     * item改动时的响应函数
+     * @param e the event to be processed
+     */
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            if(!selectedFlag){
+                selectedFlag = true;
+                lastSelectedRow = carttable.getSelectedRow();
+                selectedRows.add(lastSelectedRow);
+                updateTotalAmount();
+                return;
+            }
+            // 持续选中
+            if(selectedFlag){
+                int selectedRow = carttable.getSelectedRow();
+                selectedRows.add(lastDeselectedRow);
+                selectedRows.add(selectedRow);
+                lastSelectedRow = selectedRow;
+                updateTotalAmount();
+            }
+
+            // 在这里处理复选框选中时的逻辑
+        } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+
+            // 复选框被取消选中
+            int selectedRow = carttable.getSelectedRow();
+            selectedRows.remove(selectedRow);
+            updateTotalAmount();
+        }
+    }
+
+    /**
+     * 更新下面总价格图标
+     */
+    private void updateTotalAmount() {
+        double total = 0.0;
+        for (int selectedRow : selectedRows) {
+            Object dat = carttable.getValueAt(selectedRow, 2);
+            if (dat != null) {
+                String data = (String) dat;
+                double money = Double.parseDouble(data);
+                total += money;
+            }
+        }
+
+        totalamount.setText("￥" + Double.toString(total));
+    }
     /**
      * 获取所有的商品
      */
@@ -794,91 +866,6 @@ public class ShopTeacherStudentUI extends JFrame {
 
     }
 
-    // 购物车页面勾选框的类定义
-    class CheckBoxRenderer extends DefaultTableCellRenderer {
-        private JCheckBox checkBox = new JCheckBox();
-        private int counter = 0;
-
-        /**
-         * 表格渲染
-         */
-        public CheckBoxRenderer() {
-            checkBox.setHorizontalAlignment(JCheckBox.CENTER);
-            //checkBox.setSelected(false);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof Boolean) {
-                checkBox.setSelected((Boolean) value);
-
-                return checkBox;
-            } else {
-                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            }
-        }
-    }
-
-    class CheckBoxEditor extends DefaultCellEditor {
-        private JCheckBox checkBox = new JCheckBox();
-        //private int amountColumnIndex; // 商品金额所在列的索引
-        private int counter = 0;
-
-
-        /**
-         * 复选框编辑器
-         */
-        public CheckBoxEditor() {
-            super(new JCheckBox());
-            checkBox.setHorizontalAlignment(JCheckBox.CENTER);
-
-            checkBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-//                    JCheckBox checkBox = (JCheckBox) e.getSource();
-//                    if(checkBox.isSelected()){
-//                        int selectedRow = carttable.getSelectedRow();
-//                        Object dat = carttable.getValueAt(selectedRow, 2);
-//                        if(dat!=null)
-//                        {
-//                            String data = (String) dat;
-//                            Double money = Double.parseDouble(data);
-//                            selectedGoods.add(money);
-//                        }
-//                    }
-//
-////                    if (checkBox.isSelected()) {
-////                        // 选中状态改变为已选中
-////                        int selectedRow = carttable.getSelectedRow();
-////                        if (selectedRow != -1) {
-////                            updatePurchaseCarAmount(selectedRow);
-////                        }
-////                    } else {
-////                        // 选中状态改变为未选中
-////                        int selectedRow = carttable.getSelectedRow();
-////                        if (selectedRow != -1) {
-////                            updatePurchaseCarAmount(selectedRow);
-////                        }
-////                    }
-                }
-            });
-
-            //fireEditingStopped();
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if (value instanceof Boolean) {
-                checkBox.setSelected((Boolean) value);
-            }
-            return checkBox;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return checkBox.isSelected();
-        }
-    }
 
     class addtocartwindow extends JFrame {
         JPanel window = new JPanel(springLayout);
@@ -1173,3 +1160,4 @@ public class ShopTeacherStudentUI extends JFrame {
         }
     }
 }
+
