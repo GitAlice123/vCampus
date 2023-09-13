@@ -641,13 +641,13 @@ public class CurriculumAdminUI extends JFrame {
         //studentdata
         public AdminShowClassesStuUI() {
             super("选课系统");
-            backBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    dispose();
-                    new SummaryManagerUI();
-                }
-            });
+//            backBtn.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    dispose();
+////                    new SummaryManagerUI();
+//                }
+//            });
             JLabel imageLabel = new JLabel();
 //            try {
 //                // 加载图片
