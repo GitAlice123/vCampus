@@ -67,12 +67,9 @@ public class Course {//学生视角的课程
 
     public void setCourseType(String courseType) {
         switch (courseType) {
-            case "Compulsory":
-                this.CourseType = CourseType.Compulsory;
-            case "Optional":
-                this.CourseType = CourseType.Optional;
-            case "Limitative":
-                this.CourseType = CourseType.Limitative;
+            case "Compulsory" -> this.CourseType = CourseType.Compulsory;
+            case "Optional" -> this.CourseType = CourseType.Optional;
+            case "Limitative" -> this.CourseType = CourseType.Limitative;
         }
     }
 
