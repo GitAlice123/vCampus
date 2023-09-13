@@ -10,6 +10,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -116,13 +117,138 @@ public class BankTeacherStudentUI extends JFrame {
     SpringLayout springLayout = new SpringLayout();
     JPanel cardPanel = new JPanel(cardLayout);
     JPanel campuscard = new JPanel();
-    JPanel blank = new JPanel();
-    JPanel recharge = new JPanel(springLayout);
-    JPanel changepwd = new JPanel(springLayout);
-    JPanel cardimage = new JPanel(springLayout);
+    JPanel blank = new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/SEU_finance.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), (int)(getHeight()*0.8), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 50, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel recharge = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel changepwd = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank2.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel cardimage = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank4.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
     JPanel bill = new JPanel(springLayout);
 
-    JPanel reportloss = new JPanel(springLayout);
+    JPanel reportloss = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank3.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
 
     public BankTeacherStudentUI() {
         super("银行");
@@ -132,6 +258,7 @@ public class BankTeacherStudentUI extends JFrame {
         Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
         Font titleFont = new Font("楷体", Font.PLAIN, 50);
         Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
+        Font fieldFont=new Font("楷体",Font.PLAIN,20);
 
 //        URL resource =this.getClass().getClassLoader().getResource("SEU.png");
 //        Image image=new ImageIcon(resource).getImage();
@@ -173,12 +300,12 @@ public class BankTeacherStudentUI extends JFrame {
         balance.setFont(centerFont);
         amountLabel.setFont(centerFont);
         amountField.setPreferredSize(new Dimension(200, 30));//设置输入框大小
-        amountField.setFont(centerFont);
+        amountField.setFont(fieldFont);
         confirmrechargeBtn.setFont(buttonFont);
         confirmrechargeBtn.setBackground(customColor);
         rechargepwdLabel.setFont(centerFont);
         rechargepwdField.setPreferredSize(new Dimension(200, 30));
-        rechargepwdField.setFont(centerFont);
+        rechargepwdField.setFont(fieldFont);
 
 
         recharge.add(rechargeLabel);
@@ -221,9 +348,9 @@ public class BankTeacherStudentUI extends JFrame {
         oldpwdField.setPreferredSize(new Dimension(200, 30));
         newpwdField.setPreferredSize(new Dimension(200, 30));
         ensurepwdField.setPreferredSize(new Dimension(200, 30));
-        oldpwdField.setFont(centerFont);
-        newpwdField.setFont(centerFont);
-        ensurepwdField.setFont(centerFont);
+        oldpwdField.setFont(fieldFont);
+        newpwdField.setFont(fieldFont);
+        ensurepwdField.setFont(fieldFont);
 
 
         changepwd.add(changepwdLabel);
@@ -296,7 +423,7 @@ public class BankTeacherStudentUI extends JFrame {
         month.setPreferredSize(new Dimension(80, 40));
 
         searchField.setPreferredSize(new Dimension(200, 30));
-        searchField.setFont(centerFont);
+        searchField.setFont(fieldFont);
         searchBtn.setFont(buttonFont);
         searchBtn.setBackground(customColor);
         yearLabel.setFont(centerFont);
@@ -380,7 +507,7 @@ public class BankTeacherStudentUI extends JFrame {
         cardstatus.setFont(centerFont);
         cardpwdLabel.setFont(centerFont);
         cardpwdField.setPreferredSize(new Dimension(200, 30));
-        cardpwdField.setFont(centerFont);
+        cardpwdField.setFont(fieldFont);
         confirmfreezeBtn.setFont(buttonFont);
         confirmfreezeBtn.setBackground(customColor);
 
