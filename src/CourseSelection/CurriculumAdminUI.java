@@ -1200,6 +1200,9 @@ public class CurriculumAdminUI extends JFrame {
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
+
+                    dispose();
+
                     /*String[] columnNames ={"课程班编号","课程号","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
                     DefaultTableModel model=new DefaultTableModel(classdata,columnNames);
                     classtable.setModel(model);
