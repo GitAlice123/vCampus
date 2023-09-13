@@ -27,6 +27,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
+/**
+ * 图书馆模块管理员界面
+ */
 public class LibraryAdminUI extends JFrame {
     private int changeBtnRow;
 
@@ -239,7 +242,11 @@ public class LibraryAdminUI extends JFrame {
     String BookNum;
     JLabel NumOfBookOut;
     JButton backBtn;
-
+    /**
+     * 创建一个图书馆管理员界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public LibraryAdminUI() throws IOException {
         initComponent();
     }
@@ -939,6 +946,9 @@ public class LibraryAdminUI extends JFrame {
         }
     }
 
+    /**
+     * 管理员添加书籍的界面
+     */
     class AddBooksUI extends JFrame {
         SpringLayout springLayout;
         JLabel BookIdLabel;
@@ -1109,6 +1119,9 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
+    /**
+     * 管理员修改书籍信息的界面
+     */
     class ChangeBooksUI extends JFrame {
         SpringLayout springLayout = new SpringLayout();
         JLabel ChangeBookIdLabel = new JLabel("书名");

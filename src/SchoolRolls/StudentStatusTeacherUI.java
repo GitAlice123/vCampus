@@ -16,6 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+/**
+ * 学生学籍模块老师登录后看到的界面
+ */
 public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学籍管理系统，看见自己的所有教学班，可以点击每行最后的按钮，显示本教学班学生，并登记成绩
     // 课程班编号
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
@@ -284,7 +288,11 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
         JLabel ClassLabel = new JLabel("本班学生");
 
         JButton backBtn = new JButton("退出");
-
+        /**
+         * 创建一个显示本班学生的界面。
+         *
+         * @throws IOException 如果发生输入/输出错误时抛出该异常
+         */
         public ClassStudentsUI(StudentInfo[] studentInfos) throws IOException {
             super("学生学籍系统");
 
@@ -360,6 +368,10 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
             setVisible((true));
         }
     }
+
+    /**
+     * 修改或增加学生成绩的界面
+     */
     class AddScore extends JFrame{//登记成绩界面
         SpringLayout springLayout=new SpringLayout();
         JPanel centerPanel=new JPanel(springLayout);
@@ -572,7 +584,11 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
 
     }
 
-    //第一个ui
+    /**
+     * 创建一个学生学籍模块老师界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public StudentStatusTeacherUI() throws IOException {
         super("学生学籍系统");
         backBtn.addActionListener(new ActionListener() {

@@ -18,12 +18,21 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * 选课模块教师界面
+ */
 public class CurriculumTeacherUI extends JFrame {
     String id= GlobalData.getUID();//未完成
     String classid;
     String[][] studentdata = {
             {" ", " ", " ", " "},
     };
+    /**
+     * 将CourseClass对象数组转换为包含课程信息的二维字符串数组。
+     *
+     * @param classes CourseClass对象数组
+     * @return 包含课程信息的二维字符串数组，每行包括课程ID、授课教师、上课地点、上课时间、当前选修人数和最大选修人数
+     */
     public String[][] classtostring(CourseClass[] classes){
         String[][] scourse=new String[classes.length][6];
         for(int i=0;i<classes.length;i++){
@@ -36,7 +45,22 @@ public class CurriculumTeacherUI extends JFrame {
         }
         return scourse;
     }
+    /**
+     * 自定义的TableCellRenderer按钮，用于查看班级界面中的辅助类。
+     * 它实现了TableCellRenderer接口，并根据需要在表格单元格中显示一个"查看"按钮。
+     */
     class TeacherTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
+        /**
+         * 返回渲染后的表格单元格组件，显示一个"查看"按钮。
+         *
+         * @param table 表格组件
+         * @param value 单元格的值（未使用）
+         * @param isSelected 单元格是否被选中
+         * @param hasFocus 单元格是否拥有焦点
+         * @param row 单元格所在的行
+         * @param column 单元格所在的列
+         * @return 渲染后的表格单元格组件，包含一个"查看"按钮
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
@@ -47,6 +71,7 @@ public class CurriculumTeacherUI extends JFrame {
         }
 
     }
+
     class TeacherTableCellEditorButton extends DefaultCellEditor {
         private JButton btn;
         private int clickedRow;
@@ -83,7 +108,22 @@ public class CurriculumTeacherUI extends JFrame {
             return null;
         }
     }
+    /**
+     * 自定义 TableCellRenderer，为 JTable 的单元格提供外观设置。
+     * 用于控制选中行和非选中行的背景颜色和文字颜色。
+     */
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        /**
+         * 获取单元格的渲染组件，并根据是否选中行设置其外观。
+         *
+         * @param table      渲染的 JTable 对象
+         * @param value      单元格的值
+         * @param isSelected 是否为选中行
+         * @param hasFocus   是否具有焦点
+         * @param row        行索引
+         * @param column     列索引
+         * @return 渲染的单元格组件
+         */
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
@@ -101,6 +141,9 @@ public class CurriculumTeacherUI extends JFrame {
         }
     };
     SpringLayout springLayout=new SpringLayout();
+    /**
+     * JPanel的子类，用于显示带有背景图片的顶部面板。
+     */
     JPanel TopPanel=new JPanel(){
         @Override
         protected void paintComponent(Graphics g) {
@@ -185,6 +228,11 @@ public class CurriculumTeacherUI extends JFrame {
     JLabel title=new JLabel("教学班");
     String[][] classdata = {};
     JButton backBtn=new JButton("退出");
+    /**
+     * 创建一个课程教师用户界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public CurriculumTeacherUI() throws IOException {
         super("选课系统");
         backBtn.addActionListener(new ActionListener() {
@@ -250,6 +298,10 @@ public class CurriculumTeacherUI extends JFrame {
         setResizable(false);
         setVisible((true));
     }
+
+    /**
+     * 选课模块老师查看本班学生的界面
+     */
     class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         SpringLayout springLayout = new SpringLayout();
         JPanel ClassStudentsTopPanel = new JPanel(){
@@ -362,6 +414,10 @@ public class CurriculumTeacherUI extends JFrame {
 
         JButton backBtn = new JButton("退出");
 
+        /**
+         * 创建一个显示班级学生的界面。
+
+         */
         public TeacherClassStudentsUI() {
             super("选课系统");
 
