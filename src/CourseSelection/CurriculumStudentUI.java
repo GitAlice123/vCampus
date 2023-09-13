@@ -201,14 +201,13 @@ public class CurriculumStudentUI extends JFrame {
      将 Course 对象数组转换为二维字符串数组的方法。
      @param courses Course 对象数组。
      @return 转换后的二维字符串数组，其中每一行对应一个 Course 对象的属性信息。 */
-    public String[][] coursestostring (Course[] courses){
+    public String[][] coursestostring (Course[] courses) throws IOException {
         String[][] scourse=new String[courses.length][6];
         for(int i=0;i<courses.length;i++){
             scourse[i][0]=courses[i].getCourseID();
             scourse[i][1]=courses[i].getCourseName();
-            //未完成，数据库
-            //int num=clientAPI.GetClassNumByCourseID(courses[i].getCourseName());
-            int num=2;
+            CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost",8888);
+            int num=clientAPI.GetClassNumByCourseID(courses[i].getCourseID());
             scourse[i][2]=Integer.toString(num);
             scourse[i][3]=Double.toString(courses[i].getCourseTime());
             scourse[i][4]=courses[i].getCourseType().name();
@@ -520,7 +519,7 @@ public class CurriculumStudentUI extends JFrame {
                     throw new RuntimeException(ex);
                 }
                 if(courseClasses!=null)
-                selectclassdata= classtostring(courseClasses);
+                    selectclassdata= classtostring(courseClasses);
                 String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
                 DefaultTableModel newmodel=new DefaultTableModel(selectclassdata,columnNamesChosen);
                 Chosentable.setModel(newmodel);//未完成，按钮
