@@ -28,9 +28,7 @@ public class CourseDao {
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery("select * from tblCourse where courseId = '" + courseNum + "'");
 
-            if (!res.next()) {
-                return null;
-            }
+            if(!res.next()){return null;}
             res.beforeFirst();
             res.next();
 
@@ -73,9 +71,7 @@ public class CourseDao {
             int count = res.getRow();
             res.beforeFirst();
 
-            if (count == 0) {
-                return null;
-            }
+            if (count == 0) {return null;}
 
             course = new Course[count];
             int index = 0;

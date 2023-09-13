@@ -96,14 +96,6 @@ public class SummaryHandler extends KeyAdapter implements ActionListener {
                         new LibraryAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
-                    } catch (UnsupportedLookAndFeelException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (InstantiationException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (IllegalAccessException ex) {
-                        throw new RuntimeException(ex);
                     }
                 }
                 System.out.println("图书馆");

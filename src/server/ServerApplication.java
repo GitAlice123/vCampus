@@ -167,6 +167,98 @@ public class ServerApplication {
                 }
 
                 switch (LengthOrCode) {
+                    case 300:{
+                        serverActionTool.Action300(jsonData,clientSocket);
+                        break;
+                    }
+                    case 301:{
+                        serverActionTool.Action301(jsonData,clientSocket);
+                        break;
+                    }
+                    case 302:{
+                        serverActionTool.Action302(jsonData,clientSocket);
+                        break;
+                    }
+                    case 303:{
+                        serverActionTool.Action303(jsonData,clientSocket);
+                        break;
+                    }
+                    case 304:{
+                        serverActionTool.Action304(jsonData,clientSocket);
+                        break;
+                    }
+                    case 306:{
+                        serverActionTool.Action306(jsonData,clientSocket);
+                        break;
+                    }
+                    case 307:{
+                        serverActionTool.Action307(jsonData,clientSocket);
+                        break;
+                    }
+                    case 308:{
+                        serverActionTool.Action308(jsonData,clientSocket);
+                        break;
+                    }
+                    case 309:{
+                        serverActionTool.Action309(jsonData,clientSocket);
+                        break;
+                    }
+                    case 310:{
+                        serverActionTool.Action310(jsonData,clientSocket);
+                        break;
+                    }
+                    case 311:{
+                        serverActionTool.Action311(jsonData,clientSocket);
+                        break;
+                    }
+                    case 312:{
+                        serverActionTool.Action312(jsonData,clientSocket);
+                        break;
+                    }
+                    case 400:{
+                        serverActionTool.Action400(jsonData,clientSocket);
+                        break;
+                    }
+                    case 401:{
+                        serverActionTool.Action401(jsonData,clientSocket);
+                        break;
+                    }
+                    case 402:{
+                        serverActionTool.Action402(jsonData,clientSocket);
+                        break;
+                    }
+                    case 403:{
+                        serverActionTool.Action403(jsonData,clientSocket);
+                        break;
+                    }
+                    case 404:{
+                        serverActionTool.Action404(jsonData,clientSocket);
+                        break;
+                    }
+                    case 405:{
+                        serverActionTool.Action405(jsonData,clientSocket);
+                        break;
+                    }
+                    case 406:{
+                        serverActionTool.Action406(jsonData,clientSocket);
+                        break;
+                    }
+                    case 407:{
+                        serverActionTool.Action407(jsonData,clientSocket);
+                        break;
+                    }
+                    case 408:{
+                        serverActionTool.Action408(jsonData,clientSocket);
+                        break;
+                    }
+                    case 409:{
+                        serverActionTool.Action409(jsonData,clientSocket);
+                        break;
+                    }
+                    case 410:{
+                        serverActionTool.Action410(jsonData,clientSocket);
+                        break;
+                    }
                     case 100: {
                         // 100为LoginMessage
                         // 根据消息的类型决定服务器要采取的动作

@@ -1,7 +1,5 @@
 package view.message;
-
 import view.CourseSelection.Course;
-
 public class CoursesRespMessage {
     private Course[] courses;
 
