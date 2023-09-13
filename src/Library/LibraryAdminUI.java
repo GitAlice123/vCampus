@@ -1105,6 +1105,7 @@ public class LibraryAdminUI extends JFrame {
                         throw new RuntimeException(ex);
                     }
                     ShowTableData(AllBooks);
+                    dispose();
                 }
             });
 
