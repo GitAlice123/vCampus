@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 import javax.swing.JTable;
 
 import javax.swing.table.JTableHeader;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 
 public class LibraryAdminUI extends JFrame {
@@ -37,7 +39,7 @@ public class LibraryAdminUI extends JFrame {
             JButton button = new JButton("删除");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
+            Color customColor = new Color(173, 216, 230);
             button.setBackground(customColor);
             return button;
         }
@@ -56,7 +58,7 @@ public class LibraryAdminUI extends JFrame {
             btn = new JButton("删除");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
+            Color customColor = new Color(173, 216, 230);
             btn.setBackground(customColor);
             btn.addActionListener(new ActionListener() {
 
@@ -104,7 +106,7 @@ public class LibraryAdminUI extends JFrame {
             JButton button = new JButton("修改");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             button.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
+            Color customColor = new Color(173, 216, 230);
             button.setBackground(customColor);
             return button;
         }
@@ -123,7 +125,7 @@ public class LibraryAdminUI extends JFrame {
             btn = new JButton("修改");
             Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
-            Color customColor = new Color(255, 255, 192);
+            Color customColor = new Color(173, 216, 230);
             btn.setBackground(customColor);
             btn.addActionListener(new ActionListener() {
 
@@ -249,45 +251,9 @@ public class LibraryAdminUI extends JFrame {
         model = new DefaultTableModel();
         modelFind = new DefaultTableModel();
 
-        table = new JTable(){ // 设置jtable的单元格为透明的
+        table = new JTable();
 
-            public Component prepareRenderer(TableCellRenderer renderer,
-
-                                             int row, int column) {
-
-                Component c = super.prepareRenderer(renderer, row, column);
-
-                if (c instanceof JComponent) {
-
-                    ((JComponent) c).setOpaque(false);
-
-                }
-
-                return c;
-
-            }
-
-        };
-
-        tableFindStuBorrowed = new JTable(){ // 设置jtable的单元格为透明的
-
-            public Component prepareRenderer(TableCellRenderer renderer,
-
-                                             int row, int column) {
-
-                Component c = super.prepareRenderer(renderer, row, column);
-
-                if (c instanceof JComponent) {
-
-                    ((JComponent) c).setOpaque(false);
-
-                }
-
-                return c;
-
-            }
-
-        };
+        tableFindStuBorrowed = new JTable();
         /* 界面布局内容 */
         // super("图书馆系统");
         TopPanel = new JPanel(){
@@ -506,6 +472,7 @@ public class LibraryAdminUI extends JFrame {
         JScrollPane scrollPaneFindStuBorrowed = new JScrollPane(tableFindStuBorrowed);
         scrollPaneFindStuBorrowed.setOpaque(false);
         tableFindStuBorrowed.setOpaque(false);
+        tableFindStuBorrowed.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         scrollPaneFindStuBorrowed.getViewport().setBackground(new Color(255,255,255,150));
         scrollPaneFindStuBorrowed.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
@@ -746,25 +713,25 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
-//    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
-//        @Override
-//        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//            if (isSelected) {
-//                setForeground(Color.BLACK);
-//            } else {
-//                // 设置单元格背景颜色
-//                if (row % 2 == 0) {
-//                    Color customColor = new Color(255, 255, 224);
-//                    cellComponent.setBackground(customColor);
-//                } else {
-//                    Color customColor2 = new Color(255, 250, 205);
-//                    cellComponent.setBackground(customColor2);
-//                }
-//            }
-//            return cellComponent;
-//        }
-//    }
+    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                setForeground(Color.BLACK);
+            } else {
+                // 设置单元格背景颜色
+                if (row % 2 == 0) {
+                    Color customColor = new Color(230, 255, 255);
+                    cellComponent.setBackground(customColor);
+                } else {
+                    Color customColor2 = new Color(240, 248, 255);
+                    cellComponent.setBackground(customColor2);
+                }
+            }
+            return cellComponent;
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         try {
@@ -772,9 +739,9 @@ public class LibraryAdminUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+            UIManager.put("control", new Color(240, 248, 255)); // 背景
 
 
         } catch (Exception e) {
@@ -873,6 +840,7 @@ public class LibraryAdminUI extends JFrame {
             model.setDataVector(data, columnNamesChosen);
             table.setModel(model);
 
+            table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
             LibraryAdminUI.ChangeBookTableCellEditorButton changeEditor = new ChangeBookTableCellEditorButton();
             LibraryAdminUI.ChangeBookTableCellRendererButton changeRenderer = new ChangeBookTableCellRendererButton();
             LibraryAdminUI.DeleteBookTableCellEditorButton deleteEditor = new DeleteBookTableCellEditorButton();

@@ -48,51 +48,9 @@ public class CurriculumStudentUI extends JFrame {
 
 
      */
-    JTable Allcoursetable = new JTable(){ // 设置jtable的单元格为透明的
-
-        /**
-         *@param renderer 要使用的渲染器。
-         *@param row 所需渲染的单元格所在的行数。
-         *@param column 所需渲染的单元格所在的列数。
-         *@return 渲染后的组件。
-         */
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;//展示课程列表的表格
+    JTable Allcoursetable = new JTable();//展示课程列表的表格
     String[][] allcoursedata;
-    JTable Chosentable = new JTable(){ // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;//展示已选课程的表格
+    JTable Chosentable = new JTable();//展示已选课程的表格
     String[][] courseclassdata = {
             {"1","1","1","1","1"},
             {"1","1","1","1","1"},
@@ -612,10 +570,9 @@ public class CurriculumStudentUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(210, 210, 250)); // 边框
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
             UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
             UIManager.put("control", new Color(240, 248, 255)); // 背景
-
 
 
         } catch (Exception e) {
@@ -858,10 +815,10 @@ public class CurriculumStudentUI extends JFrame {
                 } else {
                     // 设置单元格背景颜色
                     if (row % 2 == 0) {
-                        Color customColor = new Color(240, 255, 255);
+                        Color customColor = new Color(230, 255, 255);
                         cellComponent.setBackground(customColor);
                     } else {
-                        Color customColor2 = new Color(224, 255, 255);
+                        Color customColor2 = new Color(240, 248, 255);
                         cellComponent.setBackground(customColor2);
                     }
                 }

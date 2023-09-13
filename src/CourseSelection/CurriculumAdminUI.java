@@ -173,49 +173,8 @@ public class CurriculumAdminUI extends JFrame {
      * 自定义的 JTable，用于设置单元格为透明的。
      * 在 prepareRenderer 方法中重写默认的单元格渲染器，使单元格的背景透明。
      */
-    JTable classtable = new JTable(){ // 设置jtable的单元格为透明的
-        /**
-         * @param renderer 单元格渲染器对象，用于绘制单元格的内容。
-         * @param row 单元格所在的行。
-         * @param column 单元格所在的列。
-         * @return 返回被渲染的组件。
-         */
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;
-    JTable studenttable = new JTable(){ // 设置jtable的单元格为透明的
-
-        public Component prepareRenderer(TableCellRenderer renderer,
-
-                                         int row, int column) {
-
-            Component c = super.prepareRenderer(renderer, row, column);
-
-            if (c instanceof JComponent) {
-
-                ((JComponent) c).setOpaque(false);
-
-            }
-
-            return c;
-
-        }
-
-    };;
+    JTable classtable = new JTable();
+    JTable studenttable = new JTable();
     JLabel title=new JLabel("课程班");
     String[][] studentdata = {
     };
@@ -1291,10 +1250,10 @@ public class CurriculumAdminUI extends JFrame {
             } else {
                 // 设置单元格背景颜色
                 if (row % 2 == 0) {
-                    Color customColor = new Color(240, 255, 255);
+                    Color customColor = new Color(230, 255, 255);
                     cellComponent.setBackground(customColor);
                 } else {
-                    Color customColor2 = new Color(224, 255, 255);
+                    Color customColor2 = new Color(240, 248, 255);
                     cellComponent.setBackground(customColor2);
                 }
             }
@@ -1315,7 +1274,7 @@ public class CurriculumAdminUI extends JFrame {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
             UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
             UIManager.put("control", new Color(240, 248, 255)); // 背景
 
