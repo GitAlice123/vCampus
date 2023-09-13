@@ -12,6 +12,9 @@ import view.Hospital.HospitalTeacherStudentUI;
 import view.Library.LibraryAdminUI;
 import view.Library.LibraryUI;
 import view.Login.logInUI;
+import view.SchoolRolls.StudentStatusAdminUI;
+import view.SchoolRolls.StudentStatusTeacherUI;
+import view.SchoolRolls.StudentStatusUI;
 import view.Shop.ShopManagerUI;
 import view.Shop.ShopTeacherStudentUI;
 import view.chat.ChatFrameUI;
@@ -39,19 +42,19 @@ public class SummaryManagerHandler extends KeyAdapter implements ActionListener 
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1) {
                     try {
-                        new CurriculumStudentUI();
+                        new StudentStatusUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else if (GlobalData.getUType() == 2) {
                     try {
-                        new CurriculumTeacherUI();
+                        new StudentStatusTeacherUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else {
                     try {
-                        new CurriculumAdminUI();
+                        new StudentStatusAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -96,14 +99,6 @@ public class SummaryManagerHandler extends KeyAdapter implements ActionListener 
                         new LibraryAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
-                    } catch (UnsupportedLookAndFeelException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (ClassNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (InstantiationException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (IllegalAccessException ex) {
-                        throw new RuntimeException(ex);
                     }
                 }
                 System.out.println("图书馆");
@@ -142,7 +137,11 @@ public class SummaryManagerHandler extends KeyAdapter implements ActionListener 
             }
             case "chat":
                 summaryview.dispose();
-                new ChatFrameUI();
+                try {
+                    new ChatFrameUI();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case "登出":
                 GlobalData.logout();//登出时注销用户

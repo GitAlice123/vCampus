@@ -109,6 +109,8 @@ public class SummaryManagerUI extends JFrame
         centerPanel.add(chatBtn);
         southPanel.add(logoutBtn);
 
+
+
         studentstatusmanagementBtn.addActionListener(summaryHandler);
         courseselectionBtn.addActionListener(summaryHandler);
         labraryBtn.addActionListener(summaryHandler);

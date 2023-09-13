@@ -6,7 +6,7 @@ import javax.swing.*;
  * 全局数据类，用于存储用户登录信息。
  */
 public class GlobalData {
-    private static String uID = "213213000";//用户一卡通号
+    private static String uID = GlobalData.getUID();//用户一卡通号
     private static int uType;//用户类型，1表示学生，2表示教师，3表示管理员
 
     private static String ipAddress = "localhost";

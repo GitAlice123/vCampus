@@ -2,12 +2,6 @@ package view.Library;
 
 import view.Global.GlobalData;
 import view.Global.SummaryStudentTeacherUI;
-import view.connect.LibraryClientAPI;
-import view.connect.LibraryClientAPIImpl;
-import view.message.BookISBNMessage;
-import view.message.RegisterReqMessage;
-import view.message.SearchBookNameMessage;
-import view.message.UniqueMessage;
 import view.connect.*;
 import view.message.*;
 
@@ -22,10 +16,216 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Date;import java.awt.image.BufferedImage;
+
 
 
 public class LibraryUI extends JFrame {
+    static class BorrowBookTableCellRendererButton implements TableCellRenderer {
+        public BorrowBookTableCellRendererButton() {
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("借阅");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+
+    class BorrowBookTableCellEditorButton extends DefaultCellEditor {//查看班级界面辅助类，按钮事件触发在此类中
+        private JButton btn;
+        private int clickedRow;
+
+        public BorrowBookTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("借阅");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        BorrowBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+    }
+
+    static class ReturnBookTableCellRendererButton implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("还书");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+
+    class ReturnBookTableCellEditorButton extends DefaultCellEditor {
+        private JButton btn;
+        private int clickedRow;
+
+        public ReturnBookTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("还书");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    JButton clickedButton = (JButton) e.getSource();
+                    try {
+                        ReturnBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+                    /* 下面重新显示用户借书表格 */
+                    LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
+                    String uID = GlobalData.getUID();
+                    RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
+
+                    BookHold[] AllHoldBooks= new BookHold[0];
+                    try {
+                        AllHoldBooks = libraryClientAPI_4.getBorrowedBooks(registerReqMessage);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    try {
+                        ShowBorrowedTableData(AllHoldBooks);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
+
+    static class RenewBookTableCellRendererButton implements TableCellRenderer {
+
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            JButton button = new JButton("续借");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            button.setFont(centerFont);
+            return button;
+        }
+
+    }
+
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                // 设置选中行的外观
+                component.setBackground(table.getBackground()); // 设置选中行的背景颜色
+                component.setForeground(Color.BLACK); // 设置选中行的文字颜色
+            } else {
+                // 设置非选中行的外观
+                component.setBackground(table.getBackground()); // 恢复默认的背景颜色
+                component.setForeground(table.getForeground()); // 恢复默认的文字颜色
+            }
+            return component;
+        }
+    };
+
+    class RenewBookTableCellEditorButton extends DefaultCellEditor {
+
+        private JButton btn;
+        private int clickedRow;
+
+        public RenewBookTableCellEditorButton() {
+            super(new JTextField());
+            //设置点击一次就激活，否则默认好像是点击2次激活。
+            this.setClickCountToStart(1);
+            btn = new JButton("续借");
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            btn.setFont(centerFont);
+            btn.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //System.out.println("按钮事件触发----");
+                    JButton clickedButton = (JButton) e.getSource();
+
+                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
+                    System.out.println("点击的行索引：" + clickedRow);
+
+                    // TODO:此处要添加续借操作，将该行对应的书在该学生的已借书的表格和数据库中将过期时间后延
+                    try {
+                        RenewBtnClicked(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+
+
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            clickedRow = row;
+            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
+            return btn;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+
+    }
+
     SpringLayout springLayout;
     DefaultTableModel model;
     DefaultTableModel modelChosen;
@@ -46,6 +246,7 @@ public class LibraryUI extends JFrame {
     JLabel imageLabel;
     JButton FindBookBtn;
     JButton ReturnToAllBookBtn;
+
     public LibraryUI() throws IOException {
         try {
             // 设置外观为Windows外观
@@ -63,72 +264,192 @@ public class LibraryUI extends JFrame {
         initComponents();
     }
 
-    public static void main(String[] args) throws IOException {
-        try {
-            // 设置外观为Windows外观
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
-            UIManager.put("control", new Color(248, 248, 230)); // 背景
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        new LibraryUI();
-    }
-
     private void initComponents() throws IOException {
         this.springLayout = new SpringLayout();
         this.model = new DefaultTableModel();
         this.modelChosen = new DefaultTableModel();
-        this.table = new JTable();
-        this.tableChosen = new JTable();
-        this.TopPanel = new JPanel();//顶部放置按钮的面板
-        this.BottomPanel = new JPanel();//底部放置按钮的面板
+        this.table = new JTable(){ // 设置jtable的单元格为透明的
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+
+                                             int row, int column) {
+
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                if (c instanceof JComponent) {
+
+                    ((JComponent) c).setOpaque(false);
+
+                }
+
+                return c;
+
+            }
+
+        };;
+        this.tableChosen = new JTable(){ // 设置jtable的单元格为透明的
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+
+                                             int row, int column) {
+
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                if (c instanceof JComponent) {
+
+                    ((JComponent) c).setOpaque(false);
+
+                }
+
+                return c;
+
+            }
+
+        };;
+        this.TopPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };//顶部放置按钮的面板
+        this.BottomPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };//底部放置按钮的面板
         this.panel1 = new JPanel();//中间卡片布局的面板
-        this.BookPanel = new JPanel(springLayout);//学生查看课程列表的面板
-        this.ChosenPanel = new JPanel(springLayout);//学生查看已选课程的面板
+        this.BookPanel = new JPanel(springLayout){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };//学生查看课程列表的面板
+        this.ChosenPanel = new JPanel(springLayout){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//学生查看已选课程的面板
         this.BookBtn = new JButton("查看书籍列表");
         this.ChosenBtn = new JButton("查看已借阅书籍");
         this.FindBookTex = new JTextField();//查找图书的输入框
         this.FindBookBtn = new JButton("查找");//查找按钮
-        this.ReturnToAllBookBtn = new JButton("显示所有书籍");//显示所有书籍按钮
+        this.ReturnToAllBookBtn=new JButton("显示所有书籍");//显示所有书籍按钮
         this.NumOfBook = new JLabel("在馆数量:");
         this.BookNum = null;
         this.NumOfBookOut = new JLabel(BookNum);
         this.backBtn = new JButton("退出");//同上
         this.imageLabel = new JLabel();
-        try {
-            // 加载图片
-            int newWidth = 120;  // 新的宽度
-            int newHeight = 120; // 新的高度
-
-            Image pkqIm = ImageIO.read(new File("Images/pkq8.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
-
-            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-            imageLabel.setIcon(new ImageIcon(scaledImage));
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+//        try {
+//            // 加载图片
+//            int newWidth = 120;  // 新的宽度
+//            int newHeight = 120; // 新的高度
+//
+//            Image pkqIm = ImageIO.read(new File("Images/pkq8.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
+//
+//            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+//            imageLabel.setIcon(new ImageIcon(scaledImage));
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String a = "yes";
         UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
-        Book[] AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
         ShowTableData(AllBooks);
 
-        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        LibraryClientAPI libraryClientAPI_3 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
-        BookHold[] AllHoldBooks = libraryClientAPI_3.getBorrowedBooks(registerReqMessage);
+        BookHold[] AllHoldBooks=libraryClientAPI_3.getBorrowedBooks(registerReqMessage);
 
         ShowBorrowedTableData(AllHoldBooks);
+
 
 
         table.setRowHeight(30);
@@ -136,15 +457,24 @@ public class LibraryUI extends JFrame {
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));    //修改表头的高度
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setOpaque(false);
+        table.setOpaque(false);
+        table.setDefaultRenderer(Object.class, renderer);
+        //table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
+        tableChosen.setDefaultRenderer(Object.class, renderer);
         tableChosen.setRowHeight(30);
         JTableHeader tab_headerChosen = tableChosen.getTableHeader();                    //获取表头
         tab_headerChosen.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_headerChosen.setPreferredSize(new Dimension(tab_headerChosen.getWidth(), 30));    //修改表头的高度
-        tableChosen.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        //tableChosen.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
 
+        tableChosen.setOpaque(false);
         JScrollPane scrollPaneChosen = new JScrollPane(tableChosen);
+        scrollPaneChosen.setOpaque(false);
+        scrollPaneChosen.getViewport().setBackground(new Color(255,255,255,150));
         scrollPaneChosen.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
 
         Container contentPane = getContentPane();//获取控制面板
@@ -253,14 +583,15 @@ public class LibraryUI extends JFrame {
         // 把得到的书籍列表放入表格
         String[][] data;
         String[] columnNamesChosen;
-        if (bookArray == null) {
+        if(bookArray==null){
             int columnCount = 6;
             columnNamesChosen = new String[]{"书名", "索书号", "借阅时间", "过期时间", "还书", "续借"};
-            data = new String[][]{null, null, null, null, null, null, null, null, null, null, null,
-                    null, null, null, null};
+            data = new String[][]{null,null,null,null,null,null,null,null,null,null,null,
+            null,null,null,null};
             modelChosen.setDataVector(data, columnNamesChosen);
             tableChosen.setModel(modelChosen);
-        } else {
+        }
+        else {
             int rowCount = bookArray.length;
             int columnCount = 6;
 
@@ -304,6 +635,9 @@ public class LibraryUI extends JFrame {
             tableChosen.getColumnModel().getColumn(5).setCellEditor(renewEditor);
 
         }
+
+
+
 
 
     }
@@ -355,8 +689,9 @@ public class LibraryUI extends JFrame {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-        if (bookArray == null) {
-            JOptionPane.showMessageDialog(this, "没有该书籍库存！");
+        if(bookArray==null)
+        {
+            JOptionPane.showMessageDialog(this,"没有该书籍库存！");
             FindBookTex.setText("");
             return;
         }
@@ -390,19 +725,20 @@ public class LibraryUI extends JFrame {
 
         LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
-                ISBNchosen, currentDate, "BOR", null);
+                ISBNchosen,currentDate,"BOR",null);
         Boolean flag = libraryClientAPI_1.BorrowBook(bookOperationRecord);
         if (flag) {
-            JOptionPane.showMessageDialog(this, "借阅成功！");
-        } else {
-            JOptionPane.showMessageDialog(this, "无法借阅！");
+            JOptionPane.showMessageDialog(this,"借阅成功！");
+        }
+        else{
+            JOptionPane.showMessageDialog(this,"无法借阅！");
             return;
         }
-        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
-        BookHold[] AllHoldBooks = new BookHold[0];
+        BookHold[] AllHoldBooks= new BookHold[0];
         try {
             AllHoldBooks = libraryClientAPI_5.getBorrowedBooks(registerReqMessage);
         } catch (IOException ex) {
@@ -436,7 +772,7 @@ public class LibraryUI extends JFrame {
         // ISBN号在第1列
         Object data = tableChosen.getValueAt(clickedRow, 1);
         String ISBNchosen = (String) data;
-        System.out.println("Going to return " + ISBNchosen);
+        System.out.println("Going to return "+ISBNchosen);
 
         Date currentDate = new Date();
         // 实施借书操作
@@ -447,18 +783,18 @@ public class LibraryUI extends JFrame {
 
         LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
-                ISBNchosen, currentDate, "RET", null);
+                ISBNchosen,currentDate,"RET",null);
         Boolean flag = libraryClientAPI_2.ReturnBook(bookOperationRecord);
 
         if (flag) {
             System.out.println("Return Successfully");
         }
 
-        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
-        BookHold[] AllHoldBooks = new BookHold[0];
+        BookHold[] AllHoldBooks= new BookHold[0];
         try {
             AllHoldBooks = libraryClientAPI_4.getBorrowedBooks(registerReqMessage);
         } catch (IOException ex) {
@@ -473,8 +809,8 @@ public class LibraryUI extends JFrame {
     }
 
     private String GetBookNameByISBN(String ISBN)
-            throws IOException {
-        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+            throws IOException{
+        LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         BookISBNMessage bookISBNMessage = new BookISBNMessage(ISBN);
 
         Book book = libraryClientAPI.getBookByISBN(bookISBNMessage);
@@ -482,12 +818,12 @@ public class LibraryUI extends JFrame {
     }
 
     private void ReturnToAllBookBtnClicked(ActionEvent e)
-            throws IOException {
-        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+            throws IOException{
+        LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String a = "yes";
         UniqueMessage noDataReqMessage = new UniqueMessage(a);
 
-        Book[] AllBooks = libraryClientAPI_2.getStoredBookList(noDataReqMessage);
+        Book[] AllBooks=libraryClientAPI_2.getStoredBookList(noDataReqMessage);
         ShowTableData(AllBooks);
     }
 
@@ -513,17 +849,17 @@ public class LibraryUI extends JFrame {
 
         LibraryClientAPI libraryClientAPI_1 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
         BookOperationRecord bookOperationRecord = new BookOperationRecord(nextOPRid, GlobalData.getUID(),
-                ISBNchosen, currentDate, "REN", null);
+                ISBNchosen,currentDate,"REN",null);
         Boolean flag = libraryClientAPI_1.renewBook(bookOperationRecord);
         if (flag) {
             System.out.println("Renew Successfully");
         }
 
-        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
+        LibraryClientAPI libraryClientAPI_5 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String uID = GlobalData.getUID();
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
 
-        BookHold[] AllHoldBooks = new BookHold[0];
+        BookHold[] AllHoldBooks= new BookHold[0];
         try {
             AllHoldBooks = libraryClientAPI_5.getBorrowedBooks(registerReqMessage);
         } catch (IOException ex) {
@@ -537,211 +873,21 @@ public class LibraryUI extends JFrame {
         }
 
     }
+    public static void main(String[] args) throws IOException {
+        try {
+            // 设置外观为Windows外观
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+            UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
 
-    static class BorrowBookTableCellRendererButton implements TableCellRenderer {
-        public BorrowBookTableCellRendererButton() {
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
-            JButton button = new JButton("借阅");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            button.setFont(centerFont);
-            return button;
-        }
-
-    }
-
-    static class ReturnBookTableCellRendererButton implements TableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
-            JButton button = new JButton("还书");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            button.setFont(centerFont);
-            return button;
-        }
-
-    }
-
-    static class RenewBookTableCellRendererButton implements TableCellRenderer {
-
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
-            JButton button = new JButton("续借");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            button.setFont(centerFont);
-            return button;
-        }
-
-    }
-
-    static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (isSelected) {
-                setForeground(Color.BLACK);
-            } else {
-                // 设置单元格背景颜色
-                if (row % 2 == 0) {
-                    Color customColor = new Color(255, 255, 224);
-                    cellComponent.setBackground(customColor);
-                } else {
-                    Color customColor2 = new Color(255, 250, 205);
-                    cellComponent.setBackground(customColor2);
-                }
-            }
-            return cellComponent;
-        }
-    }
-
-    class BorrowBookTableCellEditorButton extends DefaultCellEditor {//查看班级界面辅助类，按钮事件触发在此类中
-        private JButton btn;
-        private int clickedRow;
-
-        public BorrowBookTableCellEditorButton() {
-            super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
-            this.setClickCountToStart(1);
-            btn = new JButton("借阅");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            btn.setFont(centerFont);
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        BorrowBtnClicked(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            clickedRow = row;
-            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-            return btn;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-
-    }
-
-    class ReturnBookTableCellEditorButton extends DefaultCellEditor {
-        private JButton btn;
-        private int clickedRow;
-
-        public ReturnBookTableCellEditorButton() {
-            super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
-            this.setClickCountToStart(1);
-            btn = new JButton("还书");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            btn.setFont(centerFont);
-            btn.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //System.out.println("按钮事件触发----");
-                    JButton clickedButton = (JButton) e.getSource();
-                    try {
-                        ReturnBtnClicked(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                    System.out.println("点击的行索引：" + clickedRow);
-                    /* 下面重新显示用户借书表格 */
-                    LibraryClientAPI libraryClientAPI_4 = new LibraryClientAPIImpl(GlobalData.getIpAddress(), Integer.parseInt(GlobalData.getPortName()));
-                    String uID = GlobalData.getUID();
-                    RegisterReqMessage registerReqMessage = new RegisterReqMessage(uID);
-
-                    BookHold[] AllHoldBooks = new BookHold[0];
-                    try {
-                        AllHoldBooks = libraryClientAPI_4.getBorrowedBooks(registerReqMessage);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                    try {
-                        ShowBorrowedTableData(AllHoldBooks);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            clickedRow = row;
-            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-            return btn;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-
-
-    }
-
-    class RenewBookTableCellEditorButton extends DefaultCellEditor {
-
-        private JButton btn;
-        private int clickedRow;
-
-        public RenewBookTableCellEditorButton() {
-            super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
-            this.setClickCountToStart(1);
-            btn = new JButton("续借");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
-            btn.setFont(centerFont);
-            btn.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //System.out.println("按钮事件触发----");
-                    JButton clickedButton = (JButton) e.getSource();
-
-                    clickedRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
-                    System.out.println("点击的行索引：" + clickedRow);
-
-                    // TODO:此处要添加续借操作，将该行对应的书在该学生的已借书的表格和数据库中将过期时间后延
-                    try {
-                        RenewBtnClicked(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
-
-
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            clickedRow = row;
-            btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-            return btn;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-
-
+        new LibraryUI();
     }
 }

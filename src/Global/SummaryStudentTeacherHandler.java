@@ -12,6 +12,9 @@ import view.Hospital.HospitalTeacherStudentUI;
 import view.Library.LibraryAdminUI;
 import view.Library.LibraryUI;
 import view.Login.logInUI;
+import view.SchoolRolls.StudentStatusAdminUI;
+import view.SchoolRolls.StudentStatusTeacherUI;
+import view.SchoolRolls.StudentStatusUI;
 import view.Shop.ShopManagerUI;
 import view.Shop.ShopTeacherStudentUI;
 import view.chat.ChatFrameUI;
@@ -39,19 +42,19 @@ public class SummaryStudentTeacherHandler extends KeyAdapter implements ActionLi
                 summaryview.dispose();
                 if (GlobalData.getUType() == 1) {
                     try {
-                        new CurriculumStudentUI();
+                        new StudentStatusUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else if (GlobalData.getUType() == 2) {
                     try {
-                        new CurriculumTeacherUI();
+                        new StudentStatusTeacherUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 } else {
                     try {
-                        new CurriculumAdminUI();
+                        new StudentStatusAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }

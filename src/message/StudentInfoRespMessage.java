@@ -14,22 +14,12 @@ public class StudentInfoRespMessage {
     private String College;
     private StudentInfo[] studentInfos;
     private StudentInfo studentInfo;
+    public void setStudentInfo(StudentInfo studentInfo) {
+        this.studentInfo = studentInfo;
+    }
 
     public StudentInfoRespMessage(StudentInfo[] studentInfos) {
         this.studentInfos = studentInfos;
-    }
-
-    public StudentInfoRespMessage(String cardID, String ID, String sex, String name, Date birth, int grade, String college) {
-        CardID = cardID;
-        this.ID = ID;
-        Sex = sex;
-        Name = name;
-        Birth = birth;
-        Grade = grade;
-        College = college;
-    }
-
-    public StudentInfoRespMessage() {
     }
 
     public StudentInfo[] getStudentInfos() {
@@ -40,16 +30,12 @@ public class StudentInfoRespMessage {
         return CardID;
     }
 
-    public void setCardID(String cardID) {
-        CardID = cardID;
-    }
-
     public StudentInfo getStudentInfo() {
         return studentInfo;
     }
 
-    public void setStudentInfo(StudentInfo studentInfo) {
-        this.studentInfo = studentInfo;
+    public void setCardID(String cardID) {
+        CardID = cardID;
     }
 
     public String getID() {
@@ -98,5 +84,18 @@ public class StudentInfoRespMessage {
 
     public void setCollege(String college) {
         College = college;
+    }
+
+    public StudentInfoRespMessage(String cardID, String ID, String sex, String name, Date birth, int grade, String college) {
+        CardID = cardID;
+        this.ID = ID;
+        Sex = sex;
+        Name = name;
+        Birth = birth;
+        Grade = grade;
+        College = college;
+    }
+
+    public StudentInfoRespMessage() {
     }
 }

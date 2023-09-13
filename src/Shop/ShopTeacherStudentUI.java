@@ -71,29 +71,6 @@ public class ShopTeacherStudentUI extends JFrame {
     public ShopTeacherStudentUI() {
         super("商店");
 
-        OKBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int rowCount = model3.getRowCount();
-                purchaseCarAmount = (double) 0;
-                for (int row = 0; row < rowCount; row++) {
-                    Boolean isSelected = (Boolean) model3.getValueAt(row, 3); // 获取第 3 列（操作列）的值，即 JCheckBox 是否选中
-                    if(isSelected)
-                    {
-                        purchaseCarAmount = purchaseCarAmount + Double.parseDouble((String)model3.getValueAt(row, 2));
-                    }
-
-//                    purchaseCarAmount = purchaseCarAmount + Double.parseDouble((String) purchaseCar[row][2]);
-//                    System.out.println("内容为2222：" + isSelected);
-//                    if (isSelected) {
-//                        selectedRows.add(row); // 记录选中的行索引
-//
-//                        System.out.println("选中了行数：" + row);
-//                    }
-                }
-                totalamount.setText("￥"+purchaseCarAmount);
-            }
-        });
 //        URL resource = this.getClass().getClassLoader().getResource("SEU.png");
 //        Image image = new ImageIcon(resource).getImage();
 //        setIconImage(image);
@@ -106,7 +83,7 @@ public class ShopTeacherStudentUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 double sum = 0.0;
                 for (int i = 0; i < carttable.getRowCount(); i++) {
-                    boolean isChecked = (Boolean) model3.getValueAt(i, 3);
+                    boolean isChecked = (Boolean) carttable.getValueAt(i, 3);
                     //boolean isChecked = (boolean) model.getValueAt(i, 3);
                     if (isChecked) {
                         Object dat = carttable.getValueAt(i, 2);
@@ -714,19 +691,30 @@ public class ShopTeacherStudentUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 //                    JCheckBox checkBox = (JCheckBox) e.getSource();
-//                    if (checkBox.isSelected()) {
-//                        // 选中状态改变为已选中
+//                    if(checkBox.isSelected()){
 //                        int selectedRow = carttable.getSelectedRow();
-//                        if (selectedRow != -1) {
-//                            updatePurchaseCarAmount(selectedRow);
-//                        }
-//                    } else {
-//                        // 选中状态改变为未选中
-//                        int selectedRow = carttable.getSelectedRow();
-//                        if (selectedRow != -1) {
-//                            updatePurchaseCarAmount(selectedRow);
+//                        Object dat = carttable.getValueAt(selectedRow, 2);
+//                        if(dat!=null)
+//                        {
+//                            String data = (String) dat;
+//                            Double money = Double.parseDouble(data);
+//                            selectedGoods.add(money);
 //                        }
 //                    }
+//
+////                    if (checkBox.isSelected()) {
+////                        // 选中状态改变为已选中
+////                        int selectedRow = carttable.getSelectedRow();
+////                        if (selectedRow != -1) {
+////                            updatePurchaseCarAmount(selectedRow);
+////                        }
+////                    } else {
+////                        // 选中状态改变为未选中
+////                        int selectedRow = carttable.getSelectedRow();
+////                        if (selectedRow != -1) {
+////                            updatePurchaseCarAmount(selectedRow);
+////                        }
+////                    }
                 }
             });
 
@@ -738,7 +726,6 @@ public class ShopTeacherStudentUI extends JFrame {
             if (value instanceof Boolean) {
                 checkBox.setSelected((Boolean) value);
             }
-
             return checkBox;
         }
 

@@ -4,19 +4,8 @@ import view.Login.User;
 
 import java.sql.*;
 
-/**
- * 用户管理DAO
- *
- * @author shuangmu555
- */
 public class UserDao {
 
-    /**
-     * 通过用户ID查找用户类
-     *
-     * @param uId 用户ID
-     * @return 对应的User类，否则返回null
-     */
     public User findUserByuId(String uId) {
 
         String sqlString = "select * from tblUser where uId = '" + uId + "'";
@@ -30,10 +19,10 @@ public class UserDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
 
-            if (!res.next()) {
+            if(!res.next()){
                 return null;
             }
             res.beforeFirst();
@@ -53,12 +42,7 @@ public class UserDao {
         return user;
     }
 
-    /**
-     * 传入用户信息，创建用户
-     * @param user 创建用户的信息
-     * @return 是否创建成功
-     */
-    public boolean CreateUser(User user) {
+    public boolean CreateUser(User user){
 
         String sqlString = "insert into tblUser(uId,uPwd,uRole) values('" + user.getuId() + "','" + user.getuPwd() + "','" + user.getuRole() + "')";
 
@@ -70,22 +54,18 @@ public class UserDao {
         try {
             Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名 ，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
-            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            int num = sta.executeUpdate(sqlString);
+            Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            sta.executeUpdate(sqlString);
 
             con.close();//关闭数据库连接
-            if (num == 0) return false;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
         return true;
     }
-
-    /**
-     * 查找全部老师，用于下拉框
-     * @return 全部老师的User[]
-     */
     public User[] findAllTeachers(){
         String sqlString = "select * from tblUser where uRole = 'TC'";
         User[] allTeachers = new User[10];
@@ -96,7 +76,7 @@ public class UserDao {
             e.printStackTrace();
         }
         try {
-            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\db\\vCampus.mdb", "", "");
+            Connection con = DriverManager.getConnection("jdbc:Access:///.\\src\\Database\\vCampus.mdb", "", "");
             //与数据库建立连接，getConnection()方法第一个参数为jdbc:Access:///+文件总路径,第二个参数是用户名，第三个参数是密码（Access是没有用户名和密码此处为空字符串）
             Statement sta = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet res = sta.executeQuery(sqlString);
@@ -126,5 +106,4 @@ public class UserDao {
 
         return allTeachers;
     }
-
 }

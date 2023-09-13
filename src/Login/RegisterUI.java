@@ -61,9 +61,10 @@ public class RegisterUI extends JFrame {
 
         Container contentPane=getContentPane();//获取控制面板
         // 设置图标背景
-        URL resource =this.getClass().getClassLoader().getResource("SEU.png");
-        Image image=new ImageIcon(resource).getImage();
-        setIconImage(image);
+        //TODO
+//        URL resource =this.getClass().getClassLoader().getResource("SEU.png");
+//        Image image=new ImageIcon(resource).getImage();
+//        setIconImage(image);
 
         //getContentPane().add(lblBackground); // 将组件添加到面板中
 
