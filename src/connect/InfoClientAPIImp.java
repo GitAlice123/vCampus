@@ -5,19 +5,20 @@ import view.CourseSelection.Course;
 import view.CourseSelection.CourseClass;
 import view.SchoolRolls.Grade;
 import view.SchoolRolls.StudentInfo;
+import view.client.ClientRWTool;
 import view.message.*;
-import view.client.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class InfoClientAPIImp implements InfoClientAPI{
+public class InfoClientAPIImp implements InfoClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private ClientRWTool rwTool = new ClientRWTool();
+    private ClientRWTool ClientRWTool = new ClientRWTool();
+
     public InfoClientAPIImp(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -28,25 +29,26 @@ public class InfoClientAPIImp implements InfoClientAPI{
             e.printStackTrace();
         }
     }
+
     //300
     @Override
     public StudentInfo SearchStuInfoByID(String ID) throws IOException {
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,300);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 300);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -71,14 +73,14 @@ public class InfoClientAPIImp implements InfoClientAPI{
             String jsonData = objectMapper.writeValueAsString(Info);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,301);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 301);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -87,7 +89,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }
@@ -98,19 +100,19 @@ public class InfoClientAPIImp implements InfoClientAPI{
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,302);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 302);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -119,7 +121,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }
@@ -130,19 +132,19 @@ public class InfoClientAPIImp implements InfoClientAPI{
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,303);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 303);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -151,7 +153,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         GradesRespMessage RespMessage = objectMapper.readValue(mess, GradesRespMessage.class);
-        Grade[] result=RespMessage.getGrades();
+        Grade[] result = RespMessage.getGrades();
 //      处理结果
         return result;
     }
@@ -164,18 +166,18 @@ public class InfoClientAPIImp implements InfoClientAPI{
             ObjectMapper objectMapper = new ObjectMapper();
 
             // 将 LoginMessage 对象转换为 JSON 字符串
-            StringPariMessage stringPariMessage=new StringPariMessage(CourseID,stuID);
+            StringPariMessage stringPariMessage = new StringPariMessage(CourseID, stuID);
             String jsonData = objectMapper.writeValueAsString(stringPariMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,304);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 304);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -196,19 +198,19 @@ public class InfoClientAPIImp implements InfoClientAPI{
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            IDReqMessage idReqMessage=new IDReqMessage(TeacherID);
+            IDReqMessage idReqMessage = new IDReqMessage(TeacherID);
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,306);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 306);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -217,7 +219,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         CourseClassesRespMessage RespMessage = objectMapper.readValue(mess, CourseClassesRespMessage.class);
-        CourseClass[] courses=RespMessage.getCourseClasses();
+        CourseClass[] courses = RespMessage.getCourseClasses();
 //      处理结果
         return courses;
     }
@@ -230,18 +232,18 @@ public class InfoClientAPIImp implements InfoClientAPI{
             ObjectMapper objectMapper = new ObjectMapper();
 
             // 将 LoginMessage 对象转换为 JSON 字符串
-            IDReqMessage idReqMessage=new IDReqMessage(ID);
+            IDReqMessage idReqMessage = new IDReqMessage(ID);
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,307);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 307);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -250,7 +252,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         CoursesRespMessage RespMessage = objectMapper.readValue(mess, CoursesRespMessage.class);
-        Course[] courses=RespMessage.getCourses();
+        Course[] courses = RespMessage.getCourses();
 //      处理结果
         return courses;
     }
@@ -262,18 +264,18 @@ public class InfoClientAPIImp implements InfoClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            IDReqMessage idReqMessage=new IDReqMessage(classid);
+            IDReqMessage idReqMessage = new IDReqMessage(classid);
             String jsonData = objectMapper.writeValueAsString(idReqMessage);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,308);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 308);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -282,7 +284,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         StudentInfoRespMessage RespMessage = objectMapper.readValue(mess, StudentInfoRespMessage.class);
-        StudentInfo[] studentInfos=RespMessage.getStudentInfos();
+        StudentInfo[] studentInfos = RespMessage.getStudentInfos();
 //      处理结果
         return studentInfos;
     }
@@ -296,14 +298,14 @@ public class InfoClientAPIImp implements InfoClientAPI{
             String jsonData = objectMapper.writeValueAsString(grade);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,309);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 309);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -312,7 +314,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }
@@ -323,18 +325,18 @@ public class InfoClientAPIImp implements InfoClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            Pair<String,String> pair=new Pair<>(StudentID,courseID);
+            Pair<String, String> pair = new Pair<>(StudentID, courseID);
             String jsonData = objectMapper.writeValueAsString(pair);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,310);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 310);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -343,7 +345,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         DoubleMesage RespMessage = objectMapper.readValue(mess, DoubleMesage.class);
-        double result=RespMessage.getaDouble();
+        double result = RespMessage.getaDouble();
 //      处理结果
         return result;
     }
@@ -354,18 +356,18 @@ public class InfoClientAPIImp implements InfoClientAPI{
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将 LoginMessage 对象转换为 JSON 字符串
-            IDReqMessage message=null;
+            IDReqMessage message = null;
             String jsonData = objectMapper.writeValueAsString(message);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,311);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 311);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -374,7 +376,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         StudentInfoRespMessage RespMessage = objectMapper.readValue(mess, StudentInfoRespMessage.class);
-        StudentInfo[] result=RespMessage.getStudentInfos();
+        StudentInfo[] result = RespMessage.getStudentInfos();
 //      处理结果
         return result;
     }
@@ -388,14 +390,14 @@ public class InfoClientAPIImp implements InfoClientAPI{
             String jsonData = objectMapper.writeValueAsString(info);
             System.out.println(jsonData);
 
-            rwTool.ClientSendOutStream(outputStream,jsonData,312);
+            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 312);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //接收服务器响应
-        String receivedJsonData = rwTool.ClientReadStream(inputStream);
+        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
 
         String mess = receivedJsonData.toString();
 
@@ -404,7 +406,7 @@ public class InfoClientAPIImp implements InfoClientAPI{
 
 //      将 JSON 数据转换为对象
         BoolRespMessage RespMessage = objectMapper.readValue(mess, BoolRespMessage.class);
-        boolean result=RespMessage.getFlag();
+        boolean result = RespMessage.getFlag();
 //      处理结果
         return result;
     }

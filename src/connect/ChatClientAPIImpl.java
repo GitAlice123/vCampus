@@ -1,17 +1,16 @@
 package view.connect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import view.Global.GlobalData;
+import view.client.ClientRWTool;
+import view.message.ChatQuesMessage;
+import view.message.ChatWithUserMessage;
+import view.message.GPTAnsRepMessage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import view.Global.GlobalData;
-import view.Library.*;
-import view.message.*;
-
-import view.client.*;
 
 public class ChatClientAPIImpl implements ChatClientAPI {
     private Socket socket;
@@ -77,34 +76,5 @@ public class ChatClientAPIImpl implements ChatClientAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public List<String> getAllOnlineName(UniqueMessage uniqueMessage) throws IOException {
-        try {
-            // 创建 ObjectMapper 对象
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            // 将 Message 对象转换为 JSON 字符串
-            String jsonData = objectMapper.writeValueAsString(uniqueMessage);
-            System.out.println(jsonData);
-
-            ClientRWTool.ClientSendOutStream(outputStream, jsonData, 2002);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //接收服务器响应
-        String receivedJsonData = ClientRWTool.ClientReadStream(inputStream);
-
-        String mess = receivedJsonData.toString();
-
-//      创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-
-//      将 JSON 数据转换为对象
-        OnlineListRespMessage gptAnsRepMessage = objectMapper.readValue(mess, OnlineListRespMessage.class);
-
-        return gptAnsRepMessage.getOnlineList();
     }
 }

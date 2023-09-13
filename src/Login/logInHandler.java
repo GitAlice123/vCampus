@@ -1,7 +1,7 @@
 package view.Login;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.LoginClientAPI;
 import view.connect.LoginClientAPIImpl;
 import view.message.LoginMessage;
@@ -107,7 +107,7 @@ public class logInHandler extends KeyAdapter implements ActionListener {
             JOptionPane.showMessageDialog(loginView, "登录成功！");
             GlobalData.setUser(userId, typeNum);
             loginView.dispose();
-            new SummaryUI();//跳转页面的判断逻辑待写
+            new SummaryStudentTeacherUI();//跳转页面的判断逻辑待写
             System.out.println("总界面");
         } else {
             JOptionPane.showMessageDialog(loginView, "用户名或密码或用户类型错误！");

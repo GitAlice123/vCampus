@@ -6,7 +6,7 @@ import view.Bank.bankAccount;
 import view.Bank.bankBill;
 import view.DAO.bankAccountDao;
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -144,7 +144,7 @@ public class HospitalTeacherStudentUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
 
@@ -959,20 +959,20 @@ public class HospitalTeacherStudentUI extends JFrame {
                         String enterPwd = pwdField.getText();
                         try {
                             //后端消费函数
-                            flag = iBankClientAPI.bankConsume(GlobalData.getUID(), bill, enterPwd);
+                            flag = iBankClientAPI.bankConsume(GlobalData.getUID(), bill, enterPwd,false);
 
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
-                        if (flag == -4.00) {
+                        if (flag == -400000.00) {
                             JOptionPane.showMessageDialog(cardpaymentPanel, "系统出错！");
-                        } else if (flag == -3.00) {
+                        } else if (flag == -300000.00) {
                             JOptionPane.showMessageDialog(cardpaymentPanel, "密码错误，请重新输入");
-                        } else if (flag == -2.00) {
+                        } else if (flag == -200000.00) {
                             JOptionPane.showMessageDialog(cardpaymentPanel, "卡已挂失");
-                        } else if (flag == -1.00) {
+                        } else if (flag == -100000.00) {
                             JOptionPane.showMessageDialog(cardpaymentPanel, "余额不足！请充值");
-                        } else {
+                        } else if (flag>=0){
                             //从未支付表格里删除已支付的挂号记录
 
                             for (Integer rowIndex : selectedRows) {

@@ -1,28 +1,39 @@
 package view.CourseSelection;
 
 public class CourseClass {
-        private String classID;        // 课程班编号
-        private String courseID;      // 课程编号
-        private String classTeacher;   // 任课教师ID
-        private String classPlace;     // 上课地点
-        private int classMax;          // 最大人数
-        private int classTemp;         // 当前人数
-        private String classTime;      // 上课时间
-        private String[] classStudent; // 选本班级的学生ID
+    private String classID;        // 课程班编号
+    private String courseID;      // 课程编号
+    private String classTeacher;   // 任课教师ID
+    private String classPlace;     // 上课地点
+    private int classMax;          // 最大人数
+    private int classTemp;         // 当前人数
+    private String classTime;      // 上课时间
+    private String[] classStudent; // 选本班级的学生ID
+
+    public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime, String[] classStudent) {
+        this.classID = classID;
+        this.courseID = courseNum;
+        this.classTeacher = classTeacher;
+        this.classPlace = classPlace;
+        this.classMax = classMax;
+        this.classTemp = classTemp;
+        this.classTime = classTime;
+        this.classStudent = classStudent;
+    }
+
+    public CourseClass(String classID, String courseID, String classTeacher, String classPlace, int classMax, int classTemp, String classTime) {
+        this.classID = classID;
+        this.courseID = courseID;
+        this.classTeacher = classTeacher;
+        this.classPlace = classPlace;
+        this.classMax = classMax;
+        this.classTemp = classTemp;
+        this.classTime = classTime;
+    }
 
     public CourseClass() {
     }
 
-    public CourseClass(String classID, String courseNum, String classTeacher, String classPlace, int classMax, int classTemp, String classTime, String[] classStudent) {
-            this.classID = classID;
-            this.courseID = courseNum;
-            this.classTeacher = classTeacher;
-            this.classPlace = classPlace;
-            this.classMax = classMax;
-            this.classTemp = classTemp;
-            this.classTime = classTime;
-            this.classStudent = classStudent;
-        }
     public String getClassID() {
         return classID;
     }
@@ -57,16 +68,6 @@ public class CourseClass {
 
     public int getClassMax() {
         return classMax;
-    }
-
-    public CourseClass(String classID, String courseID, String classTeacher, String classPlace, int classMax, int classTemp, String classTime) {
-        this.classID = classID;
-        this.courseID = courseID;
-        this.classTeacher = classTeacher;
-        this.classPlace = classPlace;
-        this.classMax = classMax;
-        this.classTemp = classTemp;
-        this.classTime = classTime;
     }
 
     public void setClassMax(int classMax) {

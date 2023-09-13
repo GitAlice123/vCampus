@@ -1,26 +1,33 @@
 package view.server;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import view.Bank.bankServerActionTool;
 import view.Shop.ShopServerActionTool;
 import view.connect.Pair;
-import view.message.*;
+import view.message.serverGetMessage;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Objects;
+import java.util.Vector;
 
 public class ServerApplication {
     private static ServerSocket serverSocket;
     //    private Map<String, ClientHandler> clientHandlerMap = new HashMap<>();
     private Vector<ClientHandler> clients = new Vector<ClientHandler>();
-    private Vector<Socket> threadRefreshOnline = new Vector<Socket>();
+
+    private static void closeServer() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+                System.out.println("Server closed.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void startServer() throws IOException {
         int port = 8888; // 服务器监听的端口号
@@ -54,18 +61,7 @@ public class ServerApplication {
         }
     }
 
-    private static void closeServer() {
-        try {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-                System.out.println("Server closed.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void forwardMessage(String myID,String userId, String message) {
+    private void forwardMessage(String userId, String message) {
 //        ClientHandler clientHandler = clientHandlerMap.get(userId);
         for (ClientHandler thread : clients) {
             System.out.println("Into for");
@@ -74,7 +70,8 @@ public class ServerApplication {
                 System.out.println(userId);
                 if (Objects.equals(thread.getUserId(), userId)) {
                     System.out.println("equals " + userId);
-                    thread.serverActionTool.Action0(myID,message, thread.clientSocket);
+                    //TODO:A已经发消息给服务器，如何转发给B？
+                    thread.serverActionTool.Action0(message, thread.clientSocket);
                     break;
                 }
             }
@@ -87,21 +84,7 @@ public class ServerApplication {
         private ServerActionTool serverActionTool;
         private bankServerActionTool bankServerActionTool;
         private ShopServerActionTool shopServerActionTool;
-
-        public void setUserID(String userID) {
-            this.userID = userID;
-        }
-
         private String userID;
-
-        public Boolean getChatOnline() {
-            return isChatOnline;
-        }
-
-        public void setChatOnline(Boolean chatOnline) {
-            isChatOnline = chatOnline;
-        }
-
         private Boolean isChatOnline = false;
 
         public ClientHandler(Socket clientSocket, ServerRWTool rwTool, ServerActionTool serverActionTool,
@@ -111,6 +94,18 @@ public class ServerApplication {
             this.serverActionTool = serverActionTool;
             this.bankServerActionTool = bankServerActionTool;
             this.shopServerActionTool = shopServerActionTool;
+        }
+
+        public void setUserID(String userID) {
+            this.userID = userID;
+        }
+
+        public Boolean getChatOnline() {
+            return isChatOnline;
+        }
+
+        public void setChatOnline(Boolean chatOnline) {
+            isChatOnline = chatOnline;
         }
 
         public String getUserId() {
@@ -136,129 +131,12 @@ public class ServerApplication {
                     setChatOnline(true);
                     System.out.println("online!");
                     setUserID(jsonData);
-                    /*
-                    上线时展示同时在线的客户端
-                     */
+
                     clients.add(this);
-                    List<String> stringList = new ArrayList<>();
-                    // 使用循环添加元素到列表中
-                    for (ClientHandler thread : clients) {
-                        stringList.add(thread.getUserId());
-                    }
-                    serverActionTool.setOnlineList(stringList);
-
-
-                    /*
-                    上线时更改其他所有客户端的在线人员
-                     */
-//                    for(Socket clientSocket : threadRefreshOnline){
-//                        if(clientSocket==this.clientSocket)
-//                            continue;
-//                        UniqueMessage uniqueMessage = new UniqueMessage("yes");
-//                        ObjectMapper objectMapper = new ObjectMapper();
-//                        String d = objectMapper.writeValueAsString(uniqueMessage);
-//                        serverActionTool.Action2002(d,clientSocket);
-//                    }
-
                 }
-                else if(signalOrLength == 1){
 
-                    threadRefreshOnline.add(clientSocket);
-                }
 
                 switch (LengthOrCode) {
-                    case 300:{
-                        serverActionTool.Action300(jsonData,clientSocket);
-                        break;
-                    }
-                    case 301:{
-                        serverActionTool.Action301(jsonData,clientSocket);
-                        break;
-                    }
-                    case 302:{
-                        serverActionTool.Action302(jsonData,clientSocket);
-                        break;
-                    }
-                    case 303:{
-                        serverActionTool.Action303(jsonData,clientSocket);
-                        break;
-                    }
-                    case 304:{
-                        serverActionTool.Action304(jsonData,clientSocket);
-                        break;
-                    }
-                    case 306:{
-                        serverActionTool.Action306(jsonData,clientSocket);
-                        break;
-                    }
-                    case 307:{
-                        serverActionTool.Action307(jsonData,clientSocket);
-                        break;
-                    }
-                    case 308:{
-                        serverActionTool.Action308(jsonData,clientSocket);
-                        break;
-                    }
-                    case 309:{
-                        serverActionTool.Action309(jsonData,clientSocket);
-                        break;
-                    }
-                    case 310:{
-                        serverActionTool.Action310(jsonData,clientSocket);
-                        break;
-                    }
-                    case 311:{
-                        serverActionTool.Action311(jsonData,clientSocket);
-                        break;
-                    }
-                    case 312:{
-                        serverActionTool.Action312(jsonData,clientSocket);
-                        break;
-                    }
-                    case 400:{
-                        serverActionTool.Action400(jsonData,clientSocket);
-                        break;
-                    }
-                    case 401:{
-                        serverActionTool.Action401(jsonData,clientSocket);
-                        break;
-                    }
-                    case 402:{
-                        serverActionTool.Action402(jsonData,clientSocket);
-                        break;
-                    }
-                    case 403:{
-                        serverActionTool.Action403(jsonData,clientSocket);
-                        break;
-                    }
-                    case 404:{
-                        serverActionTool.Action404(jsonData,clientSocket);
-                        break;
-                    }
-                    case 405:{
-                        serverActionTool.Action405(jsonData,clientSocket);
-                        break;
-                    }
-                    case 406:{
-                        serverActionTool.Action406(jsonData,clientSocket);
-                        break;
-                    }
-                    case 407:{
-                        serverActionTool.Action407(jsonData,clientSocket);
-                        break;
-                    }
-                    case 408:{
-                        serverActionTool.Action408(jsonData,clientSocket);
-                        break;
-                    }
-                    case 409:{
-                        serverActionTool.Action409(jsonData,clientSocket);
-                        break;
-                    }
-                    case 410:{
-                        serverActionTool.Action410(jsonData,clientSocket);
-                        break;
-                    }
                     case 100: {
                         // 100为LoginMessage
                         // 根据消息的类型决定服务器要采取的动作
@@ -493,17 +371,12 @@ public class ServerApplication {
                     }
                     case 2001: {
                         //和其他客户端发消息通信
-                        ChatWithUserMessage chatWithUserMessage = serverActionTool.Action2001(jsonData, clientSocket);
-                        String targetUserID = chatWithUserMessage.getToUserID();
-                        String message = chatWithUserMessage.getMessageToSent();
-                        String fromID = chatWithUserMessage.getMyID();
+                        Pair<String, String> pair = serverActionTool.Action2001(jsonData, clientSocket);
+                        String targetUserID = pair.getFirst();
+                        String message = pair.getSecond();
                         System.out.println("Server get message, ready to forward");
                         System.out.println("Target userID is " + targetUserID);
-                        forwardMessage(fromID,targetUserID, message);
-                        break;
-                    }
-                    case 2002:{
-                        serverActionTool.Action2002(jsonData,clientSocket);
+                        forwardMessage(targetUserID, message);
                         break;
                     }
                     default: {
@@ -525,8 +398,6 @@ public class ServerApplication {
         }
 
     }
-
-
 }
 
 

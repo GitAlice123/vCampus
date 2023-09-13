@@ -1,7 +1,7 @@
 package view.Bank;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -468,7 +468,7 @@ public class BankTeacherStudentUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         //用户点击确认充值按钮

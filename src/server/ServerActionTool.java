@@ -2,53 +2,74 @@ package view.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import view.CourseSelection.Course;
-import view.CourseSelection.CourseClass;
 import view.DAO.*;
-
 import view.Hospital.Department;
 import view.Hospital.Register;
-import view.Library.*;
-
+import view.Library.Book;
 import view.Library.BookHold;
+import view.Library.BookOperationRecord;
 import view.Login.User;
-import view.SchoolRolls.Grade;
-import view.SchoolRolls.StudentInfo;
 import view.connect.Pair;
 import view.message.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ServerActionTool {
-    public ServerActionTool() {
-    }
-
-    private ServerRWTool rwTool = new ServerRWTool();
-
     private static final String KEY = "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";
     private static final String URL = "https://api.openai.com/v1/chat/completions";
     private static final String HOST = "localhost";
     private static final int PORT = 8888;
+    private ServerRWTool rwTool = new ServerRWTool();
+    private String userID;
 
-    public List<String> getOnlineList() {
-        return onlineList;
+    public ServerActionTool() {
     }
 
-    public void setOnlineList(List<String> onlineList) {
-        this.onlineList = onlineList;
-    }
+    /**
+     * 功能函数 返回语言模型的API AccessToken
+     *
+     * @return 返回语言模型的API AccessToken
+     * @throws IOException
+     */
+    private static String getAccessToken() throws IOException {
+        String apiKey = "lNiXykCWosvV8mWOt1VGAFFQ";
+        String secretKey = "28VenBQWggxqSGhHlYSn4dCOCx8NpILm";
+        String url = "https://aip.baidubce.com/oauth/2.0/token?" +
+                "grant_type=client_credentials&" +
+                "client_id=" + apiKey + "&" +
+                "client_secret=" + secretKey;
 
-    private List<String> onlineList;
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write("".getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        int responseCode = connection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Reading the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String response = reader.readLine();
+            reader.close();
+
+            ObjectMapper mapper = new ObjectMapper();
+            TokenResponse tokenResponse = mapper.readValue(response, TokenResponse.class);
+            return tokenResponse.getAccess_token();
+        } else {
+            // Error handling
+            throw new IOException("Failed to obtain access token. Response code: " + responseCode);
+        }
+    }
 
     public String getUserID() {
         return userID;
@@ -58,663 +79,9 @@ public class ServerActionTool {
         this.userID = userID;
     }
 
-    //按ID查询StudentInfo并返回
-    public void Action300(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        String ID=null;
-        try {
-            IDReqMessage idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-            ID=idReqMessage.getID();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 300");
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        StudentInfo studentInfo=studentInfoDao.findStudentInfoById(ID);
-        //StudentInfoRespMessage respMessage=new StudentInfoRespMessage();
-        //respMessage.setStudentInfo(studentInfo);
-
-
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(studentInfo);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //添加学生信息StudentInfo
-    public void Action301(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StudentInfo info = null;
-        try {
-            info = objectMapper.readValue(jsonData, StudentInfo.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 301");
-
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        boolean result=studentInfoDao.AddStudentInfo(info);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //按ID删除StudentInfo
-    public void Action302(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage idreqmessage = null;
-        try {
-            idreqmessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 302");
-
-        String ID=idreqmessage.getID();
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        boolean result=studentInfoDao.DeleteStudentInfoById(ID);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-
-
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //按ID查成绩Grade
-    public void Action303(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage = null;
-        try {
-            idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 303");
-
-        GradeDao GradeDAO=new GradeDao();
-        Grade[] result=GradeDAO.findGradesById(idReqMessage.getID());
-        GradesRespMessage respMessage=new GradesRespMessage(result);
-
-
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //按CourseID查Course
-    public void Action304(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StringPariMessage stringPariMessage = null;
-        try {
-            stringPariMessage = objectMapper.readValue(jsonData, StringPariMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 304");
-
-        CourseDao courseDAO=new CourseDao();
-        GradeDao gradeDao=new GradeDao();
-        Course respMessage=courseDAO.findCourseByNum(stringPariMessage.getFirst());
-        if(respMessage!= null) {
-            double grade = gradeDao.findGradeByInfo(stringPariMessage.getSecond(), respMessage.getCourseID());
-            respMessage.setGrades(grade);
-        }
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Course转为String
-    //按教师ID查教学班
-    public void Action306(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        String ID = null;
-        try {
-            IDReqMessage idReqMessage = objectMapper.readValue(jsonData,IDReqMessage.class);
-            ID=idReqMessage.getID();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 306");
-        CourseClassDao courseClassDao=new CourseClassDao();
-        CourseClass[] courses=courseClassDao.findClassByTeacherId(ID);
-        CourseClassesRespMessage respMessage=new CourseClassesRespMessage(courses);
-        //未完成，缺DAO
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //用ID查找课程Course
-    public void Action307(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        String ID = null;
-        try {
-            IDReqMessage idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-            ID=idReqMessage.getID();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 307");
-        GradeDao gradeDao=new GradeDao();
-        CourseDao courseDao=new CourseDao();
-        Grade[] grades=gradeDao.findGradesById(ID);//查成绩
-        String[] courseIDs=new String[grades.length];//成绩对应的课程ID
-        Course[] courses=new Course[grades.length];
-        for(int i=0;i<grades.length;i++){
-            courseIDs[i]=grades[i].getCourseID();
-            courses[i]=courseDao.findCourseByNum(grades[i].getCourseID());
-            courses[i].setGrades(grades[i].getGrade());
-        }
-        CoursesRespMessage respMessage=new CoursesRespMessage(courses);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action308(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        String ID = null;
-        try {
-            IDReqMessage idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-            ID=idReqMessage.getID();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 308");
-        ClassNameListDao classNameListDao=new ClassNameListDao();
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        String[] IDs=classNameListDao.findStudentIdByClassId(ID);
-        StudentInfo[] studentInfos=null;
-        if(IDs!=null) {
-            studentInfos = new StudentInfo[IDs.length];
-            for (int i = 0; i < IDs.length; i++) {
-                studentInfos[i] = studentInfoDao.findStudentInfoById(IDs[i]);
-            }
-        }
-        StudentInfoRespMessage respMessage=new StudentInfoRespMessage(studentInfos);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //boolean grade
-    public void Action309(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        Grade grade = null;
-        try {
-            grade = objectMapper.readValue(jsonData, Grade.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 309");
-        GradeDao gradeDao=new GradeDao();
-        boolean result=gradeDao.ModifyGrade(grade);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //double StudentID CourseID
-    public void Action310(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StringPariMessage pair = null;
-        try {
-            pair = objectMapper.readValue(jsonData, StringPariMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 310");
-        String studentID=pair.getFirst();
-        String courseID= pair.getSecond();;
-        GradeDao gradeDao=new GradeDao();
-        double result=gradeDao.findGradeByInfo(studentID,courseID);
-        DoubleMesage respMessage=new DoubleMesage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action311(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage pair = null;
-        try {
-            pair = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 311");
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        StudentInfo[] result=studentInfoDao.showAllStudentInfo();
-        StudentInfoRespMessage respMessage=new StudentInfoRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action312(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StudentInfo info = null;
-        try {
-            info = objectMapper.readValue(jsonData, StudentInfo.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 312");
-        StudentInfoDao studentInfoDao=new StudentInfoDao();
-        boolean result=studentInfoDao.ModifyStudentInfo(info);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action400(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage ID = null;
-        try {
-            ID = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 400");
-        CourseDao courseDao=new CourseDao();
-        Course[] courses=courseDao.showAllCourse();
-        for(int i=0;i<courses.length;i++){
-            courses[i].setGrades(100);
-        }
-        CoursesRespMessage respMessage=new CoursesRespMessage(courses);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //按CourseID 查找Class
-    public void Action401(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage = null;
-        try {
-            idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 401");
-        String ID=idReqMessage.getID();
-        CourseClassDao courseClassDao=new CourseClassDao();
-        CourseClass[] classes=courseClassDao.findClassByCourseId(ID);
-        CourseClassesRespMessage respMessage=new CourseClassesRespMessage(classes);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //按stuID寻找class
-    public void Action402(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage = null;
-        try {
-            idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 402");
-        ClassNameListDao classNameListDao=new ClassNameListDao();
-        String stuID=idReqMessage.getID();
-        CourseClass[] courseClasses=classNameListDao.findClassByStudentId(stuID);
-        CourseClassesRespMessage respMessage=new CourseClassesRespMessage(courseClasses);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //403 学生选课
-    public void Action403(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StringPariMessage message=new StringPariMessage();
-        try {
-            message = objectMapper.readValue(jsonData,StringPariMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 403");
-        ClassNameListDao classNameListDao=new ClassNameListDao();
-        boolean result=classNameListDao.createClassStudentLink(message.getSecond(),message.getFirst());
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //404 学生退课
-    public void Action404(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        StringPariMessage message=new StringPariMessage();
-        try {
-            message = objectMapper.readValue(jsonData,StringPariMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 404");
-        ClassNameListDao classNameListDao=new ClassNameListDao();
-        boolean result=classNameListDao.deleteClassStudentLink(message.getSecond(),message.getFirst());
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action405(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage message= new IDReqMessage();
-        try {
-            message = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 405");
-        CourseClassDao courseClassDao=new CourseClassDao();
-        String ID=message.getID();
-        IntMessage respMessage=new IntMessage(courseClassDao.getClassNumByCourseId(ID));
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action406(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage ID = null;
-        try {
-            ID = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 406");
-        CourseClassDao courseDao=new CourseClassDao();
-        CourseClass[] classes=courseDao.showAllClass();
-        CourseClassesRespMessage respMessage=new CourseClassesRespMessage(classes);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action407(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage message=null;
-        try {
-            message = objectMapper.readValue(jsonData,IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 407");
-        String id=message.getID();
-        CourseClassDao classDao=new CourseClassDao();
-        ClassNameListDao classNameListDao=new ClassNameListDao();
-        String[] IDs=classNameListDao.findStudentIdByClassId(id);
-        if(IDs!=null){
-            for(int i=0;i<IDs.length;i++)
-                classNameListDao.deleteClassStudentLink(id,IDs[i]);
-        }
-        boolean result=classDao.deleteClassByClassId(message.getID());
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action408(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        CourseClass message=null;
-        try {
-            message = objectMapper.readValue(jsonData,CourseClass.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 408");
-        CourseClassDao courseClassDao=new CourseClassDao();
-        boolean result=courseClassDao.createClass(message);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action409(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        CourseClass message=null;
-        try {
-            message = objectMapper.readValue(jsonData,CourseClass.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 409");
-        CourseClassDao courseClassDao=new CourseClassDao();
-        boolean result=courseClassDao.createClass(message);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void Action410(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage message=null;
-        try {
-            message = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 410");
-        UserDao userDao=new UserDao();
-        User[] users=userDao.findAllTeachers();
-        UserMessage respMessage=new UserMessage(users);
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private String userID;
-
     /**
      * 处理登录请求，并保留成功登录的用户ID用于唯一标识线程
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1112,6 +479,7 @@ public class ServerActionTool {
 
     /**
      * 用ISBN找书
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1145,6 +513,7 @@ public class ServerActionTool {
 
     /**
      * 取回所有操作记录
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1209,6 +578,7 @@ public class ServerActionTool {
 
     /**
      * TODO:忘了是啥了。。
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1242,6 +612,7 @@ public class ServerActionTool {
 
     /**
      * 返回所有图书，包括图书名字、编号等
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1275,6 +646,7 @@ public class ServerActionTool {
 
     /**
      * 续借图书
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1318,6 +690,7 @@ public class ServerActionTool {
 
     /**
      * 展示馆藏图书数据信息
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1350,6 +723,7 @@ public class ServerActionTool {
 
     /**
      * 得到所有图书操作记录
+     *
      * @param jsonData
      * @param clientSocket
      */
@@ -1383,25 +757,26 @@ public class ServerActionTool {
 
     /**
      * 获得所有department
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action500(String jsonData, Socket clientSocket){
+    public void Action500(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        UniqueMessage uniqueMessage=null;
+        UniqueMessage uniqueMessage = null;
         try {
-            uniqueMessage = objectMapper.readValue(jsonData,UniqueMessage.class);
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 500");
 
-        DepartmentDao departmentDao=new DepartmentDao();
-        Department[] result=departmentDao.showAllDep();
-        DepartmentsMessage respMessage=new DepartmentsMessage(result);
+        DepartmentDao departmentDao = new DepartmentDao();
+        Department[] result = departmentDao.showAllDep();
+        DepartmentsMessage respMessage = new DepartmentsMessage(result);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1412,23 +787,24 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
     //501 根据ID找到所有挂号记录(包括已缴费)
-    public void Action501(String jsonData, Socket clientSocket){
+    public void Action501(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        IDReqMessage message=null;
+        IDReqMessage message = null;
         try {
             message = objectMapper.readValue(jsonData, IDReqMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 501");
-        String ID=message.getID();
-        RegisterPaymentDao registerPaymentDao=new RegisterPaymentDao();
-        Register[] payments=registerPaymentDao.findRegisterByUserID(ID);
-        RegisterMessage respMessage=new RegisterMessage(payments);
+        String ID = message.getID();
+        RegisterPaymentDao registerPaymentDao = new RegisterPaymentDao();
+        Register[] payments = registerPaymentDao.findRegisterByUserID(ID);
+        RegisterMessage respMessage = new RegisterMessage(payments);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1439,29 +815,30 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
     //502 根据ID找到所有未缴费挂号
-    public void Action502(String jsonData, Socket clientSocket){
+    public void Action502(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        IDReqMessage message=null;
+        IDReqMessage message = null;
         try {
             message = objectMapper.readValue(jsonData, IDReqMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 502");
-        String ID=message.getID();
-        RegisterPaymentDao registerPaymentDao=new RegisterPaymentDao();
-        Register[] payments=registerPaymentDao.findPaymentByUserID(ID);
-        if(payments==null){
+        String ID = message.getID();
+        RegisterPaymentDao registerPaymentDao = new RegisterPaymentDao();
+        Register[] payments = registerPaymentDao.findPaymentByUserID(ID);
+        if (payments == null) {
             System.out.println("空空空为什么为什么");
-        }else{
-            System.out.println("长度为："+payments.length);
+        } else {
+            System.out.println("长度为：" + payments.length);
         }
 
-        RegisterMessage respMessage=new RegisterMessage(payments);
+        RegisterMessage respMessage = new RegisterMessage(payments);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1474,21 +851,21 @@ public class ServerActionTool {
     }
 
     //503 根据ID返回未支付挂号
-    public void Action503(String jsonData, Socket clientSocket){
+    public void Action503(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        Register register=null;
+        Register register = null;
         try {
             register = objectMapper.readValue(jsonData, Register.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 503");
-        RegisterPaymentDao registerPaymentDao=new RegisterPaymentDao();
-        boolean result=registerPaymentDao.createRegisterInfo(register);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
+        RegisterPaymentDao registerPaymentDao = new RegisterPaymentDao();
+        boolean result = registerPaymentDao.createRegisterInfo(register);
+        BoolRespMessage respMessage = new BoolRespMessage(result);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1500,30 +877,30 @@ public class ServerActionTool {
         }
     }
 
-
     /**
      * 支付所选择挂号
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action504(String jsonData, Socket clientSocket){
+    public void Action504(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        UniqueMessage uniqueMessage=null;
+        UniqueMessage uniqueMessage = null;
         try {
-            uniqueMessage = objectMapper.readValue(jsonData,UniqueMessage.class);
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 504");
 
-        String rID=uniqueMessage.getUniMessage();
-        RegisterPaymentDao registerPaymentDao=new RegisterPaymentDao();
-        boolean result=registerPaymentDao.payRegisterById(rID);
+        String rID = uniqueMessage.getUniMessage();
+        RegisterPaymentDao registerPaymentDao = new RegisterPaymentDao();
+        boolean result = registerPaymentDao.payRegisterById(rID);
 
-        BoolRespMessage respMessage=new BoolRespMessage(result);
+        BoolRespMessage respMessage = new BoolRespMessage(result);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1535,18 +912,18 @@ public class ServerActionTool {
         }
     }
 
-
     /**
      * 支付所选择挂号
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action505(String jsonData, Socket clientSocket){
+    public void Action505(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        StringPariMessage registerMessage=null;
+        StringPariMessage registerMessage = null;
         try {
             registerMessage = objectMapper.readValue(jsonData, StringPariMessage.class);
         } catch (JsonProcessingException e) {
@@ -1554,56 +931,19 @@ public class ServerActionTool {
         }
         System.out.println("Into object 505");
 
-        String type=registerMessage.getFirst();
-        String Slevel=registerMessage.getSecond();
+        String type = registerMessage.getFirst();
+        String Slevel = registerMessage.getSecond();
 
 //        boolean level=Boolean.parseBoolean(Slevel);
-        DepartmentDao departmentDao=new DepartmentDao();
+        DepartmentDao departmentDao = new DepartmentDao();
 //        String lev=level?"专家":"普通";
-
         Department[] result = departmentDao.findDepartmentByInfo(type, Slevel);
         if (result == null) {
-
             System.out.println("dep的result为空++++++");
-        }else {
+        } else {
             System.out.println(result.length);
         }
 
-        DepartmentsMessage respMessage=new DepartmentsMessage(result);
-
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * 根据科室ID查找科室
-     * @param jsonData
-     * @param clientSocket
-     */
-    public void Action506(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage=null;
-        try {
-            idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 506");
-
-        String ID = idReqMessage.getID();
-        DepartmentDao departmentDao = new DepartmentDao();
-        Department result = departmentDao.findDepartmentById(ID);
         DepartmentsMessage respMessage = new DepartmentsMessage(result);
 
         //下面将response信息返回客户端
@@ -1618,25 +958,59 @@ public class ServerActionTool {
     }
 
     /**
-     * 返回所有挂号信息
+     * 根据科室ID查找科室
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action507(String jsonData, Socket clientSocket){
+    public void Action506(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage=null;
+        IDReqMessage idReqMessage = null;
+        try {
+            idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 506");
+        String ID = idReqMessage.getID();
+        DepartmentDao departmentDao = new DepartmentDao();
+        Department result = departmentDao.findDepartmentById(ID);
+        DepartmentsMessage respMessage = new DepartmentsMessage(result);
+        //下面将response信息返回客户端
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 返回所有挂号信息
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
+    public void Action507(String jsonData, Socket clientSocket) {
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        IDReqMessage idReqMessage = null;
         try {
             idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 507");
-        RegisterPaymentDao registerPaymentDao=new RegisterPaymentDao();
-        Register[] registers=registerPaymentDao.showAllRegister();
-        RegisterMessage respMessage=new RegisterMessage(registers);
+        RegisterPaymentDao registerPaymentDao = new RegisterPaymentDao();
+        Register[] registers = registerPaymentDao.showAllRegister();
+        RegisterMessage respMessage = new RegisterMessage(registers);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1650,24 +1024,25 @@ public class ServerActionTool {
 
     /**
      * 根据信息新建科室
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action508(String jsonData, Socket clientSocket){
+    public void Action508(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        Department department=null;
+        Department department = null;
         try {
             department = objectMapper.readValue(jsonData, Department.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 508");
-        DepartmentDao departmentDao=new DepartmentDao();
-        boolean result=departmentDao.createDepartment(department);
-        BoolRespMessage respMessage=new BoolRespMessage(result);
+        DepartmentDao departmentDao = new DepartmentDao();
+        boolean result = departmentDao.createDepartment(department);
+        BoolRespMessage respMessage = new BoolRespMessage(result);
         //下面将response信息返回客户端
         try {
             // 将 LoginMessage 对象转换为 JSON 字符串
@@ -1681,24 +1056,62 @@ public class ServerActionTool {
 
     /**
      * 根据科室ID删除科室
+     *
      * @param jsonData
      * @param clientSocket
      */
-    public void Action509(String jsonData, Socket clientSocket){
+    public void Action509(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
-        IDReqMessage idReqMessage=null;
+        IDReqMessage idReqMessage = null;
         try {
             idReqMessage = objectMapper.readValue(jsonData, IDReqMessage.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         System.out.println("Into object 509");
-        String ID=idReqMessage.getID();
-        DepartmentDao departmentDao=new DepartmentDao();
-        boolean result=departmentDao.deleteDepartment(ID);
+        String ID = idReqMessage.getID();
+        DepartmentDao departmentDao = new DepartmentDao();
+        boolean result = departmentDao.deleteDepartment(ID);
+        BoolRespMessage respMessage = new BoolRespMessage(result);
+        //下面将response信息返回客户端
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 管理员发布公告
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
+    public void Action800(String jsonData, Socket clientSocket) {
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 500");
+
+        noticeDao noticeDao=new noticeDao();
+        String text=uniqueMessage.getUniMessage();
+        boolean result=noticeDao.editNotice(text);
+
+
         BoolRespMessage respMessage=new BoolRespMessage(result);
         //下面将response信息返回客户端
         try {
@@ -1712,7 +1125,43 @@ public class ServerActionTool {
     }
 
     /**
+     * 用户需要在前端读取公告
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
+    public void Action801(String jsonData, Socket clientSocket) {
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 801");
+
+        noticeDao noticeDao=new noticeDao();
+        String result=noticeDao.getNotice();
+
+        UniqueMessage respMessage=new UniqueMessage(result);
+        //下面将response信息返回客户端
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * 调用语言模型API
+     *
      * @param jsonData
      * @param clientSocket
      * @throws IOException
@@ -1787,11 +1236,12 @@ public class ServerActionTool {
 
     /**
      * 和其他客户端发消息的chat
+     *
      * @param jsonData
      * @param clientSocket
      * @throws IOException
      */
-    public ChatWithUserMessage Action2001(String jsonData, Socket clientSocket) throws IOException {
+    public Pair<String, String> Action2001(String jsonData, Socket clientSocket) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
         // 将 JSON 数据还原为对象
@@ -1803,96 +1253,21 @@ public class ServerActionTool {
         }
         System.out.println("Into object 2001");
 
-        return uniqueMessage;
+        // 寻找待接收的用户
+        String userToGet = uniqueMessage.getToUserID();
+        String message = uniqueMessage.getMessageToSent();
+        Pair<String, String> pair = new Pair<>(userToGet, message);
+        return pair;
     }
 
-
-    /**
-     * 功能函数 返回语言模型的API AccessToken
-     * @return 返回语言模型的API AccessToken
-     * @throws IOException
-     */
-    private static String getAccessToken() throws IOException {
-        String apiKey = "lNiXykCWosvV8mWOt1VGAFFQ";
-        String secretKey = "28VenBQWggxqSGhHlYSn4dCOCx8NpILm";
-        String url = "https://aip.baidubce.com/oauth/2.0/token?" +
-                "grant_type=client_credentials&" +
-                "client_id=" + apiKey + "&" +
-                "client_secret=" + secretKey;
-
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
-
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write("".getBytes());
-        outputStream.flush();
-        outputStream.close();
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            // Reading the response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String response = reader.readLine();
-            reader.close();
-
-            ObjectMapper mapper = new ObjectMapper();
-            TokenResponse tokenResponse = mapper.readValue(response, TokenResponse.class);
-            return tokenResponse.getAccess_token();
-        } else {
-            // Error handling
-            throw new IOException("Failed to obtain access token. Response code: " + responseCode);
-        }
-    }
-
-    /**
-     * 服务器在得到客户端A的消息后，将它转发给B
-     * @param answer
-     * @param clientSocket
-     */
-    public void Action0(String fromID,String answer,Socket clientSocket){
-        ChatMessage gptAnsRepMessage = new ChatMessage(fromID,answer);
+    public void Action0(String answer, Socket clientSocket) {
+        GPTAnsRepMessage gptAnsRepMessage = new GPTAnsRepMessage(answer);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String outputData = objectMapper.writeValueAsString(gptAnsRepMessage);
             System.out.println(outputData);
             OutputStream outputStream2 = clientSocket.getOutputStream();
             rwTool.ServerSendOutStream(outputStream2, outputData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 得到所有在线人员列表
-     * @param jsonData
-     * @param clientSocket
-     */
-    public void Action2002(String jsonData, Socket clientSocket){
-        // 创建 ObjectMapper 对象
-        ObjectMapper objectMapper = new ObjectMapper();
-        jsonData = jsonData.replaceAll("^\\[|]$", "");
-        // 将 JSON 数据还原为对象
-        UniqueMessage uniqueMessage = null;
-        try {
-            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Into object 2002");
-
-        /*
-        以下获得所有在线人员列表
-         */
-
-        OnlineListRespMessage respMessage=new OnlineListRespMessage(getOnlineList());
-        //下面将response信息返回客户端
-        try {
-            // 将 LoginMessage 对象转换为 JSON 字符串
-            String outputData = objectMapper.writeValueAsString(respMessage);
-            OutputStream outputStream = clientSocket.getOutputStream();
-            rwTool.ServerSendOutStream(outputStream, outputData);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,10 +22,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.io.IOException;
 
-public class SummaryHandler extends KeyAdapter implements ActionListener {
-    private SummaryUI summaryview;
+public class SummaryStudentTeacherHandler extends KeyAdapter implements ActionListener {
+    private SummaryStudentTeacherUI summaryview;
 
-    public SummaryHandler(SummaryUI summaryview) {
+    public SummaryStudentTeacherHandler(SummaryStudentTeacherUI summaryview) {
         this.summaryview = summaryview;
     }
 
@@ -96,6 +96,14 @@ public class SummaryHandler extends KeyAdapter implements ActionListener {
                         new LibraryAdminUI();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (InstantiationException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (IllegalAccessException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
                 System.out.println("图书馆");
@@ -134,11 +142,7 @@ public class SummaryHandler extends KeyAdapter implements ActionListener {
             }
             case "chat":
                 summaryview.dispose();
-                try {
-                    new ChatFrameUI();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                new ChatFrameUI();
                 break;
             case "登出":
                 GlobalData.logout();//登出时注销用户
