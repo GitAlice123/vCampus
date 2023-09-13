@@ -11,13 +11,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+
+/**
+ * 登录客户端API实现，用于与服务器进行用户登录验证。
+ */
 public class LoginClientAPIImpl implements LoginClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private ClientRWTool ClientRWTool = new ClientRWTool();
 
-    //构造函数
+    /**
+     * 构造一个LoginClientAPIImpl实例，并连接到服务器。
+     *
+     * @param serverAddress 服务器地址
+     * @param serverPort    服务器端口
+     */
     public LoginClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -29,6 +38,13 @@ public class LoginClientAPIImpl implements LoginClientAPI {
         }
     }
 
+    /**
+     * 通过用户提供的登录信息进行用户登录。
+     *
+     * @param loginMessage 登录消息对象，包含用户ID和密码
+     * @return 如果登录成功返回true，否则返回false
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public boolean loginByUserId(LoginMessage loginMessage) throws IOException {
         //以下发送用户id和密码给服务器

@@ -5,10 +5,20 @@ import view.Login.logInUI;
 import javax.swing.*;
 import java.io.IOException;
 
+/**
+ * 客户端应用程序的入口点。
+ */
 public class ClientApplication {
+    /**
+     * 创建一个新的客户端应用程序实例。
+     */
     public ClientApplication() {
     }
-
+    /**
+     * 启动客户端应用程序。
+     *
+     * @throws IOException 如果发生输入/输出错误。
+     */
     public void startClient() throws IOException {
         ClientRWTool rwTool = new ClientRWTool();
 

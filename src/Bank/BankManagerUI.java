@@ -5,6 +5,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
@@ -51,22 +52,98 @@ public class BankManagerUI extends JFrame {
     CardLayout cardLayout=new CardLayout();
     SpringLayout springLayout=new SpringLayout();
 
-    JPanel blank=new JPanel();
+    JPanel blank=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/SEU_finance.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), (int)(getHeight()*0.8), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 50, null);
+
+            g2d.dispose();
+        }
+    };
     JPanel cardPanel=new JPanel(cardLayout);
-    JPanel feesPanel=new JPanel(springLayout);
+    JPanel feesPanel=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
     JPanel topPanel=new JPanel();
-    JPanel centerPanel=new JPanel(springLayout);
+    JPanel centerPanel=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Bank1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
     JButton backBtn=new JButton("退出");
     JPanel BottomPanel=new JPanel();
 
 
-    /**
-     * 自定义表格单元格渲染器，用于显示挂失/解挂按钮。
-     */
     class TableCellRendererButton extends JButton implements TableCellRenderer {
 
+        /**
+         * 在表格中添加按钮
+         */
         public TableCellRendererButton() {
-            // 此处可以进行构造函数的初始化操作
+//            setOpaque(true);
+//            setFont(new Font("楷体", Font.PLAIN, 25));
         }
 
         @Override
@@ -81,14 +158,14 @@ public class BankManagerUI extends JFrame {
         }
     }
 
-    /**
-     * 自定义表格单元格编辑器，用于挂失/解挂按钮的交互。
-     */
     class TableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
         private int clickedRow;
 
+        /**
+         * 表格按钮编辑器
+         */
         public TableCellEditorButton() {
             super(new JTextField());
             //设置点击一次就激活，否则默认好像是点击2次激活。
@@ -119,8 +196,12 @@ public class BankManagerUI extends JFrame {
         public Object getCellEditorValue() {
             return null;
         }
+
     }
 
+    /**
+     * BankManagerUI构造函数
+     */
     public BankManagerUI() {
         super("银行");
 
@@ -143,9 +224,6 @@ public class BankManagerUI extends JFrame {
         topPanel.add(informationBtn);
         topPanel.add(feesBtn);
 
-        /**
-         * 导航栏：信息查询
-         * */
         informationBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,10 +232,6 @@ public class BankManagerUI extends JFrame {
                 ShowTableData(accounts);
             }
         });
-
-        /**
-         * 导航栏：学杂费
-         * */
         feesBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -178,6 +252,9 @@ public class BankManagerUI extends JFrame {
         JTableHeader tab_header = table.getTableHeader();                    //获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));    //修改表头的高度
+
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
 
         searchBtn.setFont(centerFont);
         Color customColor = new Color(180, 218, 192);
@@ -257,9 +334,6 @@ public class BankManagerUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String uID=searchField.getText();
                 getAccount(uID);
-                if(accounts==null){
-                    JOptionPane.showMessageDialog(cardPanel, "查询结果为空！");
-                }
                 ShowTableData(accounts);
             }
         });
@@ -369,9 +443,6 @@ public class BankManagerUI extends JFrame {
         model.fireTableDataChanged();
     }
 
-    /**
-     * 刷新页面上的信息，包括余额、状态、输入框内容的清空等操作。
-     */
     public void refreshPage(){
         searchField.setText("");
         type.setSelectedIndex(0);
@@ -381,8 +452,6 @@ public class BankManagerUI extends JFrame {
 
     /**
      * 随机生成LENGTH位数字的String类型数据
-     *
-     * @param LENGTH 要生成的String类型数据的长度
      */
     public String generateRandomString(int LENGTH) {
         Random random = new Random();

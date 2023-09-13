@@ -7,12 +7,32 @@ import view.Library.*;
 import view.message.*;
 
 public interface ChatClientAPI {
-    public String getGPTAnswer(ChatQuesMessage chatQuesMessage)
+    /**
+     * 获取GPT生成的回答。
+     *
+     * @param chatQuesMessage 聊天问题消息对象
+     * @return GPT生成的回答
+     * @throws IOException 如果发生通信错误
+     */
+    String getGPTAnswer(ChatQuesMessage chatQuesMessage)
             throws IOException;
 
-    public void sendUserMessage(ChatWithUserMessage chatWithUserMessage)
+    /**
+     * 发送用户消息。
+     *
+     * @param chatWithUserMessage 用户聊天消息对象
+     * @throws IOException 如果发生通信错误
+     */
+    void sendUserMessage(ChatWithUserMessage chatWithUserMessage)
             throws IOException;
 
-    public List<String> getAllOnlineName(UniqueMessage uniqueMessage)
+    /**
+     * 获取所有在线用户的名称列表。
+     *
+     * @param uniqueMessage 唯一消息对象
+     * @return 在线用户名称列表
+     * @throws IOException 如果发生通信错误
+     */
+    List<String> getAllOnlineName(UniqueMessage uniqueMessage)
             throws IOException;
 }

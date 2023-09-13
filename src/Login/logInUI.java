@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 
+/**
+ * 登录界面
+ */
 public class logInUI extends JFrame {
     JLabel titleLabel = new JLabel("用户登录");//位于边界布局的北边
     SpringLayout springLayout = new SpringLayout();
@@ -56,15 +59,23 @@ public class logInUI extends JFrame {
         }
     };
 
+    /**
+     * 登录界面，用于用户登录虚拟校园系统。
+     *
+     * @throws UnsupportedLookAndFeelException 如果外观不支持。
+     * @throws ClassNotFoundException        如果找不到指定类。
+     * @throws InstantiationException        如果无法实例化类。
+     * @throws IllegalAccessException        如果无法访问类。
+     */
     public logInUI() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         super("虚拟校园系统");
         // 设置外观为Windows外观
         //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
-        UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
-        UIManager.put("control", new Color(240, 248, 255)); // 背景
+        UIManager.put("nimbusBase", new Color(46, 139, 87)); // 边框
+        UIManager.put("nimbusBlueGrey", new Color(46, 139, 87)); // 按钮
+        UIManager.put("control", new Color(240, 255, 240)); // 背景
 
         GlobalData.setServerAddr("localhost", "8888");
 
@@ -182,10 +193,20 @@ public class logInUI extends JFrame {
         setVisible((true));
     }
 
+    /**
+     * 获取用户名输入框。
+     *
+     * @return 用户名输入框。
+     */
     public JTextField getUserNameTxt() {
         return userNameTxt;
     }
 
+    /**
+     * 获取密码输入框。
+     *
+     * @return 密码输入框。
+     */
     public JPasswordField getPwdField() {
         return pwdField;
     }

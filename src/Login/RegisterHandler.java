@@ -16,14 +16,27 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * 注册界面的事件处理类，处理用户在注册界面的各种交互操作。
+ */
 public class RegisterHandler extends KeyAdapter implements ActionListener {
     private RegisterUI registerView;
     private boolean radioButtonSelected = false;
 
+    /**
+     * 创建一个新的注册事件处理器。
+     *
+     * @param registerView 注册界面的视图。
+     */
     public RegisterHandler(RegisterUI registerView) {
         this.registerView = registerView;
     }
 
+    /**
+     * 处理按钮点击事件和单选按钮选择事件。
+     *
+     * @param e 事件对象。
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JRadioButton) {
             radioButtonSelected = true;
@@ -120,6 +133,11 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
         System.out.println(userId + ":" + pwd + ":" + ensurepsd);
     }
 
+    /**
+     * 处理按键事件，当按下回车键时执行注册操作。
+     *
+     * @param e 键盘事件对象。
+     */
     public void keyPressed(KeyEvent e) {
         e.getKeyCode();
         if (KeyEvent.VK_ENTER == e.getKeyCode()) {

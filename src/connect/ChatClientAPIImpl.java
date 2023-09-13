@@ -13,12 +13,21 @@ import view.message.*;
 
 import view.client.*;
 
+/**
+ * 聊天客户端API实现，用于与服务器进行通信。
+ */
 public class ChatClientAPIImpl implements ChatClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private ClientRWTool ClientRWTool = new ClientRWTool();
 
+    /**
+     * 构造一个ChatClientAPIImpl实例，并连接到服务器。
+     *
+     * @param serverAddress 服务器地址
+     * @param serverPort    服务器端口
+     */
     public ChatClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -30,6 +39,14 @@ public class ChatClientAPIImpl implements ChatClientAPI {
         }
     }
 
+
+    /**
+     * 获取GPT生成的回答。
+     *
+     * @param chatQuesMessage 聊天问题消息对象
+     * @return GPT生成的回答
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public String getGPTAnswer(ChatQuesMessage chatQuesMessage) throws IOException {
         try {
@@ -62,6 +79,13 @@ public class ChatClientAPIImpl implements ChatClientAPI {
         return gptAnswer;
     }
 
+
+    /**
+     * 发送用户消息。
+     *
+     * @param chatWithUserMessage 用户聊天消息对象
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public void sendUserMessage(ChatWithUserMessage chatWithUserMessage) throws IOException {
         try {
@@ -79,6 +103,14 @@ public class ChatClientAPIImpl implements ChatClientAPI {
         }
     }
 
+
+    /**
+     * 获取所有在线用户的名称列表。
+     *
+     * @param uniqueMessage 唯一消息对象
+     * @return 在线用户名称列表
+     * @throws IOException 如果发生通信错误
+     */
     @Override
     public List<String> getAllOnlineName(UniqueMessage uniqueMessage) throws IOException {
         try {
