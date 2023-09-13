@@ -387,7 +387,7 @@ public class StudentStatusAdminUI extends JFrame {
         JButton EnsureBtn=new JButton("确认");
 
         JButton ExitBtn=new JButton("取消");
-        JPanel panel=new JPanel(springLayout);、
+        JPanel panel=new JPanel(springLayout);
         /**
          * 创建一个修改学生信息界面。
          *
