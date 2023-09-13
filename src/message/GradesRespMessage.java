@@ -5,6 +5,7 @@ import view.SchoolRolls.Grade;
 public class GradesRespMessage {
     private Grade[] grades;
     private Grade grade;
+
     public GradesRespMessage(Grade[] grades) {
         this.grades = grades;
     }

@@ -132,7 +132,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         }
 
 //      处理结果
-        int result = intMessage.getInt();
+        int result = intMessage.getNum();
         return result;
     }
 
@@ -244,7 +244,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         }
 
 //      处理结果
-        int result = intMessage.getInt();
+        int result = intMessage.getNum();
         return result;
     }
 
