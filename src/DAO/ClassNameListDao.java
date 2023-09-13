@@ -39,7 +39,7 @@ public class ClassNameListDao {
         return namelist;
     }
 
-    public String[] findClassIdByStudentId(String sId) {
+    public String[] findClassByStudentId(String sId) {
         String[] classlist = new String[1];
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -73,7 +73,7 @@ public class ClassNameListDao {
         return classlist;
     }
 
-    public CourseClass[] findClassByStudentId(String sId) {
+    public CourseClass[] findClassIdByStudentId(String sId) {
         CourseClass[] classlist = new CourseClass[1];
         CourseClassDao dao = new CourseClassDao();
         try {
