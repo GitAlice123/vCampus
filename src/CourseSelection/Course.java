@@ -8,7 +8,7 @@ public class Course {//学生视角的课程
     }
 
     private String CourseID;     // 课程代码
-    private String CourseName;    // 课程名称
+    private String CourseName;    // 课程号
     private CourseType CourseType; // 课程类型
     private double CourseTime;    // 课程学时
     private double Credit;        // 学分

@@ -299,7 +299,7 @@ public class StudentStatusUI extends JFrame {
         };
 
         // 创建表格的列名数组
-        String[] columnNames = {"课程代码", "课程名称", "课程类型","课程学时","学分","总成绩"};
+        String[] columnNames = {"课程代码", "课程号", "课程类型","课程学时","学分","总成绩"};
 
         // 创建JTable对象并传入数据和列名
         DefaultTableModel model = new DefaultTableModel(data, columnNames);

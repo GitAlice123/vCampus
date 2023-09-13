@@ -427,7 +427,7 @@ public class CurriculumStudentUI extends JFrame {
                 new SummaryStudentTeacherUI();
             }
         });
-        String[] columnNames ={"课程编号","课程名称","教学班个数","课程学时","课程类型","学分","显示教学班"};
+        String[] columnNames ={"课程编号","课程号","教学班个数","课程学时","课程类型","学分","显示教学班"};
         String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
         //String ID=GlobalData.getUID();//未完成
         id= GlobalData.getUID();//未完成

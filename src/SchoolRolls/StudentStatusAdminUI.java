@@ -157,17 +157,20 @@ public class StudentStatusAdminUI extends JFrame {
         String[] columnNames = {"一卡通号", "学号", "姓名","性别","出生年月","入学年份","学院","删除","修改"};
         InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
         StudentInfo[] studentInfos=infoClientAPI.GetAllInfo();
-        data=new String[studentInfos.length][7];
-        for(int i=0;i<studentInfos.length;i++){
-            SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd");
-            data[i][0]=studentInfos[i].getCardID();
-            data[i][1]=studentInfos[i].getID();
-            data[i][2]=studentInfos[i].getName();
-            data[i][3]=studentInfos[i].getSex();
-            data[i][4]= ft.format(studentInfos[i].getBirth());
-            data[i][5]= String.valueOf(studentInfos[i].getGrade());
-            data[i][6]= studentInfos[i].getCollege();
+        if(studentInfos!=null){
+            data=new String[studentInfos.length][7];
+            for(int i=0;i<studentInfos.length;i++){
+                SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd");
+                data[i][0]=studentInfos[i].getCardID();
+                data[i][1]=studentInfos[i].getID();
+                data[i][2]=studentInfos[i].getName();
+                data[i][3]=studentInfos[i].getSex();
+                data[i][4]= ft.format(studentInfos[i].getBirth());
+                data[i][5]= String.valueOf(studentInfos[i].getGrade());
+                data[i][6]= studentInfos[i].getCollege();
+            }
         }
+
         // 创建JTable对象并传入数据和列名
         JScrollPane scrollPane = new JScrollPane(table);
         model.setDataVector(data, columnNames);
