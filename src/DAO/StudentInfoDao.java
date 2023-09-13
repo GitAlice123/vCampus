@@ -4,8 +4,16 @@ import view.SchoolRolls.StudentInfo;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
+/**
+ * 学生学籍DAO
+ * @author shuangmu555
+ */
 public class StudentInfoDao {
-
+    /**
+     * 通过一卡通号查询学籍信息
+     * @param uId 一卡通号
+     * @return 该uId对应的一个 StudentInfo类的学籍信息数据
+     */
     public StudentInfo findStudentInfoById(String uId){
         /*
             通过一卡通号查询学籍信息
@@ -50,7 +58,11 @@ public class StudentInfoDao {
 
         return studentInfo;
     }
-
+    /**
+     * 增加学生学籍信息
+     * @param stuInfo 想要添加的学生学籍信息
+     * @return 是否成功
+     */
     public boolean AddStudentInfo(StudentInfo stuInfo) {
         /*
             增加学生学籍信息
@@ -105,7 +117,11 @@ public class StudentInfoDao {
         return true;
     }
 
-
+    /**
+     * 根据一卡通号删除学生学籍信息
+     * @param uId 一卡通号
+     * @return 是否成功删除
+     */
     public Boolean DeleteStudentInfoById(String uId) {
         /*
             根据一卡通号删除学生学籍信息，并级联删除ClassNameList表、Grade表、PurchaseRecord表里相关信息
@@ -186,7 +202,10 @@ public class StudentInfoDao {
 
         return true;
     }
-
+    /**
+     * 查询所以学生学籍信息
+     * @return 所有学生的StudentInfo[]
+     */
     public StudentInfo[] showAllStudentInfo(){
        /*
             查询所以学生学籍信息
@@ -228,6 +247,12 @@ public class StudentInfoDao {
 
         return allInfo;
     }
+
+    /**
+     * 修改学生信息
+     * @param stuInfo
+     * @return 是否修改成功
+     */
     public boolean ModifyStudentInfo(StudentInfo stuInfo){
 
         SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd");

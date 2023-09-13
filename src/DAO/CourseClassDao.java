@@ -40,7 +40,7 @@ public class CourseClassDao {
                 classes[index] = new CourseClass(
                         res.getString(1),
                         res.getString(2),
-                        res.getString(3),
+                        res.getString(4),
                         res.getString(5),
                         res.getInt(6),
                         res.getInt(7),
@@ -201,7 +201,7 @@ public class CourseClassDao {
             classes = new CourseClass(
                     res.getString(1),
                     res.getString(2),
-                    res.getString(3),
+                    res.getString(4),
                     res.getString(5),
                     res.getInt(6),
                     res.getInt(7),

@@ -308,7 +308,7 @@ public class CurriculumStudentUI extends JFrame {
                             newselectclass[j++] = selectclassdata[i];
                         }
                     }
-                    String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
+                    String[] columnNamesChosen ={"课程班编号","教师编号","上课地点","上课时间","退选"};
                     selectclassdata=newselectclass;
                     DefaultTableModel newmodel=new DefaultTableModel (newselectclass,columnNamesChosen);
                     Chosentable.setModel(newmodel);
@@ -427,7 +427,7 @@ public class CurriculumStudentUI extends JFrame {
             }
         });
         String[] columnNames ={"课程编号","课程号","教学班个数","课程学时","课程类型","学分","显示教学班"};
-        String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
+        String[] columnNamesChosen ={"课程班编号","教师编号","上课地点","上课时间","退选"};
         //String ID=GlobalData.getUID();//未完成
         id= GlobalData.getUID();//未完成
         CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost", 8888);
@@ -520,7 +520,7 @@ public class CurriculumStudentUI extends JFrame {
                 }
                 if(courseClasses!=null)
                     selectclassdata= classtostring(courseClasses);
-                String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
+                String[] columnNamesChosen ={"课程班编号","教师编号","上课地点","上课时间","退选"};
                 DefaultTableModel newmodel=new DefaultTableModel(selectclassdata,columnNamesChosen);
                 Chosentable.setModel(newmodel);//未完成，按钮
                 Chosentable.getColumnModel().getColumn(4).setCellRenderer(new DeleteClassTableCellRendererButton());
@@ -753,7 +753,7 @@ public class CurriculumStudentUI extends JFrame {
         public ShowClassUI(){
             super("学生学籍系统");
 
-            String[] columnNames ={"课程班编号","任课教师","上课地点","上课时间","班级人数","课程容量","选课"};
+            String[] columnNames ={"课程班编号","教师编号","上课地点","上课时间","班级人数","课程容量","选课"};
             model.setDataVector(courseclassdata, columnNames);
             tableOfSelectedCourse.setModel(model);
             tableOfSelectedCourse.setRowHeight(30);
