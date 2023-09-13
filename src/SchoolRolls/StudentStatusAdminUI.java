@@ -353,7 +353,7 @@ public class StudentStatusAdminUI extends JFrame {
         }
 
         JTextField NameTex=new JTextField();
-        String[] options = {"男", "女"};
+        String[] options = {"M", "F"};
 
         public JComboBox<String> getComboBox() {
             return comboBox;
