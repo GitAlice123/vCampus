@@ -320,6 +320,13 @@ public class CurriculumAdminUI extends JFrame {
 
             }
         });
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                    new SummaryManagerUI();
+            }
+        });
         setSize(1200,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -641,13 +648,7 @@ public class CurriculumAdminUI extends JFrame {
         //studentdata
         public AdminShowClassesStuUI() {
             super("选课系统");
-//            backBtn.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    dispose();
-////                    new SummaryManagerUI();
-//                }
-//            });
+
             JLabel imageLabel = new JLabel();
 //            try {
 //                // 加载图片
