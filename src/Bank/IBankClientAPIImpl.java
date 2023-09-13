@@ -255,14 +255,15 @@ public class IBankClientAPIImpl implements IBankClientAPI {
      * @param id   用户一卡通ID
      * @param bill 账单信息
      * @param pwd  用户输入的密码
+     * @param isCoercive 是否为强制扣费（如水电费、学费），true代表是强制扣费
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    public double bankConsume(String id, bankBill bill, String pwd) throws IOException {
+    public double bankConsume(String id, bankBill bill, String pwd,boolean isCoercive) throws IOException {
         //以下发送用户id给服务器
         try {
             // 创建 ObjectMapper 对象
             ObjectMapper objectMapper = new ObjectMapper();
-            BankBillMessage bankBillMessage = new BankBillMessage(id, bill, pwd);
+            BankBillMessage bankBillMessage = new BankBillMessage(id, bill, pwd,isCoercive);
 
             // 将 LoginMessage 对象转换为 JSON 字符串
             String jsonData = objectMapper.writeValueAsString(bankBillMessage);

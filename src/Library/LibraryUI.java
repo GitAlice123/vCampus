@@ -1,7 +1,7 @@
 package view.Library;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.LibraryClientAPI;
 import view.connect.LibraryClientAPIImpl;
 import view.message.BookISBNMessage;
@@ -423,7 +423,7 @@ public class LibraryUI extends JFrame {
 
     private void BackBtnClicked(ActionEvent e) throws IOException {
         this.dispose();
-        new SummaryUI();
+        new SummaryStudentTeacherUI();
     }
 
     private void ReturnBtnClicked(ActionEvent e) throws IOException {

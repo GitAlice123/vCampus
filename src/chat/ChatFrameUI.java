@@ -1,6 +1,6 @@
 package view.chat;
 
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.client.ClientReceiver;
 import view.connect.ChatClientAPI;
 import view.connect.ChatClientAPIImpl;
@@ -143,7 +143,7 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
 

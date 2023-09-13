@@ -159,43 +159,55 @@ public class bankFunction {
      * @param id   用户一卡通ID
      * @param bill 消费账单信息
      * @param pwd  密码
+     * @param isCoercive 是否为强制扣费（如水电费、学费），true代表是强制扣费
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    public double bankConsume(String id, bankBill bill, String pwd) throws IOException {
-        double result = -4.00;
+    public double bankConsume(String id, bankBill bill, String pwd,boolean isCoercive) throws IOException {
+        double result = -400000.00;
         bankAccount thisAccount = bADao.findBankAccountById(id);
-        //若卡正常，则可以消费
-        try {
-            //若密码正确且卡正常
-            if (bADao.isLoss(id) && paymentPwdJudge(id, pwd)) {
-                if (thisAccount.getBalance() - bill.getAmount() >= 0) {//余额够
-                    //扣款
-                    bADao.bankConsume(id, bill.getAmount());//调用DAO类扣钱
-                    System.out.println("支付成功，余额￥" + Double.toString(thisAccount.getBalance()));
+        if(isCoercive){//如果强制扣费，直接扣钱
+            //扣款
+            bADao.bankConsume(id, bill.getAmount(),isCoercive);//调用DAO类扣钱
 
-                    //向数据库添加订单信息
-                    AddBankBill(bill);
-                    thisAccount = bADao.findBankAccountById(id);
-                    result = thisAccount.getBalance();
-                } else {
-                    System.out.println("余额不足！请充值");
-                    result = -1.00;
+
+            //向数据库添加订单信息
+            AddBankBill(bill);
+            thisAccount = bADao.findBankAccountById(id);
+            result = thisAccount.getBalance();
+            System.out.println("扣款成功，余额￥" + Double.toString(thisAccount.getBalance()));
+        }else{//当不是强制扣费时
+            //若卡正常，则可以消费
+            try {
+                //若密码正确且卡正常
+                if (bADao.isLoss(id) && paymentPwdJudge(id, pwd)) {
+                    if (thisAccount.getBalance() - bill.getAmount() >= 0) {//余额够
+                        //扣款
+                        bADao.bankConsume(id, bill.getAmount(),isCoercive);//调用DAO类扣钱
+                        System.out.println("支付成功，余额￥" + Double.toString(thisAccount.getBalance()));
+
+                        //向数据库添加订单信息
+                        AddBankBill(bill);
+                        thisAccount = bADao.findBankAccountById(id);
+                        result = thisAccount.getBalance();
+                    } else{
+                        result=-100000.00;//余额不足
+                    }
+                } else if (!bADao.isLoss(id)) {
+                    System.out.println("卡已挂失");
+                    result = -200000.00;
+
+                } else if (!paymentPwdJudge(id, pwd)) {
+                    System.out.println("密码错误，请重新输入");
+                    result = -300000.00;
 
                 }
-            } else if (!bADao.isLoss(id)) {
-                System.out.println("卡已挂失");
-                result = -2.00;
-
-            } else if (!paymentPwdJudge(id, pwd)) {
-                System.out.println("密码错误，请重新输入");
-                result = -3.00;
-
+                return result;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return -4.00;
+
+        return -400000.00;
     }
 
     /**

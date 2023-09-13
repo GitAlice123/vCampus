@@ -2,7 +2,7 @@ package view.Hospital;
 
 import view.Bank.bankAccount;
 import view.DAO.bankAccountDao;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -129,7 +129,7 @@ public class HospitalManagerUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
 

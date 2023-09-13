@@ -166,10 +166,10 @@ public class bankBillDao {
         String sqlString = "";
         if (query == "") {
             sqlString = "select * from tblBankBill where bill_userID = '" + id + "' and bill_time >= '"
-                    + ft.format(startTime) + "' and bill_time <= '" + ft.format(endTime) + "'";
+                    + ft.format(startTime) + "' and bill_time <= '" + ft.format(endTime) + "' order by bill_time desc";
         } else {
             sqlString = "select * from tblBankBill where bill_userID = '" + id + "' and bill_time >= '"
-                    + ft.format(startTime) + "' and bill_time <= '" + ft.format(endTime) + "' and bill_description = '" + query + "'";
+                    + ft.format(startTime) + "' and bill_time <= '" + ft.format(endTime) + "' and bill_description = '" + query + "' order by bill_time desc";
         }
 
         bankBill[] allBills = new bankBill[10];
@@ -203,7 +203,6 @@ public class bankBillDao {
                 index++;
             }
 
-
             con.close();//关闭数据库连接
 
         } catch (SQLException e) {
@@ -211,6 +210,8 @@ public class bankBillDao {
         }
         return allBills;
     }
+
+
 
 
     /**

@@ -308,12 +308,14 @@ public class bankAccountDao {
     }
 
     /**
-     * 通过一卡通号查询银行账户，并进行消费操作
+     * 通过一卡通号查询银行账户，并进行消费操作，如果是强制扣费，则在余额不足时将余额扣为负数
+     *
      * @param id 一卡通号id
-     * @param money 消费金额money
-     * @return 若消费金额大于账户余额，则不进行消费操作，并返回false
+     * @param money 消费金额
+     * @param isCoercive 是否为强制扣费（如水电费、学费），true代表是强制扣费
+     * @return 消费操作是非成功，若消费金额大于账户余额，则不进行消费操作，并返回false
      */
-    public boolean bankConsume(String id, double money) {
+    public boolean bankConsume(String id, double money,boolean isCoercive) {
         String sqlString1 = "select * from tblBankAccount where account_id = '" + id + "'";
         //查询原有余额
         double original_balance = 0;
@@ -344,7 +346,7 @@ public class bankAccountDao {
         }
 
         double new_balance = original_balance - money;
-        if (new_balance < 0) return false;  //若消费金额大于账户余额，则不进行消费操作，并返回false
+        if (new_balance < 0 && !isCoercive) return false;  //若消费金额大于账户余额，且是正常消费（而非强制扣费），则不进行消费操作，并返回false
         String sqlString2 = "update tblBankAccount set account_balance = '" + new_balance + "' where account_id = '" + id + "'";
         //进行消费，修改账户余额值
 
@@ -368,6 +370,7 @@ public class bankAccountDao {
 
         return true;
     }
+
 
     /**
      * 查询并返回所有的银行账户信息。
