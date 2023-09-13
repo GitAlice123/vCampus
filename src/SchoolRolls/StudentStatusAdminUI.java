@@ -1,6 +1,6 @@
 package view.SchoolRolls;
 
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -45,7 +45,7 @@ public class StudentStatusAdminUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         //loginHandler=new logInHandler(this);
@@ -112,7 +112,7 @@ public class StudentStatusAdminUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         FindBtn.addActionListener(new ActionListener() {

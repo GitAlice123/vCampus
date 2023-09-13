@@ -60,9 +60,10 @@ public interface IBankClientAPI {
      * @param id   用户一卡通ID
      * @param bill 账单信息
      * @param pwd  用户输入的密码
+     * @param isCoercive 是否为强制扣费（如水电费、学费），true代表是强制扣费
      * @return 消费结果，true表示消费成功，false表示消费失败
      */
-    double bankConsume(String id, bankBill bill, String pwd) throws IOException;
+    double bankConsume(String id, bankBill bill, String pwd,boolean isCoercive)  throws IOException;
 
     /**
      * 通过一卡通号查找account
@@ -70,7 +71,7 @@ public interface IBankClientAPI {
      * @param id 一卡通号
      * @return bankAccount账户
      */
-    public bankAccount findBankAccountById(String id) throws NullPointerException;
+    bankAccount findBankAccountById(String id) throws NullPointerException;
 
     /**
      * 用一卡通号查询并返回所有的银行账户信息。管理员用

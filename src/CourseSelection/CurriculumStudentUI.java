@@ -1,7 +1,7 @@
 package view.CourseSelection;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.CourseSelectClientAPI;
 import view.connect.CourseSelectClientAPIImp;
 
@@ -242,7 +242,7 @@ public class CurriculumStudentUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         String[] columnNames ={"课程编号","课程名称","教学班个数","课程学时","课程类型","学分","显示教学班"};

@@ -9,7 +9,7 @@ import java.awt.print.PrinterException;
 import java.io.IOException;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.client.ClientReceiver;
 import view.connect.*;
 import view.message.*;
@@ -19,6 +19,9 @@ import java.util.*;
 import java.util.List;
 
 
+/**
+ * 聊天框UI，含ClientReceiver的callback函数
+ */
 public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallback {
     private Timer waitTimer; // 定时器
     private Timer timer;
@@ -51,10 +54,20 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font centerFont = new Font("楷体", Font.PLAIN, 20);//设置中间组件的文字大小、字体
 
+    /**
+     * 存储发送出去的消息
+     */
     String messageSent;
 
+    /**
+     * 存储服务器发回的消息
+     */
     private String messageReturn; // 保存服务器返回的消息
 
+    /**
+     * 聊天框UI的构造函数
+     * @throws IOException
+     */
     public ChatFrameUI() throws IOException {
 
         super("ChatFrame");
@@ -182,7 +195,7 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
 

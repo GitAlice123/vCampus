@@ -1,6 +1,6 @@
 package view.CourseSelection;
 
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.Login.User;
 import view.SchoolRolls.StudentInfo;
 import view.connect.CourseSelectClientAPI;
@@ -437,7 +437,7 @@ public class CurriculumAdminUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dispose();
-                    new SummaryUI();
+                    new SummaryStudentTeacherUI();
                 }
             });
             JLabel imageLabel = new JLabel();

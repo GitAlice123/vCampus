@@ -1,6 +1,6 @@
 package view.Library;
 
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.LibraryClientAPI;
 import view.connect.LibraryClientAPIImpl;
 import view.message.BookISBNMessage;
@@ -9,12 +9,9 @@ import view.message.SearchBookNameMessage;
 import view.message.UniqueMessage;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
@@ -23,7 +20,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.JTable;
 
 import javax.swing.table.JTableHeader;
@@ -839,7 +835,7 @@ public class LibraryAdminUI extends JFrame {
 
     private void BackBtnClicked(ActionEvent e) throws IOException {
         this.dispose();
-        new SummaryUI();
+        new SummaryStudentTeacherUI();
     }
 
     private void ShowTableData(Book[] bookArray) {

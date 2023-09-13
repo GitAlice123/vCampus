@@ -1,6 +1,6 @@
 package view.Shop;
 
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -129,7 +129,7 @@ public class ShopManagerUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
 

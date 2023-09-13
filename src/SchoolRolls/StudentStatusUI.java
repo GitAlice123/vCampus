@@ -2,7 +2,7 @@ package view.SchoolRolls;
 
 import view.CourseSelection.Course;
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -111,7 +111,7 @@ public class StudentStatusUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         StudentInfo info=new StudentInfo("15177","54321","male","jacky",new Date(0),21,"CS");

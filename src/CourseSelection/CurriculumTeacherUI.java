@@ -3,7 +3,7 @@ package view.CourseSelection;
 
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.SchoolRolls.StudentInfo;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
@@ -99,7 +99,7 @@ public class CurriculumTeacherUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         String[] columnNames ={"课程班编号","课程名称","上课地点","当前班级人数","上课时间","本班学生"};

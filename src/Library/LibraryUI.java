@@ -1,12 +1,11 @@
 package view.Library;
 
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.*;
 import view.message.*;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +14,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;import java.awt.image.BufferedImage;
@@ -762,7 +760,7 @@ public class LibraryUI extends JFrame {
 
     private void BackBtnClicked(ActionEvent e) throws IOException {
         this.dispose();
-        new SummaryUI();
+        new SummaryStudentTeacherUI();
     }
 
     private void ReturnBtnClicked(ActionEvent e) throws IOException {

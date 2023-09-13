@@ -18,7 +18,7 @@ public class PurchaseRecordDao {
      * @return PurchaseRecord类数组allRecords，代表数据库中一卡通号为uId的所有购买记录，根据购买时间升序排序
      */
     public PurchaseRecord[] findPurchaseRecordById(String uId) {
-        String sqlString = "select * from tblPurchaseRecord where uId = '" + uId + "' order by purchaseTime";
+        String sqlString = "select * from tblPurchaseRecord where uId = '" + uId + "' order by purchaseTime desc";
         PurchaseRecord[] allRecords = new PurchaseRecord[10];
 
         try {
@@ -64,7 +64,7 @@ public class PurchaseRecordDao {
      * @return PurchaseRecord类数组allRecords，代表数据库中所有的购买记录，根据购买时间升序排序
      */
     public PurchaseRecord[] findAllPurchaseRecord() {
-        String sqlString = "select * from tblPurchaseRecord order by purchaseTime";
+        String sqlString = "select * from tblPurchaseRecord order by purchaseTime desc";
         PurchaseRecord[] allRecords = new PurchaseRecord[10];
 
         try {

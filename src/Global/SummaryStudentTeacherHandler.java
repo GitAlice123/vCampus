@@ -22,10 +22,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.io.IOException;
 
-public class SummaryHandler extends KeyAdapter implements ActionListener {
-    private SummaryUI summaryview;
+public class SummaryStudentTeacherHandler extends KeyAdapter implements ActionListener {
+    private SummaryStudentTeacherUI summaryview;
 
-    public SummaryHandler(SummaryUI summaryview) {
+    public SummaryStudentTeacherHandler(SummaryStudentTeacherUI summaryview) {
         this.summaryview = summaryview;
     }
 

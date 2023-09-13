@@ -2,7 +2,7 @@ package view.SchoolRolls;
 
 import view.CourseSelection.CourseClass;
 import view.Global.GlobalData;
-import view.Global.SummaryUI;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -408,7 +408,7 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SummaryUI();
+                new SummaryStudentTeacherUI();
             }
         });
         InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost", 8888);

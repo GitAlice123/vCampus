@@ -89,7 +89,7 @@ public class bankServerActionTool {
     }
 
     /**
-     * 对应消费consume
+     * 对应非强制消费consume
      */
     public void Action1002(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -110,8 +110,9 @@ public class bankServerActionTool {
         String userId = bankBillMessage.getId();
         bankBill userBill = bankBillMessage.getBill();
         String userPwd = bankBillMessage.getPwd();
+        boolean isC= bankBillMessage.isCoercive();
         try {
-            flag = funcs.bankConsume(userId, userBill, userPwd);
+            flag = funcs.bankConsume(userId, userBill, userPwd,isC);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

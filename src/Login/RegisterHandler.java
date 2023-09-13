@@ -1,5 +1,8 @@
 package view.Login;
 
+import view.Bank.IBankClientAPI;
+import view.Bank.IBankClientAPIImpl;
+import view.Bank.bankAccount;
 import view.connect.RegisterClientAPI;
 import view.connect.RegisterClientAPIImpl;
 import view.message.LoginMessage;
@@ -58,8 +61,10 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
 
     private void extracted() throws IOException {
         String userId = registerView.getUserNameTxt().getText();
+        String name=registerView.getNameTxt().getText();
         String password = registerView.getPwdField().getText();
         String ensurepsd = registerView.getEnsurepwdField().getText();
+
         if (userId.length() != 9) {
             JOptionPane.showMessageDialog(registerView, "请输入9位用户名！");
             registerView.getUserNameTxt().setText("");
@@ -98,11 +103,14 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
 
 
                 if (check) {
-                    // String cardId, String name, String id, String paymentPwd,double balance, boolean isLoss) {
-                    //
-                    JOptionPane.showMessageDialog(registerView, "新用户注册成功！");
-//                    bankAccount bankA=new bankAccount(generateRandomString(6),userId,u)
 
+                    //用户和老师身份自动添加对应的银行账户，初始付款密码为000000，余额为0
+                    if(role=="ST"||role=="TC"){
+                        bankAccount bankA=new bankAccount(generateRandomString(6),name,userId,"000000",0.00,true);
+                        IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
+                        iBankClientAPI.addBankAccount(bankA);
+                    }
+                    JOptionPane.showMessageDialog(registerView, "新用户注册成功！");
                 }
             }
         }
