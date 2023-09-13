@@ -1,6 +1,6 @@
 package view.CourseSelection;
 
-import view.Global.SummaryStudentTeacherUI;
+import view.Global.*;
 import view.Login.User;
 import view.SchoolRolls.StudentInfo;
 import view.connect.CourseSelectClientAPI;
@@ -17,10 +17,48 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *学生选课模块的管理员界面
+ */
 public class CurriculumAdminUI extends JFrame {
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        /**
+         * 自定义表格单元格渲染器，用于控制表格单元格的外观。
+         * 继承自 DefaultTableCellRenderer 类。
+         * 在渲染过程中，根据选择状态为表格单元格设置不同的外观样式。
+         * 如果单元格被选中，则设置背景颜色为表格的默认背景色，文字颜色为黑色。
+         * 如果单元格未被选中，则恢复为默认的背景颜色和文字颜色。
+         * 在渲染过程中，调用了父类的 getTableCellRendererComponent 方法以获取默认的单元格渲染器组件，并在其基础上进行了定制。
+         * 注意：该渲染器并未修改单元格的编辑性，仅控制外观样式。
+         *
+         * @param table 表格组件，用于获取默认的背景颜色和前景颜色以及其他相关信息。
+         * @param value 单元格的值对象。
+         * @param isSelected 当前单元格是否被选中。
+         * @param hasFocus 当前单元格是否具有焦点。
+         * @param row 单元格所在的行。
+         * @param column 单元格所在的列。
+         * @return 返回已定制外观样式的单元格渲染器组件。
+         */
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                // 设置选中行的外观
+                component.setBackground(table.getBackground()); // 设置选中行的背景颜色
+                component.setForeground(Color.BLACK); // 设置选中行的文字颜色
+            } else {
+                // 设置非选中行的外观
+                component.setBackground(table.getBackground()); // 恢复默认的背景颜色
+                component.setForeground(table.getForeground()); // 恢复默认的文字颜色
+            }
+            return component;
+        }
+    };
     /**
      * 选中的StudentID
      */
@@ -35,14 +73,149 @@ public class CurriculumAdminUI extends JFrame {
      */
     String courseid;
     SpringLayout springLayout=new SpringLayout();
-    JPanel TopPanel=new JPanel(springLayout);
-    JPanel BottomPanel=new JPanel();//底部放置按钮的面板
-    JPanel panel1=new JPanel(springLayout);
+    /**
+     * 自定义的 JPanel，用于显示顶部面板。
+     * 在 paintComponent 方法中绘制带透明度的背景图片。
+     */
+    JPanel TopPanel=new JPanel(springLayout){
+        /**
+         * @param g 绘图上下文对象，用于绘制组件的内容。
+         */
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;
+    /**
+     * 自定义的 JPanel，用于显示底部面板。
+     * 在 paintComponent 方法中绘制带透明度的背景图片。
+     */
+    JPanel BottomPanel=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;//底部放置按钮的面板
+    /**
+     * 自定义的 JPanel，用于显示中间面板。
+     * 在 paintComponent 方法中绘制带透明度的背景图片。
+     */
+    JPanel panel1=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;
 
     JButton AddNewClassBtn=new JButton("新增课程班");
     DefaultTableModel model = new DefaultTableModel();
-    JTable classtable = new JTable();
-    JTable studenttable = new JTable();
+    /**
+     * 自定义的 JTable，用于设置单元格为透明的。
+     * 在 prepareRenderer 方法中重写默认的单元格渲染器，使单元格的背景透明。
+     */
+    JTable classtable = new JTable(){ // 设置jtable的单元格为透明的
+        /**
+         * @param renderer 单元格渲染器对象，用于绘制单元格的内容。
+         * @param row 单元格所在的行。
+         * @param column 单元格所在的列。
+         * @return 返回被渲染的组件。
+         */
+        public Component prepareRenderer(TableCellRenderer renderer,
+
+                                         int row, int column) {
+
+            Component c = super.prepareRenderer(renderer, row, column);
+
+            if (c instanceof JComponent) {
+
+                ((JComponent) c).setOpaque(false);
+
+            }
+
+            return c;
+
+        }
+
+    };;
+    JTable studenttable = new JTable(){ // 设置jtable的单元格为透明的
+
+        public Component prepareRenderer(TableCellRenderer renderer,
+
+                                         int row, int column) {
+
+            Component c = super.prepareRenderer(renderer, row, column);
+
+            if (c instanceof JComponent) {
+
+                ((JComponent) c).setOpaque(false);
+
+            }
+
+            return c;
+
+        }
+
+    };;
     JLabel title=new JLabel("课程班");
     String[][] studentdata = {
             {"1", "1", "1", "1","1"},
@@ -79,6 +252,11 @@ public class CurriculumAdminUI extends JFrame {
             {"1", "1", "1", "1", "1", "1", "1","1","1"}
 
     };
+    /**
+     * 更新课程班表格。
+     *
+     * @throws IOException 如果在更新过程中发生 I/O 错误。
+     */
     void UpdateClassTable() throws IOException {
         String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
         //loginHandler=new logInHandler(this);
@@ -101,9 +279,6 @@ public class CurriculumAdminUI extends JFrame {
     }
     JButton backBtn=new JButton("退出");
     public String[][] StudentInfotoString(StudentInfo[] studentInfos){
-        if(studentInfos==null){
-            return null;
-        }
         String[][] src=new String[studentInfos.length][4];
         //classid id card_id name
         for(int i=0;i<studentInfos.length;i++){
@@ -115,39 +290,40 @@ public class CurriculumAdminUI extends JFrame {
         return src;
     }
     public String[][] ClasstoString(CourseClass[] classes){
-        if(classes==null){
-            return null;
-        }
-        String[][] src = new String[classes.length][6];
+        String[][] src=new String[classes.length][6];
         //classid coursenum place max time teacher
-        for (int i = 0; i < classes.length; i++) {
-            src[i][0] = classes[i].getClassID();
-            src[i][1] = classes[i].getCourseID();
-            src[i][2] = classes[i].getClassPlace();
-            src[i][3] = Integer.toString(classes[i].getClassMax());
-            src[i][4] = classes[i].getClassTime();
-            src[i][5] = classes[i].getClassTeacher();
+        for(int i=0;i<classes.length;i++){
+            src[i][0]=classes[i].getClassID();
+            src[i][1]=classes[i].getCourseID();
+            src[i][2]=classes[i].getClassPlace();
+            src[i][3]=Integer.toString(classes[i].getClassMax());
+            src[i][4]=classes[i].getClassTime();
+            src[i][5]=classes[i].getClassTeacher();
         }
         return src;
-
     }
+    /**
+     * 构造选课管理员界面对象。
+     *
+     * @throws IOException 如果在构造过程中发生 I/O 错误。
+     */
     public CurriculumAdminUI() throws IOException {
         super("选课系统");
         JLabel imageLabel = new JLabel();
-        try {
-            // 加载图片
-            int newWidth = 90;  // 新的宽度
-            int newHeight = 100; // 新的高度
-
-            Image pkqIm = ImageIO.read(new File("Images/sdz1.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
-
-            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-            imageLabel.setIcon(new ImageIcon(scaledImage));
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // 加载图片
+//            int newWidth = 90;  // 新的宽度
+//            int newHeight = 100; // 新的高度
+//
+//            Image pkqIm = ImageIO.read(new File("Images/sdz1.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
+//
+//            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+//            imageLabel.setIcon(new ImageIcon(scaledImage));
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
         //loginHandler=new logInHandler(this);
@@ -157,6 +333,8 @@ public class CurriculumAdminUI extends JFrame {
         DefaultTableModel model=new DefaultTableModel(classdata,columnNames);
         classtable.setModel(model);
         classtable.setRowHeight(30);
+        classtable.setOpaque(false);
+        classtable.setDefaultRenderer(Object.class, renderer);
         JTableHeader tab_header = classtable.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
@@ -170,7 +348,8 @@ public class CurriculumAdminUI extends JFrame {
         //loginHandler=new logInHandler(this);
         JScrollPane scrollPane = new JScrollPane(classtable);
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
-
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
         Container contentPane=getContentPane();//获取控制面板
         contentPane.setLayout(new BorderLayout());
 
@@ -218,10 +397,24 @@ public class CurriculumAdminUI extends JFrame {
         setResizable(false);
         setVisible((true));
     }
+    /**
+     * TableCellRenderer 的实现类，用于在表格中渲染 "删除" 按钮。
+     * 该按钮用于删除课程班级。
+     */
     class AdminDeleteClassesTableCellRendererButton implements TableCellRenderer {//查看班级界面辅助类
 
 
-
+        /**
+         * 返回一个用于绘制表格单元格的组件，该组件为一个 "删除" 按钮。
+         *
+         * @param table      表格对象。
+         * @param value      单元格的值对象。
+         * @param isSelected 表示单元格是否为选中状态。
+         * @param hasFocus   表示单元格是否拥有焦点。
+         * @param row        单元格所在的行索引。
+         * @param column     单元格所在的列索引。
+         * @return 渲染的组件，此处为一个 "删除" 按钮。
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
@@ -243,7 +436,11 @@ public class CurriculumAdminUI extends JFrame {
             Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
             btn.setFont(centerFont);
             btn.addActionListener(new ActionListener() {
-                @Override
+                /**
+                 * 处理按钮点击事件的方法。当删除按钮被点击时，执行删除课程班的操作，并更新表格和界面显示。
+                 *
+                 * @param e 按钮点击事件对象。
+                 */
                 public void actionPerformed(ActionEvent e) {
                     JButton clickedButton = (JButton) e.getSource();
 
@@ -429,10 +626,85 @@ public class CurriculumAdminUI extends JFrame {
     }
     class AdminShowClassesStuUI extends JFrame{
         SpringLayout springLayout = new SpringLayout();
-        JPanel ClassStudentsTopPanel = new JPanel();
-        JPanel ClassStudentsBottomPanel = new JPanel();//底部放置按钮的面板
+        JPanel ClassStudentsTopPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;
+        JPanel ClassStudentsBottomPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//底部放置按钮的面板
         JPanel ClassStudentsPanel1 = new JPanel();//中间卡片布局的面板
-        JPanel ClassStudentsPanel = new JPanel(springLayout);//老师查看班级学生的面板
+        JPanel ClassStudentsPanel = new JPanel(springLayout){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//老师查看班级学生的面板
         JLabel ClassLabel = new JLabel("本班学生");
 
         JButton backBtn = new JButton("退出");
@@ -444,28 +716,30 @@ public class CurriculumAdminUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dispose();
-                    new SummaryStudentTeacherUI();
+                    new SummaryManagerUI();
                 }
             });
             JLabel imageLabel = new JLabel();
-            try {
-                // 加载图片
-                int newWidth = 90;  // 新的宽度
-                int newHeight = 100; // 新的高度
-
-                Image pkqIm = ImageIO.read(new File("Images/sdz1.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
-
-                Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-                imageLabel.setIcon(new ImageIcon(scaledImage));
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                // 加载图片
+//                int newWidth = 90;  // 新的宽度
+//                int newHeight = 100; // 新的高度
+//
+//                Image pkqIm = ImageIO.read(new File("Images/sdz1.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
+//
+//                Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+//                imageLabel.setIcon(new ImageIcon(scaledImage));
+//
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             String[] columnNames = {"课程班编号", "学号", "一卡通号", "姓名","删除学生"};
             DefaultTableModel model=new DefaultTableModel(studentdata,columnNames);
             studenttable.setModel(model);
             studenttable.setRowHeight(30);
+            studenttable.setOpaque(false);
+            studenttable.setDefaultRenderer(Object.class, renderer);
             JTableHeader tab_header = studenttable.getTableHeader();					//获取表头
             tab_header.setFont(new Font("楷体",Font.PLAIN,25));
             tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
@@ -474,7 +748,8 @@ public class CurriculumAdminUI extends JFrame {
             studenttable.getColumnModel().getColumn(4).setCellEditor(new AdminDeleteStuTableCellEditorButton());
             JScrollPane scrollPane = new JScrollPane(studenttable);
             scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
-
+            scrollPane.setOpaque(false);
+            scrollPane.getViewport().setBackground(new Color(255,255,255,150));
             Container contentPane = getContentPane();//获取控制面板
 
             contentPane.setLayout(new BorderLayout());
@@ -660,15 +935,13 @@ public class CurriculumAdminUI extends JFrame {
             }
             CourseSelectClientAPI courseSelectClientAPI1=new CourseSelectClientAPIImp("localhost",8888);
             CourseClass[] classes=courseSelectClientAPI1.GetAllClass();
-            if(classes!=null) {
-                for (int i = 0; i < classes.length; i++) {
-                    ClassIdcomboBox.addItem(classes[i].getClassID());
-                }
-                CourseSelectClientAPI courseSelectClientAPI2 = new CourseSelectClientAPIImp("localhost", 8888);
-                Course[] courses = courseSelectClientAPI2.GetAllCourse();
-                for (int i = 0; i < courses.length; i++) {
-                    CourseIdcomboBox.addItem(courses[i].getCourseID());
-                }
+            for(int i=0;i<classes.length;i++){
+                ClassIdcomboBox.addItem(classes[i].getClassID());
+            }
+            CourseSelectClientAPI courseSelectClientAPI2=new CourseSelectClientAPIImp("localhost",8888);
+            Course[] courses=courseSelectClientAPI2.GetAllCourse();
+            for(int i=0;i<courses.length;i++){
+                CourseIdcomboBox.addItem(courses[i].getCourseID());
             }
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
@@ -801,6 +1074,10 @@ public class CurriculumAdminUI extends JFrame {
             setVisible((true));
         }
     }
+
+    /**
+     * 选课管理员界面查看班级界面
+     */
     class AdminChangeClassesUI extends JFrame{
         SpringLayout springLayout=new SpringLayout();
         JLabel ClassTempLabel=new JLabel("当前人数");
@@ -856,7 +1133,10 @@ public class CurriculumAdminUI extends JFrame {
 
         JButton ExitBtn=new JButton("取消");
         JPanel panel=new JPanel(springLayout);
+        /**
 
+         创建 AdminChangeClassesUI 类的新实例。
+         @throws IOException 如果发生 I/O 错误。 */
         public AdminChangeClassesUI() throws IOException {
             super("选课系统");
             Container contentPane=getContentPane();//获取控制面板
@@ -1011,7 +1291,29 @@ public class CurriculumAdminUI extends JFrame {
             setVisible((true));
         }
     }
+    /**
+
+     自定义的表格单元格背景颜色渲染器类。
+     */
     private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        /**
+
+         获取表格单元格的渲染组件。
+
+         @param table 当前的表格对象。
+
+         @param value 单元格的值。
+
+         @param isSelected 指示单元格是否被选中。
+
+         @param hasFocus 指示单元格是否拥有焦点。
+
+         @param row 单元格所在的行数。
+
+         @param column 单元格所在的列数。
+
+         @return 渲染后的单元格组件。
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -1030,6 +1332,14 @@ public class CurriculumAdminUI extends JFrame {
             return cellComponent;
         }
     }
+    /**
+
+     程序的入口方法，负责启动选课系统的管理员界面。
+
+     @param args 命令行参数（未使用）。
+
+     @throws IOException 如果发生 I/O 错误。
+     */
     public static void main(String[] args) throws IOException {
         try {
             // 设置外观为Windows外观

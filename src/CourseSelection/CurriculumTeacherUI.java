@@ -2,8 +2,7 @@ package view.CourseSelection;
 
 
 
-import view.Global.GlobalData;
-import view.Global.SummaryStudentTeacherUI;
+import view.Global.*;
 import view.SchoolRolls.StudentInfo;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
@@ -16,6 +15,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class CurriculumTeacherUI extends JFrame {
@@ -83,13 +83,123 @@ public class CurriculumTeacherUI extends JFrame {
             return null;
         }
     }
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                // 设置选中行的外观
+                component.setBackground(table.getBackground()); // 设置选中行的背景颜色
+                component.setForeground(Color.BLACK); // 设置选中行的文字颜色
+            } else {
+                // 设置非选中行的外观
+                component.setBackground(table.getBackground()); // 恢复默认的背景颜色
+                component.setForeground(table.getForeground()); // 恢复默认的文字颜色
+            }
+            return component;
+        }
+    };
     SpringLayout springLayout=new SpringLayout();
-    JPanel TopPanel=new JPanel();
-    JPanel BottomPanel=new JPanel();//底部放置按钮的面板
-    JPanel panel1=new JPanel(springLayout);
+    JPanel TopPanel=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel BottomPanel=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };//底部放置按钮的面板
+    JPanel panel1=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;
 
     DefaultTableModel model = new DefaultTableModel();
-    JTable tableOfClasses = new JTable();//显示课程班的表格
+    JTable tableOfClasses = new JTable(){ // 设置jtable的单元格为透明的
+
+        public Component prepareRenderer(TableCellRenderer renderer,
+
+                                         int row, int column) {
+
+            Component c = super.prepareRenderer(renderer, row, column);
+
+            if (c instanceof JComponent) {
+
+                ((JComponent) c).setOpaque(false);
+
+            }
+
+            return c;
+
+        }
+
+    };;//显示课程班的表格
     JLabel title=new JLabel("教学班");
     String[][] classdata = {};
     JButton backBtn=new JButton("退出");
@@ -105,9 +215,12 @@ public class CurriculumTeacherUI extends JFrame {
         String[] columnNames ={"课程班编号","课程名称","上课地点","当前班级人数","上课时间","本班学生"};
         InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
         CourseClass[] classes=infoClientAPI.SearchCourseClassByTeacherID(id);
-        if(classes[0]!=null)
+        if(classes!=null)
         classdata =classtostring(classes);
         model.setDataVector(classdata, columnNames);
+
+        tableOfClasses.setOpaque(false);
+        tableOfClasses.setDefaultRenderer(Object.class, renderer);
         tableOfClasses.setModel(model);
         tableOfClasses.setRowHeight(30);
         JTableHeader tab_header = tableOfClasses.getTableHeader();					//获取表头
@@ -122,9 +235,11 @@ public class CurriculumTeacherUI extends JFrame {
         //tableModel.setCellEditable(1, 2, false);
         //loginHandler=new logInHandler(this);
         JScrollPane scrollPane = new JScrollPane(tableOfClasses);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
         scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
         Container contentPane=getContentPane();//获取控制面板
-
+        scrollPane.setOpaque(false);
         contentPane.setLayout(new BorderLayout());
 
         contentPane.add(TopPanel,BorderLayout.NORTH);
@@ -155,12 +270,130 @@ public class CurriculumTeacherUI extends JFrame {
     }
     class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         SpringLayout springLayout = new SpringLayout();
-        JPanel ClassStudentsTopPanel = new JPanel();
-        JPanel ClassStudentsBottomPanel = new JPanel();//底部放置按钮的面板
-        JPanel ClassStudentsPanel1 = new JPanel();//中间卡片布局的面板
-        JPanel ClassStudentsPanel = new JPanel(springLayout);//老师查看班级学生的面板
+        JPanel ClassStudentsTopPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;
+        JPanel ClassStudentsBottomPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//底部放置按钮的面板
+        JPanel ClassStudentsPanel1 = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//中间卡片布局的面板
+        JPanel ClassStudentsPanel = new JPanel(springLayout){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                // 加载原始尺寸的背景图片
+                ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+                Image originalImage = originalImageIcon.getImage();
+
+                // 创建与面板尺寸相同的缓冲图像
+                BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
+
+                // 设置透明度
+                AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+                g2d.setComposite(alphaComposite);
+
+                // 绘制背景图片到缓冲图像
+                g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+                // 绘制缓冲图像到面板
+                g.drawImage(bufferedImage, 0, 0, null);
+
+                g2d.dispose();
+            }
+        };;//老师查看班级学生的面板
         DefaultTableModel model = new DefaultTableModel();
-        JTable tableOfStudents = new JTable();//显示本班学生的表格
+        JTable tableOfStudents = new JTable(){ // 设置jtable的单元格为透明的
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+
+                                             int row, int column) {
+
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                if (c instanceof JComponent) {
+
+                    ((JComponent) c).setOpaque(false);
+
+                }
+
+                return c;
+
+            }
+
+        };;//显示本班学生的表格
         JLabel ClassLabel = new JLabel("本班学生");
 
         JButton backBtn = new JButton("退出");
@@ -189,12 +422,16 @@ public class CurriculumTeacherUI extends JFrame {
             model.setDataVector(studentdata, columnNames);
             tableOfStudents.setModel(model);
             tableOfStudents.setRowHeight(30);
+            tableOfStudents.setOpaque(false);
+            tableOfStudents.setDefaultRenderer(Object.class, renderer);
             JTableHeader tab_header = tableOfStudents.getTableHeader();					//获取表头
             tab_header.setFont(new Font("楷体",Font.PLAIN,25));
             tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
             tableOfStudents.setFont(new Font("楷体",Font.PLAIN,25));
             tableOfStudents.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
             JScrollPane scrollPane = new JScrollPane(tableOfStudents);
+            scrollPane.setOpaque(false);
+            scrollPane.getViewport().setBackground(new Color(255,255,255,150));
             scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
             tableOfStudents.setEnabled(false);
             Container contentPane = getContentPane();//获取控制面板
@@ -281,9 +518,8 @@ public class CurriculumTeacherUI extends JFrame {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
             UIManager.put("nimbusBase", new Color(255, 255, 50)); // 边框
-            UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
-            UIManager.put("control", new Color(240, 248, 255)); // 背景
-
+            UIManager.put("nimbusBlueGrey", new Color(255, 255, 210)); // 按钮
+            UIManager.put("control", new Color(248, 248, 230)); // 背景
 
 
         } catch (Exception e) {

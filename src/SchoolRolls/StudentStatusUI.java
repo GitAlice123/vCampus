@@ -2,7 +2,7 @@ package view.SchoolRolls;
 
 import view.CourseSelection.Course;
 import view.Global.GlobalData;
-import view.Global.SummaryStudentTeacherUI;
+import view.Global.*;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -10,14 +10,33 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StudentStatusUI extends JFrame {
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (isSelected) {
+                // 设置选中行的外观
+                component.setBackground(table.getBackground()); // 设置选中行的背景颜色
+                component.setForeground(Color.BLACK); // 设置选中行的文字颜色
+            } else {
+                // 设置非选中行的外观
+                component.setBackground(table.getBackground()); // 恢复默认的背景颜色
+                component.setForeground(table.getForeground()); // 恢复默认的文字颜色
+            }
+            return component;
+        }
+    };
     public void setCard_id(String card_id) {
         this.card_id = card_id;
     }
@@ -61,11 +80,111 @@ public class StudentStatusUI extends JFrame {
     String college;
 
     SpringLayout springLayout=new SpringLayout();
-    JPanel TopPanel=new JPanel();//顶部放置按钮的面板
-    JPanel BottomPanel=new JPanel();//底部放置按钮的面板
+    JPanel TopPanel=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;//顶部放置按钮的面板
+    JPanel BottomPanel=new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/topPicture.png");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;//底部放置按钮的面板
     JPanel panel1=new JPanel();//中间卡片布局的面板
-    JPanel InfoPanel=new JPanel(springLayout);//学生查看个人信息的面板
-    JPanel CoursePanel=new JPanel(springLayout);//学生查看成绩的面板
+    JPanel InfoPanel=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;//学生查看个人信息的面板
+    JPanel CoursePanel=new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/BJ.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };;//学生查看成绩的面板
 
     //以下为按钮
     JButton InfoBtn=new JButton("查看个人信息");//学生登录后进入学生学籍系统看到的界面里，点击此按钮，中间出现个人信息（已经实现）
@@ -164,16 +283,39 @@ public class StudentStatusUI extends JFrame {
 
         // 创建JTable对象并传入数据和列名
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        JTable table = new JTable(model);
+        JTable table = new JTable(model){ // 设置jtable的单元格为透明的
+
+            public Component prepareRenderer(TableCellRenderer renderer,
+
+                                             int row, int column) {
+
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                if (c instanceof JComponent) {
+
+                    ((JComponent) c).setOpaque(false);
+
+                }
+
+                return c;
+
+            }
+
+        };;
         table.setRowHeight(30);
+        table.setOpaque(false);
+        table.setDefaultRenderer(Object.class, renderer);
         JTableHeader tab_header = table.getTableHeader();					//获取表头
         tab_header.setFont(new Font("楷体",Font.PLAIN,25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
         table.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
         // 创建一个JScrollPane来包装表格
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
-
+        JScrollPane scrollPaneChosen = new JScrollPane(table);
+        scrollPaneChosen.setOpaque(false);
 
         //loginHandler=new logInHandler(this);
 
