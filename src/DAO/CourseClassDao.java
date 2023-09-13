@@ -298,14 +298,15 @@ public class CourseClassDao {
      */
     public boolean ModifyClass(CourseClass courseClass) {
         String sqlString = "update tblClass " +
-                "set courseId = " + courseClass.getCourseID() +
-                "set classTeacher = " + "Null" +
-                "set classTeacherId = " + courseClass.getClassTeacher() +
-                "set classPlace = " + courseClass.getClassPlace() +
-                "set classMax = " + courseClass.getClassMax() +
-                "set classTemp = " + courseClass.getClassTemp() +
-                "set classTime = " + courseClass.getClassTime() +
-                " where classId = '" + courseClass.getClassID() + "'";
+                "set courseId = '" + courseClass.getCourseID() +
+                "', classTeacher = " + "Null" +
+                ", classTeacherId = '" + courseClass.getClassTeacher() +
+                "', classPlace = '" + courseClass.getClassPlace() +
+                "', classMax = " + courseClass.getClassMax() +
+                ", classTemp = " + courseClass.getClassTemp() +
+                ", classTime = '" + courseClass.getClassTime() +
+                "' where classId = '" + courseClass.getClassID() + "'";
+
 
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件

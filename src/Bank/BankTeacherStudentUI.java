@@ -10,11 +10,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< Updated upstream
 import java.awt.image.BufferedImage;
-=======
-import java.net.URL;
->>>>>>> Stashed changes
 import java.util.Calendar;
 import java.util.Date;
 
