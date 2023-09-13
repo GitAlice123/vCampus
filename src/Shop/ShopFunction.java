@@ -102,9 +102,12 @@ public class ShopFunction {
     }
 
     /**
-     * 向购物车中增加商品
+     * 向购物车中增加商品。
+     *
+     * @param goodName 商品名称
+     * @param num      要添加的商品数量
+     * @return 如果成功添加商品到购物车，返回true；否则返回false
      */
-
     public boolean addSelectedGood(String goodName, int num) {
         Good g = GD.findGoodByProductName(goodName);
 
@@ -134,7 +137,10 @@ public class ShopFunction {
     }
 
     /**
-     * 在后端的购物车数组中删除商品
+     * 在购物车中删除商品。
+     *
+     * @param goodName 商品名称
+     * @return 如果成功从购物车中删除商品，返回true；否则返回false
      */
     public boolean removeSelectedGood(String goodName) {
         boolean found = false;
@@ -153,13 +159,7 @@ public class ShopFunction {
 
         return found;
     }
-//    public String[][] getSelectedGoods() {
-//        if(selectedGoods.size()==0){
-//            return null;
-//        }else{
-//            return convertArrayListToStringArray(selectedGoods);
-//        }
-//    }
+
 
     /**
      * 返回购物车中的商品列表，以String[][]形式表示。
@@ -316,13 +316,7 @@ public class ShopFunction {
                 GoodStrings[i][3] = good.getCategory();//商品类别
                 GoodStrings[i][4] = good.getProvider();//供应商
                 GoodStrings[i][5] = Integer.toString(good.getGoodStock());  // 商品库存
-//                Good类属性：
-//                private String goodId;//商品序号
-//                private String goodName;//商品名称
-//                private double goodPrice;//商品价格
-//                private String category;//商品类别
-//                private String provider;//供应商
-//                private int goodStock;//商品库存数
+
 
             }
             return GoodStrings;
@@ -332,27 +326,7 @@ public class ShopFunction {
         }
     }
 
-//    /**
-//     * 将ArrayList<SelectedGood>转换为String[][]类型。
-//     *
-//     * @param selectedGoods ArrayList<SelectedGood>对象
-//     * @return 转换后的String[][]数组
-//     */
-//    public static String[][] convertArrayListToStringArray(ArrayList<SelectedGood> selectedGoods) {
-//        int size = selectedGoods.size();
-//        String[][] result = new String[size][4];
-//
-//        for (int i = 0; i < size; i++) {
-//            SelectedGood selectedGood = selectedGoods.get(i);
-//
-//            result[i][0] = selectedGood.getGoodName();//名称
-//            result[i][1] = Integer.toString(selectedGood.getGoodNums());//数量
-//            result[i][2] = Double.toString(selectedGood.getGoodPrice()* selectedGood.getGoodNums());//总金额
-//            result[i][3] = "";
-//        }
-//
-//        return result;
-//    }
+
 
     /**
      * 将PurchaseRecord对象转换为String[][]类型，以便在前端显示。学生用

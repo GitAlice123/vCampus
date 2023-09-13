@@ -10,7 +10,11 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< Updated upstream
 import java.awt.image.BufferedImage;
+=======
+import java.net.URL;
+>>>>>>> Stashed changes
 import java.util.Calendar;
 import java.util.Date;
 
@@ -551,6 +555,9 @@ public class BankTeacherStudentUI extends JFrame {
         setVisible(true);
 
 
+        /**
+         * 导航栏：充值
+         * */
         rechargeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -558,6 +565,10 @@ public class BankTeacherStudentUI extends JFrame {
                 refreshPage();
             }
         });
+
+        /**
+         * 导航栏：账单
+         * */
         billBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -569,6 +580,10 @@ public class BankTeacherStudentUI extends JFrame {
                 refreshPage();
             }
         });
+
+        /**
+         * 导航栏：修改密码
+         * */
         changepwdBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -576,6 +591,10 @@ public class BankTeacherStudentUI extends JFrame {
                 refreshPage();
             }
         });
+
+        /**
+         * 导航栏：卡片信息
+         * */
         cardimageBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -584,6 +603,10 @@ public class BankTeacherStudentUI extends JFrame {
 
             }
         });
+
+        /**
+         * 导航栏：挂失/解挂
+         * */
         freezeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -591,6 +614,10 @@ public class BankTeacherStudentUI extends JFrame {
                 cardLayout.show(cardPanel, "挂失/解挂");
             }
         });
+
+        /**
+         * 退出按钮
+         * */
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -598,7 +625,10 @@ public class BankTeacherStudentUI extends JFrame {
                 new SummaryStudentTeacherUI();
             }
         });
-        //用户点击确认充值按钮
+
+        /**
+         * 用户点击确认充值按钮
+         * */
         confirmrechargeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -607,7 +637,9 @@ public class BankTeacherStudentUI extends JFrame {
             }
         });
 
-        //用户点击确认修改密码按钮
+        /**
+         * 用户点击确认修改密码按钮
+         * */
         confirmchangepwdBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -616,7 +648,9 @@ public class BankTeacherStudentUI extends JFrame {
             }
         });
 
-        //用户选好时间的月份之后
+        /**
+         * 用户选好时间的月份之后
+         * */
         month.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -624,7 +658,9 @@ public class BankTeacherStudentUI extends JFrame {
             }
         });
 
-        //用户点击查询按钮之后
+        /**
+         * 用户点击查询按钮之后
+         * */
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -635,12 +671,13 @@ public class BankTeacherStudentUI extends JFrame {
         });
 
 
-        //用户确认改变挂失状态
+        /**
+         * 用户确认改变挂失状态
+         * */
         confirmfreezeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 confirmfreeze();
-                System.out.println("*******************");
                 refreshPage();
             }
         });
@@ -714,7 +751,7 @@ public class BankTeacherStudentUI extends JFrame {
     }
 
     /**
-     * 用户通过时间和关键字查询账单,待完善
+     * 用户通过时间和关键字查询账单
      */
     private void billSearch() {
         String selectedMonth = (String) month.getSelectedItem();
@@ -785,7 +822,9 @@ public class BankTeacherStudentUI extends JFrame {
     }
 
     /**
-     * 显示账单表格信息
+     * 显示账单表格信息。
+     *
+     * @param bills 账单数据，二维数组，每行代表一个账单记录
      */
     private void ShowTableData(String[][] bills) {
         //若查询结果为空
@@ -814,6 +853,9 @@ public class BankTeacherStudentUI extends JFrame {
         thisAccount = iBankClientAPI.findBankAccountById(GlobalData.getUID());
     }
 
+    /**
+     * 刷新页面上的信息，包括余额、状态、输入框内容的清空等操作。
+     */
     public void refreshPage() {
         getAccount();
         if(thisAccount!=null){
@@ -848,6 +890,10 @@ public class BankTeacherStudentUI extends JFrame {
 
     }
 
+
+    /**
+     * 自定义表格单元格背景颜色渲染器。
+     */
     static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

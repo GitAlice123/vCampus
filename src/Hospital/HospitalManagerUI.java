@@ -208,6 +208,11 @@ public class HospitalManagerUI extends JFrame {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+                try {
+                    getAllDepartments();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 ShowTableDataModel(departments);
             }
         });

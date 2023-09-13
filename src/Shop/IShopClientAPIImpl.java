@@ -16,7 +16,9 @@ public class IShopClientAPIImpl implements IShopClientAPI {
     private InputStream inputStream;
     private ClientRWTool ClientRWTool = new ClientRWTool();
 
-    //构造函数
+    /**
+     * 构造函数
+     * */
     public IShopClientAPIImpl(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接

@@ -325,7 +325,6 @@ public class HospitalTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, doctorPane, 40, SpringLayout.SOUTH, departmentLabel);
 
 
-        // TODO
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -769,6 +768,8 @@ public class HospitalTeacherStudentUI extends JFrame {
 
     /**
      * 随机生成LENGTH位数字的String类型数据
+     *
+     * @param LENGTH String串长度
      */
     public String generateRandomString(int LENGTH) {
         Random random = new Random();

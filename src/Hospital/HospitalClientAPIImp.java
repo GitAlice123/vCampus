@@ -9,12 +9,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * 医院客户端API的实现类，用于与医院服务器进行通信和交互。
+ */
 public class HospitalClientAPIImp implements HospitalClientAPI {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     private ClientRWTool ClientRWTool = new ClientRWTool();
 
+
+    /**
+     * 构造函数，创建与医院服务器的连接。
+     *
+     * @param serverAddress 服务器地址
+     * @param serverPort    服务器端口号
+     */
     public HospitalClientAPIImp(String serverAddress, int serverPort) {
         try {
             // 创建 Socket 连接
@@ -26,7 +36,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         }
     }
 
-    //500 返回所有department
+
+    /**
+     * 获取所有医院科室信息的方法。 500
+     *
+     * @return 包含所有科室信息的 Department 数组
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Department[] GetAllDepartments() throws IOException {
         try {
@@ -58,7 +74,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return departments;
     }
 
-    //501  根据用户ID返回所有挂号记录
+    /**
+     * 根据用户ID返回所有挂号记录的方法。 501
+     *
+     * @param ID 用户的唯一标识符
+     * @return 包含所有挂号记录的 Register 数组
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Register[] GetRegisterByID(String ID) throws IOException {
         try {
@@ -90,7 +112,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return registers;
     }
 
-    //502 根据ID返回所有未支付挂号
+    /**
+     * 根据用户ID返回所有未支付挂号记录的方法。502
+     *
+     * @param ID 用户的唯一标识符
+     * @return 包含所有未支付挂号记录的 Register 数组
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Register[] GetPaymentByID(String ID) throws IOException {
         try {
@@ -128,7 +156,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return registers;
     }
 
-    //503 根据register创建挂号
+    /**
+     * 根据挂号信息创建挂号记录的方法。503
+     *
+     * @param register 包含挂号信息的 Register 对象
+     * @return 创建挂号是否成功的布尔值
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public boolean CreaatPaymentByInfo(Register register) throws IOException {
         try {
@@ -159,7 +193,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return result;
     }
 
-    //504 支付所选订单
+    /**
+     * 支付指定挂号订单的方法。504
+     *
+     * @param rID 挂号记录的唯一标识符
+     * @return 支付是否成功的布尔值
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public boolean PayAllPayment(String rID) throws IOException {
         try {
@@ -191,7 +231,14 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return result;
     }
 
-    //505 根据科室名称和医生类型寻找挂号
+    /**
+     * 根据科室名称和医生类型寻找挂号的方法。505
+     *
+     * @param type  医生类型
+     * @param level 科室级别
+     * @return 匹配条件的科室数组
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Department[] GetDepartmentByinfo(String type, String level) throws IOException {
         try {
@@ -223,7 +270,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return departments;
     }
 
-    //506 根据科室ID查找科室
+    /**
+     * 根据科室ID查找科室的方法。506
+     *
+     * @param ID 科室的唯一标识符
+     * @return 匹配的科室对象
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Department GetDepartmentByID(String ID) throws IOException {
         try {
@@ -255,7 +308,12 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return department;
     }
 
-    //507 返回所有挂号信息
+    /**
+     * 返回所有挂号信息的方法。507
+     *
+     * @return 包含所有挂号信息的数组
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public Register[] GetAllRegisters() throws IOException {
         try {
@@ -287,7 +345,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
         return registers;
     }
 
-    //508 根据信息新建科室
+    /**
+     * 根据信息新建科室的方法。508
+     *
+     * @param department 要添加的科室信息
+     * @return 新建科室是否成功的布尔值
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public boolean AddDepartmentByInfo(Department department) throws IOException {
         try {
@@ -319,7 +383,13 @@ public class HospitalClientAPIImp implements HospitalClientAPI {
     }
 
 
-    //509 根据科室编号删除科室
+    /**
+     * 根据科室编号删除科室的方法。509
+     *
+     * @param ID 要删除的科室的编号
+     * @return 删除科室是否成功的布尔值
+     * @throws IOException 如果与服务器通信过程中发生 I/O 错误
+     */
     @Override
     public boolean DeleteDepartmentByID(String ID) throws IOException {
         try {

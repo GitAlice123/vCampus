@@ -318,7 +318,9 @@ public class ShopTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.WEST, scrollPane, 100, SpringLayout.WEST, cardPanel);
         springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 40, SpringLayout.SOUTH, searchgoodBtn);
 
-        //商品页面查询按钮
+        /**
+         * 商品页面查询按钮
+         * */
         searchgoodBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -432,7 +434,9 @@ public class ShopTeacherStudentUI extends JFrame {
         springLayout.putConstraint(SpringLayout.WEST, totalamount, 40, SpringLayout.EAST, totalamountLabel);
 
 
-        //购物车页面删除和支付按钮
+        /**
+         * 购物车页面删除和支付按钮
+         * */
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -502,7 +506,11 @@ public class ShopTeacherStudentUI extends JFrame {
     }
 
     /**
-     * 用于购物车增加商品
+     * 向二维数组末尾增加一行数据，用于购物车增加商品。
+     *
+     * @param array 要添加行的二维数组
+     * @param s     要添加的商品信息
+     * @return 添加新行后的二维数组
      */
     public static Object[][] addRowToEnd(Object[][] array, SelectedGood s) {
         String goodName = s.getGoodName();
@@ -548,7 +556,11 @@ public class ShopTeacherStudentUI extends JFrame {
     }
 
     /**
-     * 可用于前端删除购物车物品
+     * 从二维数组中删除指定行，可用于前端删除购物车物品。
+     *
+     * @param array    要删除行的二维数组
+     * @param rowIndex 要删除的行索引
+     * @return 删除指定行后的二维数组
      */
     public static Object[][] deleteRow(Object[][] array, int rowIndex) {
         if (array == null || array.length == 0) {
@@ -589,6 +601,8 @@ public class ShopTeacherStudentUI extends JFrame {
 
     /**
      * 随机生成LENGTH位数字的String类型数据
+     *
+     * @param LENGTH 要生成的String类型的长度
      */
     public String generateRandomString(int LENGTH) {
         Random random = new Random();
@@ -606,6 +620,8 @@ public class ShopTeacherStudentUI extends JFrame {
 
     /**
      * 更新购物车界面选中商品的总金额
+     *
+     * @param selectedRow 当前被选中的行数
      */
     private void updatePurchaseCarAmount(int selectedRow) {
         int rowCount = model3.getRowCount();
@@ -633,6 +649,8 @@ public class ShopTeacherStudentUI extends JFrame {
 
     /**
      * 显示商品的表格信息
+     *
+     * @param data 购买记录数据，二维数组，每行代表一个商品
      */
     private void ShowTableDataModel(String[][] data) {
         //若查询结果为空
@@ -658,6 +676,8 @@ public class ShopTeacherStudentUI extends JFrame {
 
     /**
      * 显示购买记录的表格信息
+     *
+     * @param data 购买记录数据，二维数组，每行代表一个购买记录
      */
     private void ShowTableDataModel2(String[][] data) {
         //若查询结果为空
@@ -680,6 +700,8 @@ public class ShopTeacherStudentUI extends JFrame {
 
     /**
      * 显示购物车的表格信息
+     *
+     * @param data 购买记录数据，二维数组，每行代表一个购物车商品信息
      */
     private void ShowTableDataModel3(Object[][] data) {
         //若查询结果为空
@@ -719,7 +741,9 @@ public class ShopTeacherStudentUI extends JFrame {
         AllGoods = iShopClientAPI.getAllGoodsST();
     }
 
-    // 商品页面”加入购物车“的按钮相关类
+    /**
+     * 商品页面”加入购物车“的按钮相关类
+     * */
     class TableCellRendererButton implements TableCellRenderer {
         JButton button = new JButton("加入购物车");
 
@@ -1042,6 +1066,9 @@ public class ShopTeacherStudentUI extends JFrame {
             springLayout.putConstraint(SpringLayout.WEST, confirmpurchaseBtn, 225, SpringLayout.WEST, cardpaymentPanel);
             springLayout.putConstraint(SpringLayout.NORTH, confirmpurchaseBtn, 60, SpringLayout.SOUTH, pwdLabel);
 
+            /**
+             * 支付按钮
+             * */
             confirmpurchaseBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

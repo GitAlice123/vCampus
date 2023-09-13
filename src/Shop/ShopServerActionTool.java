@@ -19,6 +19,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应findGoodST
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action900(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -53,6 +56,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应查询商品管理员findGoodM
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action901(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -87,6 +93,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应加入购物车addSelectedGood
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action902(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -122,6 +131,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应getSelectedGood前端获取购物车数据
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action903(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -156,6 +168,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应getAllGoodsST学生界面获取所有商品
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action904(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -198,6 +213,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应getAllGoodsM管理员界面获取所有商品
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action905(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -232,6 +250,9 @@ public class ShopServerActionTool {
 
     /**
      * 管理员进货ManagerAddGood
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action906(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -267,6 +288,9 @@ public class ShopServerActionTool {
 
     /**
      * 管理员退货ManagerReduceGood
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action907(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -303,6 +327,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应getAllPurchaseRecord获取所有购买记录，管理员
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action908(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -337,6 +364,9 @@ public class ShopServerActionTool {
 
     /**
      * 查找并返回数据库中一卡通号为uId的所有购买记录信息,对应getPurchaseRecordById获取所有购买记录，学生
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action909(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -371,6 +401,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应管理员进货界面用的findGoodAllInfo
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action910(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -406,6 +439,9 @@ public class ShopServerActionTool {
 
     /**
      * 对应删除购物车中商品函数removeSelectedGood
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action911(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -441,6 +477,9 @@ public class ShopServerActionTool {
 
     /**
      * addPurchaseRecord增加购买记录
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action912(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象

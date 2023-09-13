@@ -20,6 +20,9 @@ public class bankServerActionTool {
 
     /**
      * 对应changeLoss
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1000(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -54,6 +57,9 @@ public class bankServerActionTool {
 
     /**
      * 对应充值recharge
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1001(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -90,6 +96,9 @@ public class bankServerActionTool {
 
     /**
      * 对应非强制消费consume
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1002(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -131,6 +140,9 @@ public class bankServerActionTool {
 
     /**
      * 对应修改密码changePwd
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1003(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -167,7 +179,10 @@ public class bankServerActionTool {
     }
 
     /**
-     * 对应查询账单功能
+     * 处理查询账单功能（1004操作码）。
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1004(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -206,6 +221,9 @@ public class bankServerActionTool {
 
     /**
      * 通过id查找account
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1005(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -240,6 +258,9 @@ public class bankServerActionTool {
 
     /**
      * 管理员获取账户信息
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1006(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -274,6 +295,9 @@ public class bankServerActionTool {
 
     /**
      * 对应新建bankAccount
+     *
+     * @param jsonData     包含查询信息的JSON数据
+     * @param clientSocket 与客户端通信的套接字
      */
     public void Action1007(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象

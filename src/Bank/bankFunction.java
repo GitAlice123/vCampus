@@ -6,6 +6,7 @@ import view.Global.GlobalData;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 
 
 public class bankFunction {
@@ -32,7 +33,10 @@ public class bankFunction {
                 bADao.recharge(id, money);
 
                 //重新获取数据库最新数据然后显示余额弹窗
-                thisAccount = bADao.findBankAccountById(GlobalData.getUID());
+                thisAccount = bADao.findBankAccountById(id);
+                //增加订单信息
+                bankBill bill=new bankBill("银行充值",generateRandomString(20), thisAccount.getCardId(), id,new Date(),true,money);
+                AddBankBill(bill);
                 result = thisAccount.getBalance();//若成功，返回余额
 
             } else if (!bADao.isLoss(id)) {
@@ -290,6 +294,10 @@ public class bankFunction {
 
             for (int i = 0; i < accounts.length; i++) {
                 bankAccount account = accounts[i];
+                if(account==null)
+                {
+                    return null;
+                }
 
                 accountStrings[i][0] = account.getCardId();
                 accountStrings[i][1] = account.getName();
@@ -306,8 +314,33 @@ public class bankFunction {
         }
     }
 
-
+    /**
+     * 向银行账户列表中添加一个银行账户。
+     *
+     * @param bankaccount 要添加的银行账户
+     * @return 如果成功添加银行账户，则返回true；否则返回false
+     */
     public boolean addBankAccount(bankAccount bankaccount) {
         return bADao.addBankAccount(bankaccount);
     }
+
+    /**
+     * 随机生成LENGTH位数字的String类型数据
+     *
+     * @param LENGTH 要生成的String类型的长度
+     */
+    public String generateRandomString(int LENGTH) {
+        Random random = new Random();
+        String DIGITS = "0123456789";
+        StringBuilder stringBuilder = new StringBuilder(LENGTH);
+
+        for (int i = 0; i < LENGTH; i++) {
+            int randomIndex = random.nextInt(DIGITS.length());
+            char randomChar = DIGITS.charAt(randomIndex);
+            stringBuilder.append(randomChar);
+        }
+
+        return stringBuilder.toString();
+    }
+
 }

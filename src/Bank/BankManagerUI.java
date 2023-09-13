@@ -60,11 +60,13 @@ public class BankManagerUI extends JFrame {
     JPanel BottomPanel=new JPanel();
 
 
+    /**
+     * 自定义表格单元格渲染器，用于显示挂失/解挂按钮。
+     */
     class TableCellRendererButton extends JButton implements TableCellRenderer {
 
         public TableCellRendererButton() {
-//            setOpaque(true);
-//            setFont(new Font("楷体", Font.PLAIN, 25));
+            // 此处可以进行构造函数的初始化操作
         }
 
         @Override
@@ -79,6 +81,9 @@ public class BankManagerUI extends JFrame {
         }
     }
 
+    /**
+     * 自定义表格单元格编辑器，用于挂失/解挂按钮的交互。
+     */
     class TableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
@@ -114,8 +119,8 @@ public class BankManagerUI extends JFrame {
         public Object getCellEditorValue() {
             return null;
         }
-
     }
+
     public BankManagerUI() {
         super("银行");
 
@@ -138,6 +143,9 @@ public class BankManagerUI extends JFrame {
         topPanel.add(informationBtn);
         topPanel.add(feesBtn);
 
+        /**
+         * 导航栏：信息查询
+         * */
         informationBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,6 +154,10 @@ public class BankManagerUI extends JFrame {
                 ShowTableData(accounts);
             }
         });
+
+        /**
+         * 导航栏：学杂费
+         * */
         feesBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -245,6 +257,9 @@ public class BankManagerUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String uID=searchField.getText();
                 getAccount(uID);
+                if(accounts==null){
+                    JOptionPane.showMessageDialog(cardPanel, "查询结果为空！");
+                }
                 ShowTableData(accounts);
             }
         });
@@ -354,6 +369,9 @@ public class BankManagerUI extends JFrame {
         model.fireTableDataChanged();
     }
 
+    /**
+     * 刷新页面上的信息，包括余额、状态、输入框内容的清空等操作。
+     */
     public void refreshPage(){
         searchField.setText("");
         type.setSelectedIndex(0);
@@ -363,6 +381,8 @@ public class BankManagerUI extends JFrame {
 
     /**
      * 随机生成LENGTH位数字的String类型数据
+     *
+     * @param LENGTH 要生成的String类型数据的长度
      */
     public String generateRandomString(int LENGTH) {
         Random random = new Random();

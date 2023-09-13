@@ -132,7 +132,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         }
 
 //      处理结果
-        int result = intMessage.getInt();
+        int result = intMessage.getNum();
         return result;
     }
 
@@ -244,7 +244,7 @@ public class IBankClientAPIImpl implements IBankClientAPI {
         }
 
 //      处理结果
-        int result = intMessage.getInt();
+        int result = intMessage.getNum();
         return result;
     }
 
@@ -399,7 +399,12 @@ public class IBankClientAPIImpl implements IBankClientAPI {
     }
 
 
-    //1007
+    /**
+     * 添加银行账户（1007操作码）。
+     *
+     * @param bankaccount 要添加的银行账户
+     * @return 如果成功添加银行账户，则返回true；否则返回false
+     */
     public boolean addBankAccount(bankAccount bankaccount) {
         //以下发送用户id给服务器
         try {

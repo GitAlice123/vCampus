@@ -214,7 +214,7 @@ public class CourseSelectClientAPIImp implements CourseSelectClientAPI{
 
 //      将 JSON 数据转换为对象
         IntMessage RespMessage = objectMapper.readValue(mess, IntMessage.class);
-        int result=RespMessage.getInt();
+        int result=RespMessage.getNum();
 //      处理结果
         return result;
     }

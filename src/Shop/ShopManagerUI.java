@@ -564,6 +564,8 @@ public class ShopManagerUI extends JFrame {
 
     /**
      * 显示商品的表格信息
+     *
+     * @param data 购买记录数据，二维数组，每行代表一个购买记录
      */
     private void ShowTableDataModel(String[][] data) {
         //若查询结果为空
@@ -585,7 +587,9 @@ public class ShopManagerUI extends JFrame {
     }
 
     /**
-     * 显示购买记录的表格信息
+     * 显示购买记录的表格信息。
+     *
+     * @param data 购买记录数据，二维数组，每行代表一个购买记录
      */
     private void ShowTableDataModel2(String[][] data) {
         //若查询结果为空

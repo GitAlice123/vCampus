@@ -80,5 +80,11 @@ public interface IBankClientAPI {
      */
     String[][] findBankAccounts(String id);
 
+    /**
+     * 添加银行账户（1007操作码）。
+     *
+     * @param bankaccount 要添加的银行账户
+     * @return 如果成功添加银行账户，则返回true；否则返回false
+     */
     boolean addBankAccount(bankAccount bankaccount);
 }
