@@ -184,6 +184,14 @@ public class RegisterUI extends JFrame {
     public JTextField getUserNameTxt() {
         return userNameTxt;
     }
+
+    /**
+     * @return 用户名的文本信息
+     */
+    public JTextField getNameTxt() {
+        return nameField;
+    }
+
     /**
      * @return 密码的文本信息
      */

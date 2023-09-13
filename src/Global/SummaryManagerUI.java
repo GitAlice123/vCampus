@@ -122,6 +122,7 @@ public class SummaryManagerUI extends JFrame
             public void actionPerformed(ActionEvent e) {
                 NoticeClientAPI noticeClientAPI=new NoticeClientAPIImpl("localhost", 8888);
                 String input=textarea.getText();
+                System.out.println("input:::::是"+input);
                 boolean flag=noticeClientAPI.editNotice(input);
                 if(flag){
                     JOptionPane.showMessageDialog(centerPanel, "成功发布！");
@@ -171,6 +172,10 @@ public class SummaryManagerUI extends JFrame
         springLayout.putConstraint(SpringLayout.WEST,chatBtn,40,SpringLayout.WEST,centerPanel);
         springLayout.putConstraint(SpringLayout.NORTH,chatBtn,40,SpringLayout.SOUTH,bankBtn);
 
+        //显示公告
+        NoticeClientAPI noticeClientAPI=new NoticeClientAPIImpl("localhost", 8888);
+        String text=noticeClientAPI.getNotice();
+        textarea.setText(text);
 
         mp = new MyJPanel();
         mp.setPreferredSize(new Dimension(600,399));

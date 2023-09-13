@@ -1,6 +1,9 @@
 package view.CourseSelection;
 
 
+
+import view.Global.GlobalData;
+import view.Global.SummaryStudentTeacherUI;
 import view.SchoolRolls.StudentInfo;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
@@ -161,6 +164,71 @@ public class CurriculumTeacherUI extends JFrame {
         }
     }
 
+    DefaultTableModel model = new DefaultTableModel();
+    JTable tableOfClasses = new JTable();//显示课程班的表格
+    JLabel title=new JLabel("教学班");
+    String[][] classdata = {};
+    JButton backBtn=new JButton("退出");
+    public CurriculumTeacherUI() throws IOException {
+        super("选课系统");
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
+        String[] columnNames ={"课程班编号","课程名称","上课地点","当前班级人数","上课时间","本班学生"};
+        InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
+        CourseClass[] classes=infoClientAPI.SearchCourseClassByTeacherID(id);
+        if(classes[0]!=null)
+        classdata =classtostring(classes);
+        model.setDataVector(classdata, columnNames);
+        tableOfClasses.setModel(model);
+        tableOfClasses.setRowHeight(30);
+        JTableHeader tab_header = tableOfClasses.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
+        tableOfClasses.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        tableOfClasses.getColumnModel().getColumn(5).setCellRenderer(new TeacherTableCellRendererButton());
+        tableOfClasses.getColumnModel().getColumn(5).setCellEditor(new TeacherTableCellEditorButton());
+        //table.setEnabled(false);
+
+        // 设置特定单元格不可编辑
+        //tableModel.setCellEditable(1, 2, false);
+        //loginHandler=new logInHandler(this);
+        JScrollPane scrollPane = new JScrollPane(tableOfClasses);
+        scrollPane.setPreferredSize(new Dimension(1000, 600)); // 设置滚动面板的大小
+        Container contentPane=getContentPane();//获取控制面板
+
+        contentPane.setLayout(new BorderLayout());
+
+        contentPane.add(TopPanel,BorderLayout.NORTH);
+        contentPane.add(BottomPanel,BorderLayout.SOUTH);
+        contentPane.add(panel1,BorderLayout.CENTER);
+        title.setFont(new Font("楷体",Font.PLAIN,40));
+        panel1.add(scrollPane);
+
+        tableOfClasses.setFont(new Font("楷体",Font.PLAIN,25));
+        backBtn.setPreferredSize(new Dimension(100,40));
+        backBtn.setFont(new Font("楷体",Font.PLAIN,25));
+        TopPanel.add(title);
+        BottomPanel.add(backBtn);
+
+
+        springLayout.putConstraint(SpringLayout.NORTH,scrollPane,30,SpringLayout.NORTH,panel1);
+        springLayout.putConstraint(SpringLayout.WEST,scrollPane,100,SpringLayout.WEST,panel1);
+
+
+
+
+
+        setSize(1200,800);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible((true));
+    }
     class TeacherClassStudentsUI extends JFrame {//显示本班学生界面
         SpringLayout springLayout = new SpringLayout();
         JPanel ClassStudentsTopPanel = new JPanel();

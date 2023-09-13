@@ -689,17 +689,18 @@ public class BankTeacherStudentUI extends JFrame {
 
     public void refreshPage() {
         getAccount();
-        // 刷新余额显示
-        balance.setText("￥" + Double.toString(thisAccount.getBalance()));
-        account.setText(thisAccount.getCardId());
-        name.setText(thisAccount.getName());
-        id.setText(thisAccount.getId());
-        id2.setText(thisAccount.getId());
-        balance2.setText("￥" + thisAccount.getBalance());
-        status.setText(thisAccount.isLoss() ? "正常" : "已挂失");
-        System.out.println("--------------");
-        System.out.println(Boolean.toString(thisAccount.isLoss()));
-
+        if(thisAccount!=null){
+            // 刷新余额显示
+            balance.setText("￥" + Double.toString(thisAccount.getBalance()));
+            account.setText(thisAccount.getCardId());
+            name.setText(thisAccount.getName());
+            id.setText(thisAccount.getId());
+            id2.setText(thisAccount.getId());
+            balance2.setText("￥" + thisAccount.getBalance());
+            status.setText(thisAccount.isLoss() ? "正常" : "已挂失");
+            System.out.println("--------------");
+            System.out.println(Boolean.toString(thisAccount.isLoss()));
+        }
 
         // 清空输入框内容
         amountField.setText("");

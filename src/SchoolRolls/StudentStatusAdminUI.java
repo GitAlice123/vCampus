@@ -1,5 +1,6 @@
 package view.SchoolRolls;
 
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -35,6 +36,13 @@ public class StudentStatusAdminUI extends JFrame {
     public StudentStatusAdminUI() throws IOException {
         super("学生学籍系统");
 
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
         //loginHandler=new logInHandler(this);
         // 创建表格的列名数组
         String[] columnNames = {"一卡通号", "学号", "姓名", "性别", "出生年月", "入学年份", "学院", "删除", "修改"};
@@ -94,6 +102,46 @@ public class StudentStatusAdminUI extends JFrame {
         springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 10, SpringLayout.SOUTH, FindTex);
 
 
+
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
+        FindBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                InfoClientAPI clientAPI=new InfoClientAPIImp("localhost",8888);
+
+                StudentInfo info=null;
+                String id=getFindTex().getText();
+                try {
+                    info=clientAPI.SearchStuInfoByID(id);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                String[][] src=new String[1][7];
+                    src[0][0]=info.getCardID();
+                    src[0][1]=info.getID();
+                    src[0][2]=info.getName();
+                    src[0][3]=info.getSex();
+                    src[0][4]= String.valueOf(info.getBirth());
+                    src[0][5]= String.valueOf(info.getGrade());
+                    src[0][6]= info.getCollege();
+                // 创建JTable对象并传入数据和列名
+                data=src;
+                String[] columnNames = {"一卡通号", "学号", "姓名","性别","出生年月","入学年份","学院","删除","修改"};
+                model.setDataVector(data, columnNames);
+                table.setModel(model);
+                table.getColumnModel().getColumn(7).setCellRenderer(new InfoDeleteTableCellRendererButton());
+                table.getColumnModel().getColumn(7).setCellEditor(new InfoDeleteTableCellEditorButton());
+                table.getColumnModel().getColumn(8).setCellRenderer(new InfoChangeTableCellRendererButton());
+                table.getColumnModel().getColumn(8).setCellEditor(new InfoChangeTableCellEditorButton());
+                scrollPane.setPreferredSize(new Dimension(580, 250)); // 设置滚动面板的大小
+            }
+        });
         AddStudentBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

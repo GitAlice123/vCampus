@@ -1,5 +1,7 @@
 package view.CourseSelection;
 
+import view.Global.SummaryStudentTeacherUI;
+import view.Login.User;
 import view.SchoolRolls.StudentInfo;
 import view.connect.CourseSelectClientAPI;
 import view.connect.CourseSelectClientAPIImp;
@@ -419,6 +421,13 @@ public class CurriculumAdminUI extends JFrame {
         //studentdata
         public AdminShowClassesStuUI() {
             super("选课系统");
+            backBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                    new SummaryStudentTeacherUI();
+                }
+            });
             JLabel imageLabel = new JLabel();
             try {
                 // 加载图片

@@ -1,6 +1,8 @@
 package view.SchoolRolls;
 
 import view.CourseSelection.Course;
+import view.Global.GlobalData;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -44,11 +46,18 @@ public class StudentStatusUI extends JFrame {
     JTextField FindTex = new JTextField();//查询课程编号或名称输入框
     public StudentStatusUI() throws IOException {
         super("学生学籍系统");
-        StudentInfo info = new StudentInfo("15177", "54321", "male", "jacky", new Date(0), 21, "CS");
-        InfoClientAPI infoClientAPI1 = new InfoClientAPIImp("localhost", 8888);
-        boolean result = infoClientAPI1.AddStuInfo(info);
-        InfoClientAPI infoClientAPI2 = new InfoClientAPIImp("localhost", 8888);
-        StudentInfo tar = infoClientAPI2.SearchStuInfoByID("15177");
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
+        StudentInfo info=new StudentInfo("15177","54321","male","jacky",new Date(0),21,"CS");
+        InfoClientAPI infoClientAPI1=new InfoClientAPIImp("localhost", 8888);
+        boolean result=infoClientAPI1.AddStuInfo(info);
+        InfoClientAPI infoClientAPI2=new InfoClientAPIImp("localhost", 8888);
+        StudentInfo tar=infoClientAPI2.SearchStuInfoByID(GlobalData.getUID());
         setCard_id(tar.getCardID());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String BirthString = sdf.format(tar.getBirth());

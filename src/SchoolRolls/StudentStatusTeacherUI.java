@@ -1,6 +1,8 @@
 package view.SchoolRolls;
 
 import view.CourseSelection.CourseClass;
+import view.Global.GlobalData;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.InfoClientAPI;
 import view.connect.InfoClientAPIImp;
 
@@ -516,6 +518,109 @@ public class StudentStatusTeacherUI extends JFrame {//老师登录进学生学�
 
 
     }
+
+    //第一个ui
+    public StudentStatusTeacherUI() throws IOException {
+        super("学生学籍系统");
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
+        InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost", 8888);
+        //第一个请求
+        String[] columnNames ={"课程编号","课程班编号","上课地点","当前班级人数","上课时间","本班学生"};
+        String ID= GlobalData.getUID();//全局变量，未完成
+        CourseClass[] classes=infoClientAPI.SearchCourseClassByTeacherID(ID);
+        /*
+        String[] IDs = {"123", "321"};
+        CourseClass[] classes = new CourseClass[2];
+        classes[0] = new CourseClass("123", "123", "123", "Room101", 40, 32, "10:00AM-12:00PM", IDs);
+        classes[1] = classes[0];*/
+        classNums =new String[classes.length];
+        classIDs=new String[classes.length];
+        classStudents=new String[classes.length][100];
+        classMaxs=new String[classes.length];
+        classPlaces=new String[classes.length];
+        classTemps=new String[classes.length];
+        classTeachers=new String[classes.length];
+        classTimes=new String[classes.length];
+        //
+        for(int i=0;i<classes.length;i++){
+            classTeachers[i]=classes[i].getClassTeacher();
+            classPlaces[i]=classes[i].getClassPlace();
+            classMaxs[i]=Integer.toString(classes[i].getClassMax());
+            classTimes[i]=classes[i].getClassTime();
+            classTemps[i]=Integer.toString(classes[i].getClassTemp());
+            classIDs[i]=classes[i].getClassID();
+            classNums[i]=classes[i].getCourseID();
+            classStudents[i]=classes[i].getClassStudent();
+        }
+        coursedata =new String[classes.length][5];
+        for (int i = 0; i < classes.length; i++) {
+            coursedata[i][0]=classNums[i];
+            coursedata[i][1]=classIDs[i];
+            coursedata[i][2]=classPlaces[i];
+            coursedata[i][3]=classTemps[i];
+            coursedata[i][4]=classTimes[i];
+        }
+        model.setDataVector(coursedata, columnNames);
+        coursetable.setModel(model);
+        coursetable.setModel(model);
+        coursetable.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        coursetable.setRowHeight(30);
+        JTableHeader tab_header = coursetable.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
+        coursetable.getColumnModel().getColumn(5).setCellRenderer(new TableCellRendererButton());
+        coursetable.getColumnModel().getColumn(5).setCellEditor(new TableCellEditorButton());
+
+        //       JScrollPane scrollPane = new JScrollPane(table);
+//        ClassPanel.add(scrollPane);
+//        ClassPanel.setBounds(100, 100, 300, 200);
+//        ClassPanel.setVisible(true);
+        JScrollPane scrollPane = new JScrollPane(coursetable);
+        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
+
+        Container contentPane=getContentPane();//获取控制面板
+
+        contentPane.setLayout(new BorderLayout());
+        CardLayout cardLayout=new CardLayout();
+        contentPane.add(TopPanel,BorderLayout.NORTH);
+        contentPane.add(BottomPanel,BorderLayout.SOUTH);
+        contentPane.add(panel1,BorderLayout.CENTER);
+
+        panel1.setLayout(cardLayout);//卡片式布局
+        panel1.add(ClassPanel,"ClassPanel");
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        coursetable.setFont(centerFont);
+        ClassBtn.setFont(centerFont);
+        backBtn.setFont(centerFont);
+        ClassBtn.setPreferredSize(new Dimension(200,40));
+        backBtn.setPreferredSize(new Dimension(100,40));
+
+        TopPanel.add(ClassBtn);
+        BottomPanel.add(backBtn);
+        ClassPanel.add(scrollPane);
+
+        springLayout.putConstraint(SpringLayout.NORTH,scrollPane,60,SpringLayout.NORTH,ClassPanel);
+        springLayout.putConstraint(SpringLayout.WEST,scrollPane,100,SpringLayout.WEST,ClassPanel);
+        ClassBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                cardLayout.show(panel1,"ClassPanel");
+            }
+        });
+        setSize(1200,800);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible((true));
+    }
+
 
     private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
         @Override

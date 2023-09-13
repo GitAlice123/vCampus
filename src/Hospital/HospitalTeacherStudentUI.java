@@ -165,8 +165,8 @@ public class HospitalTeacherStudentUI extends JFrame {
         doctortable.setFont(new Font("楷体", Font.PLAIN, 20));
         model.setDataVector(registerdata, registerheader);
         doctortable.setModel(model);
-        doctortable.getColumnModel().getColumn(6).setCellRenderer(new HospitalTeacherStudentUI.TableCellRendererButton());
-        doctortable.getColumnModel().getColumn(6).setCellEditor(new HospitalTeacherStudentUI.TableCellEditorButton());
+        doctortable.getColumnModel().getColumn(6).setCellRenderer(new TableCellRendererButton());
+        doctortable.getColumnModel().getColumn(6).setCellEditor(new TableCellEditorButton());
         JScrollPane doctorPane = new JScrollPane(doctortable);
         doctortable.setRowHeight(30);
         doctorPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
@@ -295,8 +295,8 @@ public class HospitalTeacherStudentUI extends JFrame {
         purchaseheader = new String[]{"挂号编号", "科室类型", "挂号时间", "金额", "操作"};
         model3.setDataVector(good, purchaseheader);
         purchasetable.setModel(model3);
-        purchasetable.getColumnModel().getColumn(4).setCellRenderer(new HospitalTeacherStudentUI.CheckBoxRenderer());
-        purchasetable.getColumnModel().getColumn(4).setCellEditor(new HospitalTeacherStudentUI.CheckBoxEditor());
+        purchasetable.getColumnModel().getColumn(4).setCellRenderer(new CheckBoxRenderer());
+        purchasetable.getColumnModel().getColumn(4).setCellEditor(new CheckBoxEditor());
 
         purchasetable.setRowHeight(30);
         purchasepane = new JScrollPane(purchasetable);
@@ -334,7 +334,7 @@ public class HospitalTeacherStudentUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //支付选中的商品
-                new HospitalTeacherStudentUI.purchasewindow();
+                new purchasewindow();
             }
         });
 
@@ -567,8 +567,8 @@ public class HospitalTeacherStudentUI extends JFrame {
         }
         // 通知表格模型数据发生变化，刷新表格显示
         model.fireTableDataChanged();
-        doctortable.getColumnModel().getColumn(6).setCellRenderer(new HospitalTeacherStudentUI.TableCellRendererButton());
-        doctortable.getColumnModel().getColumn(6).setCellEditor(new HospitalTeacherStudentUI.TableCellEditorButton());
+        doctortable.getColumnModel().getColumn(6).setCellRenderer(new TableCellRendererButton());
+        doctortable.getColumnModel().getColumn(6).setCellEditor(new TableCellEditorButton());
     }
 
     /**
@@ -615,8 +615,8 @@ public class HospitalTeacherStudentUI extends JFrame {
         // 通知表格模型数据发生变化，刷新表格显示
         model3.fireTableDataChanged();
 
-        purchasetable.getColumnModel().getColumn(4).setCellRenderer(new HospitalTeacherStudentUI.CheckBoxRenderer());
-        purchasetable.getColumnModel().getColumn(4).setCellEditor(new HospitalTeacherStudentUI.CheckBoxEditor());
+        purchasetable.getColumnModel().getColumn(4).setCellRenderer(new CheckBoxRenderer());
+        purchasetable.getColumnModel().getColumn(4).setCellEditor(new CheckBoxEditor());
     }
 
     /**
@@ -691,7 +691,7 @@ public class HospitalTeacherStudentUI extends JFrame {
 
                     clickedRow = (int) clickedButton.getClientProperty("row");
 
-                    new HospitalTeacherStudentUI.choosetimewindow(clickedRow);
+                    new choosetimewindow(clickedRow);
 
                 }
             });

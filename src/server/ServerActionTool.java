@@ -1130,7 +1130,7 @@ public class ServerActionTool {
      * @param jsonData
      * @param clientSocket
      */
-    public void Action801(String jsonData, Socket clientSocket) {
+    public void Action800(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
         jsonData = jsonData.replaceAll("^\\[|]$", "");
@@ -1141,7 +1141,7 @@ public class ServerActionTool {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Into object 801");
+        System.out.println("Into object 800");
 
         noticeDao noticeDao=new noticeDao();
         String result=noticeDao.getNotice();
@@ -1157,6 +1157,44 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * 管理员发布公告
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
+    public void Action801(String jsonData, Socket clientSocket) {
+        // 创建 ObjectMapper 对象
+        ObjectMapper objectMapper = new ObjectMapper();
+        jsonData = jsonData.replaceAll("^\\[|]$", "");
+        // 将 JSON 数据还原为对象
+        UniqueMessage uniqueMessage = null;
+        try {
+            uniqueMessage = objectMapper.readValue(jsonData, UniqueMessage.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Into object 801");
+
+        noticeDao noticeDao=new noticeDao();
+        String text=uniqueMessage.getUniMessage();
+        boolean result=noticeDao.editNotice(text);
+
+
+        BoolRespMessage respMessage=new BoolRespMessage(result);
+        //下面将response信息返回客户端
+        try {
+            // 将 LoginMessage 对象转换为 JSON 字符串
+            String outputData = objectMapper.writeValueAsString(respMessage);
+            OutputStream outputStream = clientSocket.getOutputStream();
+            rwTool.ServerSendOutStream(outputStream, outputData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     /**

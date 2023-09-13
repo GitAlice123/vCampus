@@ -61,7 +61,7 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
 
     private void extracted() throws IOException {
         String userId = registerView.getUserNameTxt().getText();
-        String name=registerView.getUserNameTxt().getText();
+        String name=registerView.getNameTxt().getText();
         String password = registerView.getPwdField().getText();
         String ensurepsd = registerView.getEnsurepwdField().getText();
 
@@ -104,10 +104,12 @@ public class RegisterHandler extends KeyAdapter implements ActionListener {
 
                 if (check) {
 
-                    //自动添加对应的银行账户，初始付款密码为000000，余额为0
-                    bankAccount bankA=new bankAccount(generateRandomString(6),name,userId,"000000",0.00,true);
-                    IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
-                    iBankClientAPI.addBankAccount(bankA);
+                    //用户和老师身份自动添加对应的银行账户，初始付款密码为000000，余额为0
+                    if(role=="ST"||role=="TC"){
+                        bankAccount bankA=new bankAccount(generateRandomString(6),name,userId,"000000",0.00,true);
+                        IBankClientAPI iBankClientAPI = new IBankClientAPIImpl("localhost", 8888);
+                        iBankClientAPI.addBankAccount(bankA);
+                    }
                     JOptionPane.showMessageDialog(registerView, "新用户注册成功！");
                 }
             }

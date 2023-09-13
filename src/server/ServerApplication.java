@@ -261,6 +261,16 @@ public class ServerApplication {
                         serverActionTool.Action509(jsonData, clientSocket);
                         break;
                     }
+                    case 800: {
+                        //用户读公告
+                        serverActionTool.Action800(jsonData, clientSocket);
+                        break;
+                    }
+                    case 801: {
+                        //管理员发公告
+                        serverActionTool.Action801(jsonData, clientSocket);
+                        break;
+                    }
                     case 900: {
                         // 根据商品ID或商品名称查询商品信息，供学生使用 900
                         // 根据消息的类型决定服务器要采取的动作

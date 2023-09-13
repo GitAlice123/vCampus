@@ -1,5 +1,7 @@
 package view.CourseSelection;
 
+import view.Global.GlobalData;
+import view.Global.SummaryStudentTeacherUI;
 import view.connect.CourseSelectClientAPI;
 import view.connect.CourseSelectClientAPIImp;
 
@@ -362,6 +364,125 @@ public class CurriculumStudentUI extends JFrame {
         }
 
 
+    }
+
+    public CurriculumStudentUI() throws IOException {
+        super("选课系统");
+
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new SummaryStudentTeacherUI();
+            }
+        });
+        String[] columnNames ={"课程编号","课程名称","教学班个数","课程学时","课程类型","学分","显示教学班"};
+        String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
+        //String ID=GlobalData.getUID();//未完成
+        id= GlobalData.getUID();//未完成
+        CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost", 8888);
+        Course[] courses=clientAPI.GetAllCourse();
+        /*Course[] courses=new Course[2];
+        courses[0]=new Course("123","123", Course.CourseType.Optional,3.0,4,99);
+        courses[1]=new Course("321","321", Course.CourseType.Optional,3.0,4,99);
+        */
+        String[][] src=coursestostring(courses);
+        CourseSelectClientAPI clientAPI1=new CourseSelectClientAPIImp("localhost",8888);
+        CourseClass[] classes=clientAPI1.SearchSelectClassByID(id);
+        if(classes==null)
+            selectclassdata= new String[][]{
+                    {"", "", "", "", "", "",""}
+            };
+        else selectclassdata=classtostring(classes);
+        allcoursedata =src;
+        model.setDataVector(allcoursedata, columnNames);
+        Allcoursetable.setModel(model);
+        Allcoursetable.setRowHeight(30);
+        JTableHeader tab_header = Allcoursetable.getTableHeader();					//获取表头
+        tab_header.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));	//修改表头的高度
+        Allcoursetable.getColumnModel().getColumn(6).setCellRenderer(new ShowCoursesTableCellRendererButton());
+        Allcoursetable.getColumnModel().getColumn(6).setCellEditor(new ShowCoursesTableCellEditorButton());
+        Allcoursetable.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+
+        modelChosen.setDataVector(selectclassdata, columnNamesChosen);
+        Chosentable.setModel(modelChosen);
+        Chosentable.setRowHeight(30);
+        JTableHeader tab_headerChosen = Chosentable.getTableHeader();					//获取表头
+        tab_headerChosen.setFont(new Font("楷体",Font.PLAIN,25));
+        tab_headerChosen.setPreferredSize(new Dimension(tab_headerChosen.getWidth(), 30));	//修改表头的高度
+        Chosentable.getColumnModel().getColumn(4).setCellRenderer(new DeleteClassTableCellRendererButton());
+        Chosentable.getColumnModel().getColumn(4).setCellEditor(new DeleteClassTableCellEditorButton());
+        Chosentable.setDefaultRenderer(Object.class, new TableBackgroundColorRenderer());
+        JScrollPane scrollPane = new JScrollPane(Allcoursetable);
+        scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
+        JScrollPane scrollPaneChosen = new JScrollPane(Chosentable);
+        scrollPaneChosen.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
+        //loginHandler=new logInHandler(this);
+
+        Container contentPane=getContentPane();//获取控制面板
+        contentPane.setLayout(new BorderLayout());
+        CardLayout cardLayout = new CardLayout();
+        contentPane.add(TopPanel, BorderLayout.NORTH);
+        contentPane.add(BottomPanel, BorderLayout.SOUTH);
+        contentPane.add(panel1, BorderLayout.CENTER);
+        panel1.setLayout(cardLayout);//卡片式布局
+        panel1.add(CoursesPanel, "CoursesPanel");
+        panel1.add(ChosenPanel, "ChosenPanel");
+        backBtn.setPreferredSize(new Dimension(100, 40));
+        CoursesBtn.setPreferredSize(new Dimension(200, 40));
+        ChosenBtn.setPreferredSize(new Dimension(200, 40));
+        TopPanel.add(CoursesBtn);
+        TopPanel.add(ChosenBtn);
+        Font centerFont=new Font("楷体",Font.PLAIN,25);//设置中间组件的文字大小、字体
+        backBtn.setFont(centerFont);
+        CoursesBtn.setFont(centerFont);
+        ChosenBtn.setFont(centerFont);
+        Allcoursetable.setFont(centerFont);
+        Chosentable.setFont(centerFont);
+
+        BottomPanel.add(backBtn);
+        CoursesPanel.add(scrollPane);
+        ChosenPanel.add(scrollPaneChosen);
+        CoursesBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(panel1,"CoursesPanel");
+            }
+        });
+        ChosenBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CourseSelectClientAPI courseSelectClientAPI=new CourseSelectClientAPIImp("localhost",8888);
+                CourseClass[] courseClasses=null;
+                try {
+                    courseClasses=courseSelectClientAPI.SearchSelectClassByID(id);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                if(courseClasses!=null)
+                selectclassdata= classtostring(courseClasses);
+                String[] columnNamesChosen ={"课程班编号","任课教师","上课地点","上课时间","退选"};
+                DefaultTableModel newmodel=new DefaultTableModel(selectclassdata,columnNamesChosen);
+                Chosentable.setModel(newmodel);//未完成，按钮
+                Chosentable.getColumnModel().getColumn(4).setCellRenderer(new DeleteClassTableCellRendererButton());
+                Chosentable.getColumnModel().getColumn(4).setCellEditor(new DeleteClassTableCellEditorButton());
+                cardLayout.show(panel1,"ChosenPanel");
+            }
+        });
+        springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 60, SpringLayout.NORTH, panel1);
+        springLayout.putConstraint(SpringLayout.WEST, scrollPane, 100, SpringLayout.WEST, panel1);
+        springLayout.putConstraint(SpringLayout.NORTH, scrollPaneChosen, 60, SpringLayout.NORTH, panel1);
+        springLayout.putConstraint(SpringLayout.WEST, scrollPaneChosen, 100, SpringLayout.WEST, panel1);
+
+
+
+
+        setSize(1200,800);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible((true));
     }
 
     private class TableBackgroundColorRenderer extends DefaultTableCellRenderer {

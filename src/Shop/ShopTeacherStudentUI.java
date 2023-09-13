@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.Vector;
 
 public class ShopTeacherStudentUI extends JFrame {
     Object[][] purchaseCar = null;
@@ -66,7 +67,7 @@ public class ShopTeacherStudentUI extends JFrame {
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
-
+    Vector<Double> selectedGoods = new Vector<Double>();
     public ShopTeacherStudentUI() {
         super("商店");
 
@@ -100,6 +101,28 @@ public class ShopTeacherStudentUI extends JFrame {
         //更新现在有的商品列表
         getAllGoods();
 
+        OKBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double sum = 0.0;
+                for (int i = 0; i < carttable.getRowCount(); i++) {
+                    boolean isChecked = (Boolean) model3.getValueAt(i, 3);
+                    //boolean isChecked = (boolean) model.getValueAt(i, 3);
+                    if (isChecked) {
+                        Object dat = carttable.getValueAt(i, 2);
+                        if (dat != null) {
+                            String data = (String) dat;
+                            Double money = Double.parseDouble(data);
+                            sum += money;
+                        }
+                    }
+                }
+//                for (Double num : selectedGoods) {
+//                    sum += num;
+//                }
+                totalamount.setText("￥"+ String.format("%.2f", sum));
+            }
+        });
         //导航栏
         purchasegoodBtn.setFont(buttonFont);
         purchasehistoryBtn.setFont(buttonFont);
@@ -145,10 +168,11 @@ public class ShopTeacherStudentUI extends JFrame {
 
             }
         });
-
         shoppingcartBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(!selectedGoods.isEmpty())
+                    selectedGoods.clear();
                 cardLayout.show(cardPanel, "购物车");
 
                 // TODO 加上下面这一行，购物车的初始显示就不对
@@ -189,8 +213,8 @@ public class ShopTeacherStudentUI extends JFrame {
         };
         model.setDataVector(gooddata, goodheader);
         goodtable.setModel(model);
-        goodtable.getColumnModel().getColumn(4).setCellRenderer(new ShopTeacherStudentUI.TableCellRendererButton());
-        goodtable.getColumnModel().getColumn(4).setCellEditor(new ShopTeacherStudentUI.TableCellEditorButton());
+        goodtable.getColumnModel().getColumn(4).setCellRenderer(new TableCellRendererButton());
+        goodtable.getColumnModel().getColumn(4).setCellEditor(new TableCellEditorButton());
         JScrollPane scrollPane = new JScrollPane(goodtable);
         goodtable.setRowHeight(30);
         scrollPane.setPreferredSize(new Dimension(1000, 500)); // 设置滚动面板的大小
@@ -491,33 +515,10 @@ public class ShopTeacherStudentUI extends JFrame {
         return stringBuilder.toString();
     }
 
-
-//    checkBox.addActionListener(new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            JCheckBox checkBox = (JCheckBox) e.getSource();
-//            if (checkBox.isSelected()) {
-//                // 选中状态改变为已选中
-//                int selectedRow = carttable.getSelectedRow();
-//                if (selectedRow != -1) {
-//                    updatePurchaseCarAmount();
-//                }
-//            } else {
-//                // 选中状态改变为未选中
-//                int selectedRow = carttable.getSelectedRow();
-//                if (selectedRow != -1) {
-//                    updatePurchaseCarAmount();
-//                }
-//            }
-//        }
-//    });
-
     /**
      * 更新购物车界面选中商品的总金额
      */
     private void updatePurchaseCarAmount(int selectedRow) {
-//        DefaultTableModel model4 = (DefaultTableModel) carttable.getModel();
-//        int rowCount = model4.getRowCount();
         int rowCount = model3.getRowCount();
         ArrayList<Integer> selectedRows = new ArrayList<>();
         purchaseCarAmount = 0.0;
@@ -562,8 +563,8 @@ public class ShopTeacherStudentUI extends JFrame {
         }
         // 通知表格模型数据发生变化，刷新表格显示
         model.fireTableDataChanged();
-        goodtable.getColumnModel().getColumn(4).setCellRenderer(new ShopTeacherStudentUI.TableCellRendererButton());
-        goodtable.getColumnModel().getColumn(4).setCellEditor(new ShopTeacherStudentUI.TableCellEditorButton());
+        goodtable.getColumnModel().getColumn(4).setCellRenderer(new TableCellRendererButton());
+        goodtable.getColumnModel().getColumn(4).setCellEditor(new TableCellEditorButton());
     }
 
     /**

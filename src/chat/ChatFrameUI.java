@@ -14,10 +14,22 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.IOException;
+import view.Global.SummaryStudentTeacherUI;
+import view.client.ClientReceiver;
+import view.connect.*;
+import view.message.*;
 
+import java.util.*;
+
+import java.util.List;
+
+
+
+ */
 public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallback {
     SpringLayout springLayout = new SpringLayout();
-    JPanel topPanel;
+    JPael to
+
     JPanel centerPanel;
     JPanel bottomPanel;
     // 底部
@@ -41,13 +53,33 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
 
     // 颜色
     Color bottomcolor = new Color(233, 208, 222);
-    Color topcolor = new Color(152, 193, 202);
-    String messageSent;
+
+        Str
+    ng messageSent;
     private Timer waitTimer; // 定时器
-    private int dotCount; // 点号数量
+    private int dotCon; // 点号数量
     private String messageReturn; // 保存服务器返回的消息
 
-    public ChatFrameUI() {
+   
+    Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
+    Font centerFont = new Font("楷体", Font.PLAIN, 20);//设置中间组件的文字大小、字体
+
+    /**
+     * 存储发送出去的消息
+     */
+    String messageSent;
+
+    /**
+     * 存储服务器发回的消息
+     */
+    private String messageReturn; // 保存服务器返回的消息
+
+    /**
+     * 聊天框UI的构造函数
+     * @throws IOException
+     */
+    public ChatFrameUI() throws IOException {
+
         super("ChatFrame");
         startReceivingMessages();
 
