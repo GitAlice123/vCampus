@@ -195,6 +195,9 @@ public class ShopManagerUI extends JFrame {
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
     Font fieldFont=new Font("楷体",Font.PLAIN,20);
 
+    /**
+     * ShopManagerUI构造函数
+     */
     public ShopManagerUI() {
         super("商店");
         //获取所有商品
@@ -551,6 +554,10 @@ public class ShopManagerUI extends JFrame {
 
     }
 
+    /**
+     * @param args
+     * 主函数
+     */
     public static void main(String[] args) {
         new ShopManagerUI();
     }

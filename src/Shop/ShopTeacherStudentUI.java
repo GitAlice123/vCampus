@@ -169,6 +169,10 @@ public class ShopTeacherStudentUI extends JFrame {
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
     Vector<Double> selectedGoods = new Vector<Double>();
+
+    /**
+     * ShopTeacherStudentUI的构造函数
+     */
     public ShopTeacherStudentUI() {
         super("商店");
 
@@ -575,6 +579,10 @@ public class ShopTeacherStudentUI extends JFrame {
         return newArray;
     }
 
+    /**
+     * @param args
+     * 主函数
+     */
     public static void main(String[] args) {
         new ShopTeacherStudentUI();
     }
@@ -729,6 +737,9 @@ public class ShopTeacherStudentUI extends JFrame {
         private int clickedRow;
 
 
+        /**
+         * 在表格中生成按钮
+         */
         public TableCellEditorButton() {
             super(new JTextField());
             //设置点击一次就激活，否则默认好像是点击2次激活。
@@ -764,6 +775,9 @@ public class ShopTeacherStudentUI extends JFrame {
         private JCheckBox checkBox = new JCheckBox();
         private int counter = 0;
 
+        /**
+         * 表格渲染
+         */
         public CheckBoxRenderer() {
             checkBox.setHorizontalAlignment(JCheckBox.CENTER);
             //checkBox.setSelected(false);
@@ -787,6 +801,9 @@ public class ShopTeacherStudentUI extends JFrame {
         private int counter = 0;
 
 
+        /**
+         * 复选框编辑器
+         */
         public CheckBoxEditor() {
             super(new JCheckBox());
             checkBox.setHorizontalAlignment(JCheckBox.CENTER);
@@ -848,6 +865,10 @@ public class ShopTeacherStudentUI extends JFrame {
         JButton cancelBtn = new JButton("取消");
         JComboBox<String> count = new JComboBox<String>();
 
+        /**
+         * @param row
+         * 加入购物车的弹窗
+         */
         public addtocartwindow(int row) {
 
             goodname.setFont(centerFont);
@@ -962,6 +983,9 @@ public class ShopTeacherStudentUI extends JFrame {
         JLabel pwdLabel = new JLabel("密码");
         JPasswordField pwdField = new JPasswordField();
 
+        /**
+         * 支付弹窗
+         */
         public purchasewindow() {
             super("请选择支付方式（推荐使用微信支付）");
             //导航栏
