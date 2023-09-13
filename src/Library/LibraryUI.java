@@ -23,6 +23,9 @@ import java.util.Date;import java.awt.image.BufferedImage;
  * 学生和老师看到的图书馆界面
  */
 public class LibraryUI extends JFrame {
+    /**
+     * 借阅按钮渲染器
+     */
     static class BorrowBookTableCellRendererButton implements TableCellRenderer {
         public BorrowBookTableCellRendererButton() {
         }
@@ -38,6 +41,9 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 借阅按钮编辑器
+     */
     class BorrowBookTableCellEditorButton extends DefaultCellEditor {//查看班级界面辅助类，按钮事件触发在此类中
         private JButton btn;
         private int clickedRow;
@@ -75,6 +81,9 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 还书按钮渲染器
+     */
     static class ReturnBookTableCellRendererButton implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -87,6 +96,9 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 还书按钮编辑器
+     */
     class ReturnBookTableCellEditorButton extends DefaultCellEditor {
         private JButton btn;
         private int clickedRow;
@@ -147,6 +159,9 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 续借按钮渲染器
+     */
     static class RenewBookTableCellRendererButton implements TableCellRenderer {
 
 
@@ -161,10 +176,24 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 自定义表格单元格渲染器，用于设置选中行和非选中行的外观。
+     */
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
+            /**
+             * 获取表格单元格的渲染组件。
+             *
+             * @param table      表格
+             * @param value      单元格值
+             * @param isSelected 单元格是否选中
+             * @param hasFocus   单元格是否具有焦点
+             * @param row        行索引
+             * @param column     列索引
+             * @return 渲染组件
+             */
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (isSelected) {
                 // 设置选中行的外观
@@ -179,6 +208,9 @@ public class LibraryUI extends JFrame {
         }
     };
 
+    /**
+     * 续借按钮编辑器
+     */
     class RenewBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
@@ -271,6 +303,10 @@ public class LibraryUI extends JFrame {
         initComponents();
     }
 
+    /**
+     * 初始化组件
+     * @throws IOException
+     */
     private void initComponents() throws IOException {
         this.springLayout = new SpringLayout();
         this.model = new DefaultTableModel();
@@ -331,6 +367,11 @@ public class LibraryUI extends JFrame {
         };//底部放置按钮的面板
         this.panel1 = new JPanel();//中间卡片布局的面板
         this.BookPanel = new JPanel(springLayout){
+            /**
+             * 绘制面板的组件。
+             *
+             * @param g 绘图对象
+             */
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -357,6 +398,11 @@ public class LibraryUI extends JFrame {
             }
         };//学生查看课程列表的面板
         this.ChosenPanel = new JPanel(springLayout){
+            /**
+             * 绘制面板的组件。
+             *
+             * @param g 绘图对象
+             */
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -392,20 +438,7 @@ public class LibraryUI extends JFrame {
         this.NumOfBookOut = new JLabel(BookNum);
         this.backBtn = new JButton("退出");//同上
         this.imageLabel = new JLabel();
-//        try {
-//            // 加载图片
-//            int newWidth = 120;  // 新的宽度
-//            int newHeight = 120; // 新的高度
-//
-//            Image pkqIm = ImageIO.read(new File("Images/pkq8.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
-//
-//            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-//            imageLabel.setIcon(new ImageIcon(scaledImage));
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
         String a = "yes";
         UniqueMessage noDataReqMessage = new UniqueMessage(a);
@@ -510,24 +543,36 @@ public class LibraryUI extends JFrame {
 
 
         /* 下面是监听函数 */
+        /**
+         * 借书界面按钮监听函数
+         */
         BookBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(panel1, "BookPanel");
             }
         });
+        /**
+         * 查看已借阅书籍监听函数
+         */
         ChosenBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(panel1, "ChosenPanel");
             }
         });
+        /**
+         * 查询书籍按钮监听函数
+         */
         FindBookBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SearchBtnClicked();
             }
         });
+        /**
+         * 返回所有书籍列表监听函数
+         */
         ReturnToAllBookBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -537,7 +582,10 @@ public class LibraryUI extends JFrame {
                     throw new RuntimeException(ex);
                 }
             }
-        });//TODO:加按钮响应
+        });
+        /**
+         * 返回监听函数
+         */
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -550,6 +598,11 @@ public class LibraryUI extends JFrame {
         });
     }
 
+    /**
+     * 展示所有借阅图书
+     * @param bookArray 借阅记录
+     * @throws IOException
+     */
     private void ShowBorrowedTableData(BookHold[] bookArray) throws IOException {
         // 把得到的书籍列表放入表格
         String[][] data;
@@ -613,6 +666,10 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 展示所有图书
+     * @param bookArray 所有书籍
+     */
     private void ShowTableData(Book[] bookArray) {
         // 把得到的书籍列表放入表格
         int rowCount = bookArray.length;
@@ -648,6 +705,9 @@ public class LibraryUI extends JFrame {
         table.getColumnModel().getColumn(6).setCellEditor(editor);
     }
 
+    /**
+     * 查询按钮点击后
+     */
     private void SearchBtnClicked() {
         System.out.println("Search Pressed");
         String searchText = FindBookTex.getText(); // 获取文本框内容作为搜索文本
@@ -669,6 +729,11 @@ public class LibraryUI extends JFrame {
         ShowTableData(bookArray);
     }
 
+    /**
+     * 借书按钮点击后
+     * @param e
+     * @throws IOException
+     */
     private void BorrowBtnClicked(ActionEvent e) throws IOException {
         //System.out.println("按钮事件触发----");
         JButton clickedButton = (JButton) e.getSource();
@@ -729,11 +794,21 @@ public class LibraryUI extends JFrame {
 
     }
 
+    /**
+     * 返回按钮点击后
+     * @param e
+     * @throws IOException
+     */
     private void BackBtnClicked(ActionEvent e) throws IOException {
         this.dispose();
         new SummaryStudentTeacherUI();
     }
 
+    /**
+     * 还书按钮点击后
+     * @param e
+     * @throws IOException
+     */
     private void ReturnBtnClicked(ActionEvent e) throws IOException {
         //System.out.println("按钮事件触发----");
         JButton clickedButton = (JButton) e.getSource();
@@ -779,6 +854,12 @@ public class LibraryUI extends JFrame {
         }
     }
 
+    /**
+     * 用ISBN找书
+     * @param ISBN
+     * @return
+     * @throws IOException
+     */
     private String GetBookNameByISBN(String ISBN)
             throws IOException{
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
@@ -788,6 +869,11 @@ public class LibraryUI extends JFrame {
         return book.getBookName();
     }
 
+    /**
+     * 回到所有书籍列表响应函数
+     * @param e
+     * @throws IOException
+     */
     private void ReturnToAllBookBtnClicked(ActionEvent e)
             throws IOException{
         LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl(GlobalData.getIpAddress(),Integer.parseInt(GlobalData.getPortName()));
@@ -798,6 +884,11 @@ public class LibraryUI extends JFrame {
         ShowTableData(AllBooks);
     }
 
+    /**
+     * 续借按钮点击后
+     * @param e
+     * @throws IOException
+     */
     private void RenewBtnClicked(ActionEvent e) throws IOException {
         //System.out.println("按钮事件触发----");
         JButton clickedButton = (JButton) e.getSource();

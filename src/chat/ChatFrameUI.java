@@ -24,6 +24,9 @@ import java.util.Objects;
 import java.util.Set;
 
 
+/**
+ * 聊天框UI
+ */
 public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallback {
     private Timer waitTimer; // 定时器
     private Timer timer;
@@ -63,13 +66,24 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
 
     private String messageReturn; // 保存服务器返回的消息
 
+    /**
+     * 构造函数
+     * @throws IOException
+     */
     public ChatFrameUI() throws IOException {
 
         super("ChatFrame");
         startReceivingMessages();
 //        startReceivingOnline();
 
+        /**
+         * 设置计时器，每1000ms刷新一次
+         */
         timer = new Timer(1000, new ActionListener() {
+            /**
+             * timer到点了要做什么
+             * @param e the event to be processed
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 每秒调用的函数
@@ -177,6 +191,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         springLayout.putConstraint(SpringLayout.NORTH, centerpane, 0, SpringLayout.NORTH, leftpane);
         springLayout.putConstraint(SpringLayout.WEST, friends, 20, SpringLayout.WEST, leftpane);
         springLayout.putConstraint(SpringLayout.NORTH, friends, 40, SpringLayout.SOUTH, leftpane);
+        /**
+         * 等待计时器，用于生成省略号动态效果
+         */
         waitTimer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -189,6 +206,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
                 }
             }
         });
+        /**
+         * 发送按钮监听函数
+         */
         sendBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -216,6 +236,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
                 }
             }
         });
+        /**
+         * 返回按钮监听函数
+         */
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -251,6 +274,10 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         setVisible(true);
     }
 
+    /**
+     * 发送消息
+     * @throws PrinterException
+     */
     private void sendMessage() throws PrinterException {
         messageSent = textarea.getText();
         if (!messageSent.isEmpty()) {
@@ -259,9 +286,17 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         }
     }
 
+    /**
+     * 收到GPT回答（发出和接收）
+     */
     private void receiveGPTMessage() {
         SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
 
+            /**
+             * 隐藏的省略号计时器
+             * @return 省略号字符串
+             * @throws Exception
+             */
             @Override
             protected String doInBackground() throws Exception {
                 ChatClientAPI chatClientAPI = new ChatClientAPIImpl("localhost", 8888);
@@ -270,6 +305,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
                 return messageReturn;
             }
 
+            /**
+             * 当计时器到点
+             */
             @Override
             protected void done() {
                 waitTimer.stop(); // 停止定时器
@@ -295,12 +333,21 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         worker.execute();
     }
 
+    /**
+     * 校内聊天发送消息
+     * @param targerUser 目标用户
+     * @throws IOException
+     */
     private void sendOthersMessage(String targerUser) throws IOException {
         ChatClientAPI chatClientAPI = new ChatClientAPIImpl("localhost", 8888);
         ChatWithUserMessage chatWithUserMessage = new ChatWithUserMessage(GlobalData.getUID(), messageSent, targerUser);
         chatClientAPI.sendUserMessage(chatWithUserMessage);
     }
 
+    /**
+     * 得到省略号
+     * @return 省略号字符串
+     */
     private String getWaitingMessage() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < dotCount; i++) {
@@ -309,6 +356,10 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         return sb.toString();
     }
 
+    /**
+     * 回调函数
+     * @param message 接收到的消息。
+     */
     @Override
     public void onMessageReceived(ChatMessage message) {
         // 在这里处理收到的消息
@@ -316,6 +367,9 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
         chathistory.append(message.getRole() + ": " + message.getContent() + "\n");
     }
 
+    /**
+     * 打开后台线程监听服务器
+     */
     public void startReceivingMessages() {
         ClientReceiver clientReceiver;
         try {
@@ -327,31 +381,18 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
     }
 
 
+    /**
+     * 计时器开始
+     */
     public void startTimer() {
         timer.start();
     }
 
-    public void stopTimer() {
-        timer.stop();
-    }
-//    public void startReceivingOnline() {
-//        ChatFrameUI currentUI = this;
-//        try {
-//            ClientOnlineReceiver clientReceiver = new ClientOnlineReceiver(new ClientOnlineReceiver.MessageCallback() {
-//                @Override
-//                public void onMessageReceived(OnlineListRespMessage message) {
-//                    List<String>allOnline = message.getOnlineList();
-//                    for (String name : allOnline) {
-//                        currentUI.friends.addItem(name);
-//                    }
-//                }
-//            });
-//            clientReceiver.startReceiving();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
+    /**
+     * 显示所有在线人员名单
+     * @throws IOException
+     */
     public void showAllOnlineList() throws IOException {
         ChatClientAPI chatClientAPI = new ChatClientAPIImpl("localhost", 8888);
         UniqueMessage uniqueMessage = new UniqueMessage("yes");
@@ -375,6 +416,12 @@ public class ChatFrameUI extends JFrame implements ClientReceiver.MessageCallbac
 
     }
 
+    /**
+     * 判断返回的在线序列和当前下拉框中是否一致
+     * @param sequence1 服务器返回的在线序列
+     * @param comboBox 下拉框
+     * @return 是否一致
+     */
     public static boolean areElementsEqual(List<String> sequence1, JComboBox<String> comboBox) {
         // 将序列转换为集合
         Set<String> set1 = new HashSet<>(sequence1);

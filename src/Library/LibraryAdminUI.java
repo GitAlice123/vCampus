@@ -33,6 +33,9 @@ import javax.swing.table.DefaultTableModel;
 public class LibraryAdminUI extends JFrame {
     private int changeBtnRow;
 
+    /**
+     * 删除按钮渲染器
+     */
     class DeleteBookTableCellRendererButton implements TableCellRenderer {
 
 
@@ -49,6 +52,9 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
+    /**
+     * 删除按钮编辑器
+     */
     class DeleteBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
@@ -100,9 +106,24 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
+    /**
+     * 更改图书按钮渲染器
+     */
     class ChangeBookTableCellRendererButton implements TableCellRenderer {
 
 
+        /**
+         * 渲染器被调用以绘制单元格的方法。
+         *
+         * @param table           请求渲染器绘制的<code>JTable</code>；可以为<code>null</code>
+         * @param value           要渲染的单元格的值。具体的渲染方式由特定的渲染器来解释和绘制。例如，如果<code>value</code>是字符串"true"，可以将其渲染为字符串，也可以将其渲染为选中的复选框。<code>null</code>是一个有效的值
+         * @param isSelected      如果要突出显示选定的单元格，则为true；否则为false
+         * @param hasFocus        如果为true，则适当地渲染单元格。例如，如果单元格可以编辑，可以在单元格上放置特殊的边框；如果单元格处于编辑状态，可以使用指示编辑的颜色进行渲染
+         * @param row             正在绘制的单元格的行索引。在绘制表头时，<code>row</code>的值为-1
+         * @param column          正在绘制的单元格的列索引
+         *
+         * @return 修改按钮
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
@@ -116,27 +137,36 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
-    class ChangeBookTableCellEditorButton extends DefaultCellEditor {
+    /**
+     * 更改图书编辑器
+     */
+    /**
+     * 用于修改书籍表格单元格的自定义编辑器按钮。
+     */
+    public class ChangeBookTableCellEditorButton extends DefaultCellEditor {
 
         private JButton btn;
+        private int changeBtnRow;
 
+        /**
+         * 构造函数，创建一个ChangeBookTableCellEditorButton对象。
+         */
         public ChangeBookTableCellEditorButton() {
             super(new JTextField());
-            //设置点击一次就激活，否则默认好像是点击2次激活。
 
+            // 设置点击一次就激活，否则默认需要点击两次激活
             this.setClickCountToStart(1);
+
             btn = new JButton("修改");
-            Font centerFont = new Font("楷体", Font.PLAIN, 25);//设置中间组件的文字大小、字体
+            Font centerFont = new Font("楷体", Font.PLAIN, 25);
             btn.setFont(centerFont);
             Color customColor = new Color(173, 216, 230);
             btn.setBackground(customColor);
-            btn.addActionListener(new ActionListener() {
 
+            btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //System.out.println("按钮事件触发----");
                     JButton clickedButton = (JButton) e.getSource();
-
                     changeBtnRow = (int) clickedButton.getClientProperty("row"); // 获取客户端属性中保存的行索引
                     System.out.println("点击的行索引：" + changeBtnRow);
 
@@ -144,24 +174,34 @@ public class LibraryAdminUI extends JFrame {
                     changeBooksUI.setVisible(true);
                 }
             });
-
-
         }
 
+        /**
+         * 获取用于编辑的单元格组件。
+         *
+         * @param table      正在编辑的表格
+         * @param value      单元格的当前值
+         * @param isSelected 单元格是否被选中
+         * @param row        单元格所在的行索引
+         * @param column     单元格所在的列索引
+         * @return 单元格的编辑组件
+         */
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             changeBtnRow = row;
             btn.putClientProperty("row", row); // 将行索引保存为按钮的客户端属性
-
             return btn;
         }
 
+        /**
+         * 获取编辑器的单元格值。
+         *
+         * @return 编辑器的单元格值
+         */
         @Override
         public Object getCellEditorValue() {
             return null;
         }
-
-
     }
 
     /* 初始化内容*/
@@ -247,10 +287,21 @@ public class LibraryAdminUI extends JFrame {
      *
      * @throws IOException 如果发生输入/输出错误时抛出该异常
      */
-    public LibraryAdminUI() throws IOException {
+    public LibraryAdminUI() throws IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        // 设置外观为Windows外观
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+        UIManager.put("nimbusBase", new Color(173, 230, 230)); // 边框
+        UIManager.put("nimbusBlueGrey", new Color(173, 216, 230)); // 按钮
+        UIManager.put("control", new Color(240, 248, 255)); // 背景
         initComponent();
     }
 
+    /**
+     * 初始化组件
+     * @throws IOException
+     */
     private void initComponent() throws IOException {
 
         /* 初始化内容*/
@@ -423,23 +474,6 @@ public class LibraryAdminUI extends JFrame {
         NumOfBookOut = new JLabel(BookNum);
         backBtn = new JButton("退出");
 
-// 折叠的展示图片的，和实现无关
-//        JLabel imageLabel = new JLabel();
-//        try {
-//            // 加载图片
-//            int newWidth = 120;  // 新的宽度
-//            int newHeight = 120; // 新的高度
-//
-//            Image pkqIm = ImageIO.read(new File("Images/pkq4.jpeg"));  // 请将 "image.png" 替换为实际的图片路径
-//
-//            Image scaledImage = pkqIm.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-//            imageLabel.setIcon(new ImageIcon(scaledImage));
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
 
         // 初始显示所有馆藏书籍
         LibraryClientAPI libraryClientAPI_2 = new LibraryClientAPIImpl("localhost", 8888);
@@ -554,6 +588,9 @@ public class LibraryAdminUI extends JFrame {
         FindStuBorrowedPanel.add(scrollPaneFindStuBorrowed);
 
 
+        /**
+         * 返回按钮监听响应
+         */
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -616,15 +653,18 @@ public class LibraryAdminUI extends JFrame {
         setVisible((true));
 
 
-
-
-        /* 监听函数 */
+        /**
+         * 查看书籍列表栏
+         */
         BooksBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(panel1, "BooksPanel");
             }
         });
+        /**
+         * 查看图书馆汇报栏
+         */
         ReportBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -657,7 +697,7 @@ public class LibraryAdminUI extends JFrame {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                NumOfBookInTheLibraryLabelOut.setText(Integer.toString(totalNum));
+                NumOfAllBooksLabelOut.setText(Integer.toString(totalNum));
                 NumOfBookInTheLibraryLabelOut.setText(Integer.toString(freeNum));
                 NumOfBorrowedBooksLabelOut.setText(Integer.toString(borrowedNum));
                 if (report == null)
@@ -668,6 +708,9 @@ public class LibraryAdminUI extends JFrame {
 
             }
         });
+        /**
+         * 查看操作记录栏
+         */
         FindStuBorrowedTopBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -679,6 +722,9 @@ public class LibraryAdminUI extends JFrame {
                 cardLayout.show(panel1, "FindStuBorrowedPanel");
             }
         });
+        /**
+         * 添加图书按钮响应
+         */
         AddBooksBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -687,12 +733,18 @@ public class LibraryAdminUI extends JFrame {
                 addOrChangeBooksUI.setVisible(true);
             }
         });
+        /**
+         * 查找图书按钮响应
+         */
         FindBookBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SearchBtnClicked();
             }
         });
+        /**
+         * 查找借阅记录按钮响应
+         */
         FindStuBorrowedBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -709,7 +761,21 @@ public class LibraryAdminUI extends JFrame {
         });
     }
 
+    /**
+     * 静态类TableBackgroundColorRenderer是DefaultTableCellRenderer的子类，用于设置表格单元格的背景颜色。
+     */
     static class TableBackgroundColorRenderer extends DefaultTableCellRenderer {
+        /**
+         * 重写getTableCellRendererComponent方法，用于自定义表格单元格的渲染。
+         *
+         * @param table      表格
+         * @param value      单元格的值
+         * @param isSelected 单元格是否被选中
+         * @param hasFocus   单元格是否拥有焦点
+         * @param row        单元格所在的行索引
+         * @param column     单元格所在的列索引
+         * @return 渲染后的组件
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -729,7 +795,7 @@ public class LibraryAdminUI extends JFrame {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         try {
             // 设置外观为Windows外观
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -756,6 +822,11 @@ public class LibraryAdminUI extends JFrame {
         new LibraryAdminUI();
     }
 
+    /**
+     * 删除按钮监听响应
+     * @param e
+     * @throws IOException
+     */
     private void deleteBtnClicked(ActionEvent e) throws IOException {
         //System.out.println("按钮事件触发----");
         JButton clickedButton = (JButton) e.getSource();
@@ -781,6 +852,10 @@ public class LibraryAdminUI extends JFrame {
         ShowTableData(AllBooks);
     }
 
+    /**
+     * 查找按钮监听响应
+     */
+
     private void SearchBtnClicked() {
         System.out.println("Search Pressed");
         String searchText = FindBookTex.getText(); // 获取文本框内容作为搜索文本
@@ -796,11 +871,22 @@ public class LibraryAdminUI extends JFrame {
         ShowTableData(bookArray);
     }
 
+    /**
+     * 返回按钮监听响应
+     * @param e
+     * @throws IOException
+     */
     private void BackBtnClicked(ActionEvent e) throws IOException {
         this.dispose();
         new SummaryStudentTeacherUI();
     }
 
+
+    /**
+     * 该方法用于在表格中显示书籍数据。
+     *
+     * @param bookArray 书籍数组
+     */
     private void ShowTableData(Book[] bookArray) {
         // 把得到的书籍列表放入表格
         String[][] data;
@@ -851,6 +937,11 @@ public class LibraryAdminUI extends JFrame {
 
     }
 
+    /**
+     * 该方法用于在表格中显示书籍操作记录数据。
+     *
+     * @throws IOException 如果发生I/O错误
+     */
     private void ShowOprTable() throws IOException {
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
         BookOperationRecord[] bookArray;
@@ -895,6 +986,12 @@ public class LibraryAdminUI extends JFrame {
         }
     }
 
+    /**
+     * 该方法用于在表格中显示搜索到的书籍操作记录数据。
+     *
+     * @param searchText 搜索文本
+     * @throws IOException 如果发生I/O错误
+     */
     private void ShowSearchOprTable(String searchText) throws IOException{
         LibraryClientAPI libraryClientAPI = new LibraryClientAPIImpl("localhost",8888);
         RegisterReqMessage registerReqMessage = new RegisterReqMessage(searchText);
@@ -957,6 +1054,9 @@ public class LibraryAdminUI extends JFrame {
         JPanel panel;
 
 
+        /**
+         * 构造函数
+         */
         public AddBooksUI() {
             setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
             springLayout = new SpringLayout();
@@ -1056,6 +1156,9 @@ public class LibraryAdminUI extends JFrame {
             springLayout.putConstraint(SpringLayout.NORTH, ExitBtn, 0, SpringLayout.NORTH, EnsureAddBtn);
             springLayout.putConstraint(SpringLayout.WEST, ExitBtn, 20, SpringLayout.EAST, EnsureAddBtn);
 
+            /**
+             * 退出监听
+             */
             ExitBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -1063,6 +1166,9 @@ public class LibraryAdminUI extends JFrame {
                 }
             });
 
+            /**
+             * 确定监听
+             */
             EnsureAddBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -1137,6 +1243,9 @@ public class LibraryAdminUI extends JFrame {
         JButton ChangeExitBtn = new JButton("取消");
         JPanel panel = new JPanel(springLayout);
 
+        /**
+         * 修改图书的构造函数
+         */
         public ChangeBooksUI() {
             Container contentPane = getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
@@ -1209,6 +1318,9 @@ public class LibraryAdminUI extends JFrame {
             springLayout.putConstraint(SpringLayout.WEST, ChangeExitBtn, 20, SpringLayout.EAST, ChangeEnsureBtn);
 
 
+            /**
+             * 退出监听函数
+             */
             ChangeExitBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -1216,6 +1328,9 @@ public class LibraryAdminUI extends JFrame {
                 }
             });
 
+            /**
+             * 修改图书确认按钮监听
+             */
             ChangeEnsureBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

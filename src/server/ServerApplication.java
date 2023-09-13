@@ -16,12 +16,19 @@ import view.Shop.ShopServerActionTool;
 import view.connect.Pair;
 import view.message.*;
 
+/**
+ * 服务器程序
+ */
 public class ServerApplication {
     private static ServerSocket serverSocket;
     //    private Map<String, ClientHandler> clientHandlerMap = new HashMap<>();
     private Vector<ClientHandler> clients = new Vector<ClientHandler>();
     private Vector<Socket> threadRefreshOnline = new Vector<Socket>();
 
+    /**
+     * 打开服务器
+     * @throws IOException 错误
+     */
     public void startServer() throws IOException {
         int port = 8888; // 服务器监听的端口号
         ServerRWTool rwTool = new ServerRWTool();
@@ -54,6 +61,9 @@ public class ServerApplication {
         }
     }
 
+    /**
+     * 关闭服务器
+     */
     private static void closeServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
@@ -65,6 +75,12 @@ public class ServerApplication {
         }
     }
 
+    /**
+     * 转发消息
+     * @param myID 发送者ID
+     * @param userId 接受者ID
+     * @param message 消息内容
+     */
     private void forwardMessage(String myID,String userId, String message) {
 //        ClientHandler clientHandler = clientHandlerMap.get(userId);
         for (ClientHandler thread : clients) {
@@ -81,6 +97,9 @@ public class ServerApplication {
         }
     }
 
+    /**
+     * 客户端处理线程
+     */
     private class ClientHandler implements Runnable {
         private Socket clientSocket;
         private ServerRWTool rwTool;
@@ -88,22 +107,42 @@ public class ServerApplication {
         private bankServerActionTool bankServerActionTool;
         private ShopServerActionTool shopServerActionTool;
 
+        /**
+         * 设置用户ID
+         * @param userID 用户ID
+         */
         public void setUserID(String userID) {
             this.userID = userID;
         }
 
         private String userID;
 
+        /**
+         *  是否在线
+         * @return 在线情况
+         */
         public Boolean getChatOnline() {
             return isChatOnline;
         }
 
+        /**
+         * 设置在线情况
+         * @param chatOnline 在线情况
+         */
         public void setChatOnline(Boolean chatOnline) {
             isChatOnline = chatOnline;
         }
 
         private Boolean isChatOnline = false;
 
+        /**
+         * 构造函数
+         * @param clientSocket 套接字
+         * @param rwTool 工具函数
+         * @param serverActionTool 服务器工具函数
+         * @param bankServerActionTool 银行服务器工具函数
+         * @param shopServerActionTool 商店服务器工具函数
+         */
         public ClientHandler(Socket clientSocket, ServerRWTool rwTool, ServerActionTool serverActionTool,
                              bankServerActionTool bankServerActionTool, ShopServerActionTool shopServerActionTool) {
             this.clientSocket = clientSocket;
@@ -113,10 +152,17 @@ public class ServerApplication {
             this.shopServerActionTool = shopServerActionTool;
         }
 
+        /**
+         * 得到用户ID
+         * @return
+         */
         public String getUserId() {
             return userID;
         }
 
+        /**
+         * 线程开始运行
+         */
         @Override
         public void run() {
             System.out.println("Begin thread run");
@@ -531,11 +577,6 @@ public class ServerApplication {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-
-        public void processMessage(String message) {
-            // 在这里处理来自服务器的消息
-
         }
 
     }

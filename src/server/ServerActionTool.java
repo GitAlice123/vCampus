@@ -29,7 +29,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 服务器的工具函数
+ */
 public class ServerActionTool {
+    /**
+     * 无参构造
+     */
     public ServerActionTool() {
     }
 
@@ -40,25 +46,37 @@ public class ServerActionTool {
     private static final String HOST = "localhost";
     private static final int PORT = 8888;
 
+    /**
+     * 得到当前在线人员
+     * @return 在线人员列表
+     */
     public List<String> getOnlineList() {
         return onlineList;
     }
 
+    /**
+     * 设置在线人员列表
+     * @param onlineList 在线人员列表
+     */
     public void setOnlineList(List<String> onlineList) {
         this.onlineList = onlineList;
     }
 
     private List<String> onlineList;
 
-    public String getUserID() {
-        return userID;
-    }
-
+    /**
+     * 设置用户ID
+     * @param userID 用户ID
+     */
     public void setUserID(String userID) {
         this.userID = userID;
     }
 
-    //按ID查询StudentInfo并返回
+    /**
+     * 按ID查询StudentInfo并返回
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action300(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -89,7 +107,11 @@ public class ServerActionTool {
         }
     }
 
-    //添加学生信息StudentInfo
+    /**
+     * 添加学生信息StudentInfo
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action301(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -118,7 +140,11 @@ public class ServerActionTool {
         }
     }
 
-    //按ID删除StudentInfo
+    /**
+     * 删除学生信息StudentInfo
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action302(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -149,7 +175,11 @@ public class ServerActionTool {
         }
     }
 
-    //按ID查成绩Grade
+    /**
+     * 按ID查成绩Grade
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action303(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -179,7 +209,11 @@ public class ServerActionTool {
         }
     }
 
-    //按CourseID查Course
+    /**
+     * 按CourseID查Course
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action304(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -211,8 +245,11 @@ public class ServerActionTool {
         }
     }
 
-    //Course转为String
-    //按教师ID查教学班
+    /**
+     * 按教师ID查教学班
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action306(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -241,7 +278,11 @@ public class ServerActionTool {
         }
     }
 
-    //用ID查找课程Course
+    /**
+     * 用ID查找课程Course
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action307(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -280,6 +321,12 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 得课程名列表
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action308(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -315,7 +362,11 @@ public class ServerActionTool {
         }
     }
 
-    //boolean grade
+    /**
+     * boolean grade
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action309(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -342,7 +393,11 @@ public class ServerActionTool {
         }
     }
 
-    //double StudentID CourseID
+    /**
+     * double StudentID CourseID
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action310(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -370,6 +425,12 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 学生信息列表
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action311(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -395,6 +456,12 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * bool返回值
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action312(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -420,6 +487,12 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 用户信息
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action313(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -445,6 +518,12 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 得到课程列表
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action400(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -474,6 +553,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     *
+     * @param jsonData
+     * @param clientSocket
+     */
     //按CourseID 查找Class
     public void Action401(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
@@ -744,8 +828,8 @@ public class ServerActionTool {
 
     /**
      * 处理登录请求，并保留成功登录的用户ID用于唯一标识线程
-     * @param jsonData
-     * @param clientSocket
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
      */
     public String Action100(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -788,6 +872,11 @@ public class ServerActionTool {
         return loginMessage.getUserId();
     }
 
+    /**
+     * 注册请求信息
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action101(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -819,6 +908,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 注册允许请求（检查是否已经存在该用户）
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action102(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -857,6 +951,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 得到馆藏书籍列表请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action200(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -894,6 +993,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 自己借阅的书籍列表请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action201(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -929,6 +1033,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 用书名查找书籍并返回书籍列表请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action202(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -957,6 +1066,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 用索书号查找书籍并删除该书籍请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action203(String jsonData, Socket clientSocket) {
         // 删除图书,成功返回true
         // 创建 ObjectMapper 对象
@@ -987,6 +1101,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 传入book对象增加书籍请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action204(String jsonData, Socket clientSocket) {
         // 增加图书
         // 创建 ObjectMapper 对象
@@ -1018,6 +1137,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 借阅书籍请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action205(String jsonData, Socket clientSocket) {
         // 借阅书籍
         // 创建 ObjectMapper 对象
@@ -1065,6 +1189,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 还书请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action206(String jsonData, Socket clientSocket) {
         // 还书
         // 创建 ObjectMapper 对象
@@ -1109,6 +1238,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 修改书籍请求
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action207(String jsonData, Socket clientSocket) {
         // 修改图书
         // 创建 ObjectMapper 对象
@@ -1141,8 +1275,8 @@ public class ServerActionTool {
 
     /**
      * 用ISBN找书
-     * @param jsonData
-     * @param clientSocket
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
      */
     public void Action208(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -1174,8 +1308,8 @@ public class ServerActionTool {
 
     /**
      * 取回所有操作记录
-     * @param jsonData
-     * @param clientSocket
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
      */
     public void Action209(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
@@ -1208,6 +1342,11 @@ public class ServerActionTool {
         }
     }
 
+    /**
+     * 得到所有书籍
+     * @param jsonData 收到的json字符串
+     * @param clientSocket 套接字
+     */
     public void Action210(String jsonData, Socket clientSocket) {
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -1237,7 +1376,7 @@ public class ServerActionTool {
     }
 
     /**
-     * TODO:忘了是啥了。。
+     * 返回书籍列表
      * @param jsonData
      * @param clientSocket
      */
@@ -1441,7 +1580,11 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    //501 根据ID找到所有挂号记录(包括已缴费)
+    /**
+     * 根据ID找到所有挂号记录(包括已缴费)
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action501(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -1468,7 +1611,11 @@ public class ServerActionTool {
             e.printStackTrace();
         }
     }
-    //502 根据ID找到所有未缴费挂号
+    /**
+     * 根据ID找到所有未缴费挂号
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action502(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
@@ -1502,7 +1649,11 @@ public class ServerActionTool {
         }
     }
 
-    //503 根据ID返回未支付挂号
+    /**
+     * 根据ID返回未支付挂号
+     * @param jsonData
+     * @param clientSocket
+     */
     public void Action503(String jsonData, Socket clientSocket){
         // 创建 ObjectMapper 对象
         ObjectMapper objectMapper = new ObjectMapper();
