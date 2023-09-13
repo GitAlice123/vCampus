@@ -19,7 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;import java.awt.image.BufferedImage;
 
 
-
+/**
+ * 学生和老师看到的图书馆界面
+ */
 public class LibraryUI extends JFrame {
     static class BorrowBookTableCellRendererButton implements TableCellRenderer {
         public BorrowBookTableCellRendererButton() {
@@ -247,6 +249,11 @@ public class LibraryUI extends JFrame {
     JButton FindBookBtn;
     JButton ReturnToAllBookBtn;
 
+    /**
+     * 创建一个图书馆老师、学生用户界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public LibraryUI() throws IOException {
         try {
             // 设置外观为Windows外观

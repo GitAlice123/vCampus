@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 学生学籍模块，学生看到的界面
+ */
 public class StudentStatusUI extends JFrame {
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -224,6 +227,11 @@ public class StudentStatusUI extends JFrame {
         }
         return scourse;
     }
+    /**
+     * 创建一个学生学籍模块学生看到的界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public StudentStatusUI() throws IOException {
         super("学生学籍系统");
         backBtn.addActionListener(new ActionListener() {

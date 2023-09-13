@@ -19,6 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 学生学籍模块管理员的界面
+ */
 public class StudentStatusAdminUI extends JFrame {
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -134,6 +137,11 @@ public class StudentStatusAdminUI extends JFrame {
     JButton AddStudentBtn=new JButton("添加学生");
 
     JButton backBtn=new JButton("退出");
+    /**
+     * 创建一个学生学籍管理员用户界面。
+     *
+     * @throws IOException 如果发生输入/输出错误时抛出该异常
+     */
     public StudentStatusAdminUI() throws IOException {
         super("学生学籍系统");
 
@@ -317,6 +325,10 @@ public class StudentStatusAdminUI extends JFrame {
         table.getColumnModel().getColumn(8).setCellRenderer(new InfoChangeTableCellRendererButton());
         table.getColumnModel().getColumn(8).setCellEditor(new InfoChangeTableCellEditorButton());
     }
+
+    /**
+     * 修改学生信息界面
+     */
     class ChangeStudentUI extends JFrame {
         SpringLayout springLayout=new SpringLayout();
        // JLabel Card_idLabel=new JLabel("一卡通号");
@@ -372,7 +384,12 @@ public class StudentStatusAdminUI extends JFrame {
         JButton EnsureBtn=new JButton("确认");
 
         JButton ExitBtn=new JButton("取消");
-        JPanel panel=new JPanel(springLayout);
+        JPanel panel=new JPanel(springLayout);、
+        /**
+         * 创建一个修改学生信息界面。
+         *
+         * @throws IOException 如果发生输入/输出错误时抛出该异常
+         */
         public ChangeStudentUI(){
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
@@ -518,6 +535,10 @@ public class StudentStatusAdminUI extends JFrame {
         }
 
     }
+
+    /**
+     * 增加学生信息界面
+     */
     class AddStudentUI extends JFrame {
         SpringLayout springLayout=new SpringLayout();
         JLabel Card_idLabel=new JLabel("一卡通号");
@@ -576,6 +597,11 @@ public class StudentStatusAdminUI extends JFrame {
 
         JButton ExitBtn=new JButton("取消");
         JPanel panel=new JPanel(springLayout);
+        /**
+         * 创建一个增加学生信息界面。
+         *
+         * @throws IOException 如果发生输入/输出错误时抛出该异常
+         */
         public AddStudentUI() throws IOException {
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
