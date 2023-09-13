@@ -4,7 +4,15 @@ import view.CourseSelection.CourseClass;
 
 import java.sql.*;
 
+/**
+ * 选课模块 班级名单DAO
+ */
 public class ClassNameListDao {
+    /**
+     * 查找一个班级里的所有学生
+     * @param ClassId 班级ID
+     * @return 所有学生的ID　String[]
+     */
     public String[] findStudentIdByClassId(String ClassId) {
         String[] namelist = new String[1];
         try {
@@ -39,7 +47,12 @@ public class ClassNameListDao {
         return namelist;
     }
 
-    public String[] findClassByStudentId(String sId) {
+    /**
+     * 查找一个学生选择的所有班级ID
+     * @param sId 学生一卡通号
+     * @return 所有的班级ID　String[]
+     */
+    public String[] findClassIdByStudentId(String sId) {
         String[] classlist = new String[1];
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -73,7 +86,12 @@ public class ClassNameListDao {
         return classlist;
     }
 
-    public CourseClass[] findClassIdByStudentId(String sId) {
+    /**
+     * 查找一个学生选择的所有班级
+     * @param sId 学生一卡通号
+     * @return 所有的班级　CourseClass[]
+     */
+    public CourseClass[] findClassByStudentId(String sId) {
         CourseClass[] classlist = new CourseClass[1];
         CourseClassDao dao = new CourseClassDao();
         try {
@@ -108,6 +126,12 @@ public class ClassNameListDao {
         return classlist;
     }
 
+    /**
+     * 增加选课链接
+     * @param classId 班级编号
+     * @param uId　学生编号
+     * @return 是否创建成功
+     */
     public boolean createClassStudentLink(String classId, String uId) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件
@@ -134,6 +158,12 @@ public class ClassNameListDao {
         return true;
     }
 
+    /**
+     * 删除选课链接
+     * @param classId 班级编号
+     * @param uId 学生编号
+     * @return 是否创建成功
+     */
     public boolean deleteClassStudentLink(String classId, String uId) {
         try {
             Class.forName("com.hxtt.sql.access.AccessDriver");//导入Access驱动文件，本质是.class文件

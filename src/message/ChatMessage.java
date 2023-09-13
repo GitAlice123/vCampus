@@ -1,6 +1,14 @@
 package view.message;
 
 public class ChatMessage {
+    public ChatMessage(String role, String content) {
+        this.role = role;
+        this.content = content;
+    }
+
+    public ChatMessage() {
+    }
+
     private String role;
     private String content;
 

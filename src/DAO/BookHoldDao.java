@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 图书馆模块借书DAO
+ */
 public class BookHoldDao {
 
     /**
@@ -120,9 +123,8 @@ public class BookHoldDao {
     }
 
 
-    /*
+    /**
      * 还书，在BookHold表中删除该用户对该书本的借书记录
-     *
      * @param borrowRecord 还书操作记录（包涵操作号、一卡通号、书号、操作时间、操作类型、备注）
      * @return 还书操作是否成功，如该书还未被该用户借阅，或者操作日期晚于借阅过期时间，则返回false，并不进行还书操作
      */
@@ -183,10 +185,10 @@ public class BookHoldDao {
     }
 
 
-    /*
+    /**
      * 续借，在BookHold表中修改该用户对该书本的借书情况，将过期时间改为当前操作时间加两个月；
      *
-     * @param borrowRecord 续借操作记录（包涵操作号、一卡通号、书号、操作时间、操作类型、备注）
+     * @param renewRecord 续借操作记录（包涵操作号、一卡通号、书号、操作时间、操作类型、备注）
      * @return 续借操作是否成功，如该书还未被该用户借阅，则返回false，或者操作日期晚于借阅过期时间，并不进行续借操作
      */
     public boolean Renew(BookOperationRecord renewRecord) {

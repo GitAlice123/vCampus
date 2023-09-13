@@ -4,12 +4,14 @@ import view.Library.Book;
 
 import java.sql.*;
 
+/**
+ * 图书馆模块书籍DAO
+ */
 public class BookDao {
 
 
     /**
      * 根据书号查询书
-     *
      * @param ISBN 书号
      * @return 查询到的书本对象
      */

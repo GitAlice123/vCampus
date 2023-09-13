@@ -134,7 +134,11 @@ public class SummaryHandler extends KeyAdapter implements ActionListener {
             }
             case "chat":
                 summaryview.dispose();
-                new ChatFrameUI();
+                try {
+                    new ChatFrameUI();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case "登出":
                 GlobalData.logout();//登出时注销用户
