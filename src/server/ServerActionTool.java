@@ -488,7 +488,7 @@ public class ServerActionTool {
         System.out.println("Into object 402");
         ClassNameListDao classNameListDao=new ClassNameListDao();
         String stuID=idReqMessage.getID();
-        CourseClass[] courseClasses=classNameListDao.findClassIdByStudentId(stuID);
+        CourseClass[] courseClasses=classNameListDao.findClassByStudentId(stuID);
         CourseClassesRespMessage respMessage=new CourseClassesRespMessage(courseClasses);
         //下面将response信息返回客户端
         try {

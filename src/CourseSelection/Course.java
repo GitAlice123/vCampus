@@ -76,6 +76,18 @@ public class Course {//学生视角的课程
         }
     }
 
+    public String getCourseType(String s) {
+        switch (this.CourseType) {
+            case Compulsory:
+                return "Compulsory";
+            case Optional:
+                return "Optional";
+            case Limitative:
+                return "Limitative";
+        }
+        return null;
+    }
+
     public double getCourseTime() {
         return CourseTime;
     }
