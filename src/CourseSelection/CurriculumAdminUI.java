@@ -227,7 +227,7 @@ public class CurriculumAdminUI extends JFrame {
      * @throws IOException 如果在更新过程中发生 I/O 错误。
      */
     void UpdateClassTable() throws IOException {
-        String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
+        String[] columnNames ={"课程班编号","课程号","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
         //loginHandler=new logInHandler(this);
         CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost",8888);
         CourseClass[] courseClasses=clientAPI.GetAllClass();
@@ -294,7 +294,7 @@ public class CurriculumAdminUI extends JFrame {
 //            e.printStackTrace();
 //        }
 
-        String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
+        String[] columnNames ={"课程班编号","课程号","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
         //loginHandler=new logInHandler(this);
         CourseSelectClientAPI clientAPI=new CourseSelectClientAPIImp("localhost",8888);
         CourseClass[] courseClasses=clientAPI.GetAllClass();
@@ -438,7 +438,7 @@ public class CurriculumAdminUI extends JFrame {
                     }
                     System.out.println("点击的行索引：" + clickedRow);
                     classdata=newselectclass;
-                    String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
+                    String[] columnNames ={"课程班编号","课程号","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
                     DefaultTableModel model=new DefaultTableModel(classdata,columnNames);
                     classtable.setModel(model);
                     classtable.setRowHeight(30);
@@ -835,7 +835,7 @@ public class CurriculumAdminUI extends JFrame {
     class AdminAddClassesUI extends JFrame{
         SpringLayout springLayout=new SpringLayout();
         JLabel ClassIdLabel=new JLabel("课程班编号");
-        JLabel CourseNameLabel=new JLabel("课程名称");
+        JLabel CourseNameLabel=new JLabel("课程号");
         JLabel ClassPlaceLabel=new JLabel("上课地点");
         JLabel ClassMaxLabel=new JLabel("最大人数");
         JLabel ClassTimeLabel=new JLabel("上课时间");
@@ -1050,7 +1050,7 @@ public class CurriculumAdminUI extends JFrame {
     class AdminChangeClassesUI extends JFrame{
         SpringLayout springLayout=new SpringLayout();
         JLabel ClassTempLabel=new JLabel("当前人数");
-        JLabel CourseNameLabel=new JLabel("课程名称");
+        JLabel CourseNameLabel=new JLabel("课程号");
         JLabel ClassPlaceLabel=new JLabel("上课地点");
         JLabel ClassMaxLabel=new JLabel("最大人数");
         JLabel ClassTimeLabel=new JLabel("上课时间");
@@ -1240,7 +1240,7 @@ public class CurriculumAdminUI extends JFrame {
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    /*String[] columnNames ={"课程班编号","课程名称","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
+                    /*String[] columnNames ={"课程班编号","课程号","上课地点","最大人数","上课时间","任课教师ID","修改","删除","本班学生"};
                     DefaultTableModel model=new DefaultTableModel(classdata,columnNames);
                     classtable.setModel(model);
                     classtable.getColumnModel().getColumn(6).setCellRenderer(new AdminChangeClassesTableCellRendererButton());

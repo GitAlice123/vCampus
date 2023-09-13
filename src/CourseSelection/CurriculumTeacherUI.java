@@ -212,7 +212,7 @@ public class CurriculumTeacherUI extends JFrame {
                 new SummaryStudentTeacherUI();
             }
         });
-        String[] columnNames ={"课程班编号","课程名称","上课地点","当前班级人数","上课时间","本班学生"};
+        String[] columnNames ={"课程班编号","课程号","上课地点","当前班级人数","上课时间","本班学生"};
         InfoClientAPI infoClientAPI=new InfoClientAPIImp("localhost",8888);
         CourseClass[] classes=infoClientAPI.SearchCourseClassByTeacherID(id);
         if(classes!=null)
