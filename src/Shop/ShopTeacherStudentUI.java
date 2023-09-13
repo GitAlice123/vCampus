@@ -15,6 +15,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,10 +60,110 @@ public class ShopTeacherStudentUI extends JFrame {
     SpringLayout springLayout = new SpringLayout();
     JPanel cardPanel = new JPanel(cardLayout);
     JPanel shopcard = new JPanel();
-    JPanel blankPanel = new JPanel();
-    JPanel purchasegoodPanel = new JPanel(springLayout);
-    JPanel purchasehistoryPanel = new JPanel(springLayout);
-    JPanel shoppingcartPanel = new JPanel(springLayout);
+    JPanel blankPanel = new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel purchasegoodPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel purchasehistoryPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel shoppingcartPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
 
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
@@ -199,6 +300,9 @@ public class ShopTeacherStudentUI extends JFrame {
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));
 
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setBackground(new Color(255,255,255,150));
+
         purchasegoodPanel.add(searchgoodBtn);
         purchasegoodPanel.add(searchgoodField);
         purchasegoodPanel.add(scrollPane);
@@ -262,6 +366,8 @@ public class ShopTeacherStudentUI extends JFrame {
         tab_header2.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header2.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
 
+        historyscrollPane.setOpaque(false);
+        historyscrollPane.getViewport().setBackground(new Color(255,255,255,150));
 
         purchasehistoryPanel.add(historyscrollPane);
         purchasehistoryPanel.add(historyLabel);
@@ -273,13 +379,7 @@ public class ShopTeacherStudentUI extends JFrame {
 
         //购物车
         carttable.setFont(new Font("楷体", Font.PLAIN, 20));
-        Object[][] good = {
-                {null, null, null, false},
-                {null, null, null, false},
-                {null, null, null, false},
-                {null, null, null, false},
-                {null, null, null, false}
-        };
+        Object[][] good = {};
         String[] cartheader = {"商品名称", "商品数量", "金额", "操作"};
         model3.setDataVector(good, cartheader);
         carttable.setModel(model3);
@@ -293,6 +393,10 @@ public class ShopTeacherStudentUI extends JFrame {
         JTableHeader tab_header3 = carttable.getTableHeader();                    //获取表头
         tab_header3.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header3.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
+
+        cartpane.setOpaque(false);
+        cartpane.getViewport().setBackground(new Color(255,255,255,150));
+
         shoppingcartLabel.setFont(titleFont);
         deleteBtn.setFont(buttonFont);
         purchaseBtn.setFont(buttonFont);
