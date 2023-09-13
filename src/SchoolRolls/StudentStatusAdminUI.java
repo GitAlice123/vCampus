@@ -226,13 +226,13 @@ public class StudentStatusAdminUI extends JFrame {
 
 
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                new SummaryManagerUI();
-            }
-        });
+//        backBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                dispose();
+//                new SummaryManagerUI();
+//            }
+//        });
         FindBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
