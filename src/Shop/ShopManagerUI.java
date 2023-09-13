@@ -8,6 +8,7 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 public class ShopManagerUI extends JFrame {
     String[][] AllGoods = null;
@@ -57,16 +58,142 @@ public class ShopManagerUI extends JFrame {
     SpringLayout springLayout = new SpringLayout();
     JPanel cardPanel = new JPanel(cardLayout);
     JPanel shopcard = new JPanel();
-    JPanel blankPanel = new JPanel();
-    JPanel searchgoodPanel = new JPanel(springLayout);
-    JPanel purchasehistoryPanel = new JPanel(springLayout);
-    JPanel stockPanel = new JPanel(springLayout);
-    JPanel returnPanel = new JPanel(springLayout);
+    JPanel blankPanel = new JPanel(){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel searchgoodPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel purchasehistoryPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel stockPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
+    JPanel returnPanel = new JPanel(springLayout){
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // 加载原始尺寸的背景图片
+            ImageIcon originalImageIcon = new ImageIcon("Images/Shop1.jpg");
+            Image originalImage = originalImageIcon.getImage();
+
+            // 创建与面板尺寸相同的缓冲图像
+            BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = bufferedImage.createGraphics();
+
+            // 设置透明度
+            AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+            g2d.setComposite(alphaComposite);
+
+            // 绘制背景图片到缓冲图像
+            g2d.drawImage(originalImage, 0, 0, getWidth(), getHeight(), this);
+
+            // 绘制缓冲图像到面板
+            g.drawImage(bufferedImage, 0, 0, null);
+
+            g2d.dispose();
+        }
+    };
 
 
     Font buttonFont = new Font("楷体", Font.PLAIN, 25);//设置按钮的文字大小、字体
     Font titleFont = new Font("楷体", Font.PLAIN, 50);
     Font centerFont = new Font("楷体", Font.PLAIN, 30);//设置中间组件的文字大小、字体
+    Font fieldFont=new Font("楷体",Font.PLAIN,20);
 
     public ShopManagerUI() {
         super("商店");
@@ -136,7 +263,7 @@ public class ShopManagerUI extends JFrame {
         //查询商品
         searchBtn.setFont(buttonFont);
         searchgoodField.setPreferredSize(new Dimension(200, 30));
-        searchgoodField.setFont(centerFont);
+        searchgoodField.setFont(fieldFont);
         goodtable.setFont(new Font("楷体", Font.PLAIN, 20));
 
         String[] goodheader = {"序号", "商品名称", "价格", "库存"};
@@ -161,6 +288,9 @@ public class ShopManagerUI extends JFrame {
         JTableHeader tab_header = goodtable.getTableHeader();                    //获取表头
         tab_header.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header.setPreferredSize(new Dimension(tab_header.getWidth(), 30));
+
+        goodscrollPane.setOpaque(false);
+        goodscrollPane.getViewport().setBackground(new Color(255,255,255,150));
 
         searchgoodPanel.add(goodscrollPane);
         searchgoodPanel.add(searchBtn);
@@ -222,6 +352,9 @@ public class ShopManagerUI extends JFrame {
         tab_header2.setFont(new Font("楷体", Font.PLAIN, 25));
         tab_header2.setPreferredSize(new Dimension(tab_header2.getWidth(), 30));
 
+        historyscrollPane.setOpaque(false);
+        historyscrollPane.getViewport().setBackground(new Color(255,255,255,150));
+
         purchasehistoryPanel.add(historyscrollPane);
         purchasehistoryPanel.add(historyLabel);
 
@@ -238,12 +371,12 @@ public class ShopManagerUI extends JFrame {
         goodcategoryLabel.setFont(centerFont);
         supplierLabel.setFont(centerFont);
         countLabel.setFont(centerFont);
-        goodIDField.setFont(centerFont);
-        goodnameField.setFont(centerFont);
-        goodpriceField.setFont(centerFont);
-        goodcategoryField.setFont(centerFont);
-        supplierField.setFont(centerFont);
-        countField.setFont(centerFont);
+        goodIDField.setFont(fieldFont);
+        goodnameField.setFont(fieldFont);
+        goodpriceField.setFont(fieldFont);
+        goodcategoryField.setFont(fieldFont);
+        supplierField.setFont(fieldFont);
+        countField.setFont(fieldFont);
         searchBtn2.setFont(buttonFont);
         confirmBtn.setFont(buttonFont);
         goodIDField.setPreferredSize(new Dimension(200, 30));
@@ -356,8 +489,8 @@ public class ShopManagerUI extends JFrame {
         returnLabel.setFont(titleFont);
         goodIDLabel2.setFont(centerFont);
         countLabel2.setFont(centerFont);
-        goodIDField2.setFont(centerFont);
-        countField2.setFont(centerFont);
+        goodIDField2.setFont(fieldFont);
+        countField2.setFont(fieldFont);
         confirmBtn2.setFont(buttonFont);
         goodIDField2.setPreferredSize(new Dimension(200, 30));
         countField2.setPreferredSize(new Dimension(200, 30));
