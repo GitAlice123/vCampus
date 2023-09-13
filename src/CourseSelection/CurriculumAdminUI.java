@@ -101,6 +101,9 @@ public class CurriculumAdminUI extends JFrame {
     }
     JButton backBtn=new JButton("退出");
     public String[][] StudentInfotoString(StudentInfo[] studentInfos){
+        if(studentInfos==null){
+            return null;
+        }
         String[][] src=new String[studentInfos.length][4];
         //classid id card_id name
         for(int i=0;i<studentInfos.length;i++){
@@ -112,17 +115,21 @@ public class CurriculumAdminUI extends JFrame {
         return src;
     }
     public String[][] ClasstoString(CourseClass[] classes){
-        String[][] src=new String[classes.length][6];
+        if(classes==null){
+            return null;
+        }
+        String[][] src = new String[classes.length][6];
         //classid coursenum place max time teacher
-        for(int i=0;i<classes.length;i++){
-            src[i][0]=classes[i].getClassID();
-            src[i][1]=classes[i].getCourseID();
-            src[i][2]=classes[i].getClassPlace();
-            src[i][3]=Integer.toString(classes[i].getClassMax());
-            src[i][4]=classes[i].getClassTime();
-            src[i][5]=classes[i].getClassTeacher();
+        for (int i = 0; i < classes.length; i++) {
+            src[i][0] = classes[i].getClassID();
+            src[i][1] = classes[i].getCourseID();
+            src[i][2] = classes[i].getClassPlace();
+            src[i][3] = Integer.toString(classes[i].getClassMax());
+            src[i][4] = classes[i].getClassTime();
+            src[i][5] = classes[i].getClassTeacher();
         }
         return src;
+
     }
     public CurriculumAdminUI() throws IOException {
         super("选课系统");
@@ -653,13 +660,15 @@ public class CurriculumAdminUI extends JFrame {
             }
             CourseSelectClientAPI courseSelectClientAPI1=new CourseSelectClientAPIImp("localhost",8888);
             CourseClass[] classes=courseSelectClientAPI1.GetAllClass();
-            for(int i=0;i<classes.length;i++){
-                ClassIdcomboBox.addItem(classes[i].getClassID());
-            }
-            CourseSelectClientAPI courseSelectClientAPI2=new CourseSelectClientAPIImp("localhost",8888);
-            Course[] courses=courseSelectClientAPI2.GetAllCourse();
-            for(int i=0;i<courses.length;i++){
-                CourseIdcomboBox.addItem(courses[i].getCourseID());
+            if(classes!=null) {
+                for (int i = 0; i < classes.length; i++) {
+                    ClassIdcomboBox.addItem(classes[i].getClassID());
+                }
+                CourseSelectClientAPI courseSelectClientAPI2 = new CourseSelectClientAPIImp("localhost", 8888);
+                Course[] courses = courseSelectClientAPI2.GetAllCourse();
+                for (int i = 0; i < courses.length; i++) {
+                    CourseIdcomboBox.addItem(courses[i].getCourseID());
+                }
             }
             Container contentPane=getContentPane();//获取控制面板
             contentPane.setLayout(new BorderLayout());
